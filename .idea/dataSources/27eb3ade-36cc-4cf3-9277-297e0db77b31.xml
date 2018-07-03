@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="nurse@localhost">
+  <database-model serializer="dbm" rdbms="MYSQL" format-version="4.9">
+    <root id="1">
+      <ServerVersion>0.16.4.1</ServerVersion>
+      <DefaultCasing>exact</DefaultCasing>
+    </root>
+    <schema id="2" parent="1" name="information_schema"/>
+    <schema id="3" parent="1" name="nurse">
+      <Current>1</Current>
+      <Visible>1</Visible>
+    </schema>
+    <table id="4" parent="3" name="company"/>
+    <table id="5" parent="3" name="company_info"/>
+    <table id="6" parent="3" name="company_right"/>
+    <table id="7" parent="3" name="company_right_relation"/>
+    <table id="8" parent="3" name="files"/>
+    <table id="9" parent="3" name="user"/>
+    <table id="10" parent="3" name="user_info"/>
+    <table id="11" parent="3" name="user_right"/>
+    <table id="12" parent="3" name="user_right_relation"/>
+    <column id="13" parent="4" name="id">
+      <Position>1</Position>
+      <Comment>公司id</Comment>
+      <DataType>SMALLINT(5) UNSIGNED|5s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="14" parent="4" name="phone">
+      <Position>2</Position>
+      <Comment>第二id</Comment>
+      <DataType>VARCHAR(11)|12s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="15" parent="4" name="password">
+      <Position>3</Position>
+      <Comment>密码</Comment>
+      <DataType>VARCHAR(32)|12s</DataType>
+    </column>
+    <column id="16" parent="4" name="union_id">
+      <Position>4</Position>
+      <Comment>微信id</Comment>
+      <DataType>VARCHAR(20)|12s</DataType>
+    </column>
+    <index id="17" parent="4" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id
+phone</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="18" parent="4" name="id">
+      <ColNames>id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="19" parent="4" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id
+phone</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="20" parent="4" name="id">
+      <ColNames>id</ColNames>
+    </key>
+    <column id="21" parent="5" name="id">
+      <Position>1</Position>
+      <Comment>id</Comment>
+      <DataType>SMALLINT(5) UNSIGNED|5s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="22" parent="5" name="name">
+      <Position>2</Position>
+      <Comment>公司名称</Comment>
+      <DataType>VARCHAR(20)|12s</DataType>
+      <NotNull>1</NotNull>
+      <DefaultExpression>&apos;&apos;</DefaultExpression>
+    </column>
+    <column id="23" parent="5" name="logo">
+      <Position>3</Position>
+      <Comment>log</Comment>
+      <DataType>VARCHAR(100)|12s</DataType>
+      <NotNull>1</NotNull>
+      <DefaultExpression>&apos;&apos;</DefaultExpression>
+    </column>
+    <index id="24" parent="5" name="company_id">
+      <ColNames>id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="25" parent="5" name="file_id">
+      <ColNames>logo</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="26" parent="5" name="company_id">
+      <ColNames>id</ColNames>
+    </key>
+    <key id="27" parent="5" name="file_id">
+      <ColNames>logo</ColNames>
+    </key>
+    <foreign-key id="28" parent="5" name="company_id">
+      <ColNames>id</ColNames>
+      <RefSchemaName>nurse</RefSchemaName>
+      <RefTableName>company</RefTableName>
+      <RefColNames>id</RefColNames>
+      <OnUpdate>cascade</OnUpdate>
+      <OnDelete>cascade</OnDelete>
+    </foreign-key>
+    <foreign-key id="29" parent="5" name="file_id">
+      <ColNames>logo</ColNames>
+      <RefSchemaName>nurse</RefSchemaName>
+      <RefTableName>files</RefTableName>
+      <RefKeyName>PRIMARY</RefKeyName>
+      <RefColNames>id</RefColNames>
+      <OnUpdate>cascade</OnUpdate>
+      <OnDelete>cascade</OnDelete>
+    </foreign-key>
+    <column id="30" parent="6" name="id">
+      <Position>1</Position>
+      <Comment>权限id</Comment>
+      <DataType>TINYINT(3) UNSIGNED|-6s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="31" parent="6" name="name">
+      <Position>2</Position>
+      <DataType>VARCHAR(20)|12s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="32" parent="6" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="33" parent="6" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="34" parent="7" name="user_id">
+      <Position>1</Position>
+      <Comment>用户id</Comment>
+      <DataType>SMALLINT(5) UNSIGNED|5s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="35" parent="7" name="right_id">
+      <Position>2</Position>
+      <Comment>权限id</Comment>
+      <DataType>TINYINT(3) UNSIGNED|-6s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="36" parent="7" name="user_id">
+      <ColNames>user_id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="37" parent="7" name="right_id">
+      <ColNames>right_id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="38" parent="7" name="right_id">
+      <ColNames>right_id</ColNames>
+    </key>
+    <key id="39" parent="7" name="user_id">
+      <ColNames>user_id</ColNames>
+    </key>
+    <foreign-key id="40" parent="7" name="company_right_relation_ibfk_2">
+      <ColNames>user_id</ColNames>
+      <RefSchemaName>nurse</RefSchemaName>
+      <RefTableName>company</RefTableName>
+      <RefColNames>id</RefColNames>
+      <OnUpdate>cascade</OnUpdate>
+      <OnDelete>cascade</OnDelete>
+    </foreign-key>
+    <foreign-key id="41" parent="7" name="company_right_relation_ibfk_1">
+      <ColNames>right_id</ColNames>
+      <RefSchemaName>nurse</RefSchemaName>
+      <RefTableName>company_right</RefTableName>
+      <RefKeyName>PRIMARY</RefKeyName>
+      <RefColNames>id</RefColNames>
+      <OnUpdate>cascade</OnUpdate>
+      <OnDelete>cascade</OnDelete>
+    </foreign-key>
+    <column id="42" parent="8" name="id">
+      <Position>1</Position>
+      <Comment>文件的md5</Comment>
+      <DataType>VARCHAR(32)|12s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="43" parent="8" name="ext">
+      <Position>2</Position>
+      <Comment>扩展名</Comment>
+      <DataType>VARCHAR(10)|12s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="44" parent="8" name="path">
+      <Position>3</Position>
+      <Comment>保存位置</Comment>
+      <DataType>VARCHAR(100)|12s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="45" parent="8" name="name">
+      <Position>4</Position>
+      <Comment>文件名</Comment>
+      <DataType>VARCHAR(100)|12s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="46" parent="8" name="time">
+      <Position>5</Position>
+      <Comment>上传时间</Comment>
+      <DataType>TIMESTAMP(19)|93s</DataType>
+      <NotNull>1</NotNull>
+      <DefaultExpression>CURRENT_TIMESTAMP</DefaultExpression>
+    </column>
+    <index id="47" parent="8" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="48" parent="8" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="49" parent="9" name="id">
+      <Position>1</Position>
+      <Comment>id</Comment>
+      <DataType>SMALLINT(5) UNSIGNED|5s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="50" parent="9" name="union_id">
+      <Position>2</Position>
+      <Comment>微信唯一id</Comment>
+      <DataType>VARCHAR(20)|12s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="51" parent="9" name="phone">
+      <Position>3</Position>
+      <Comment>电话第二账号</Comment>
+      <DataType>VARCHAR(11)|12s</DataType>
+    </column>
+    <column id="52" parent="9" name="password">
+      <Position>4</Position>
+      <Comment>密码</Comment>
+      <DataType>VARCHAR(32)|12s</DataType>
+    </column>
+    <index id="53" parent="9" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="54" parent="9" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="55" parent="10" name="id">
+      <Position>1</Position>
+      <Comment>用户id</Comment>
+      <DataType>SMALLINT(5) UNSIGNED|5s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="56" parent="10" name="name">
+      <Position>2</Position>
+      <Comment>姓名</Comment>
+      <DataType>VARCHAR(10)|12s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="57" parent="10" name="sex">
+      <Position>3</Position>
+      <Comment>性别</Comment>
+      <DataType>TINYINT(3) UNSIGNED|-6s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="58" parent="10" name="company_id">
+      <Position>4</Position>
+      <Comment>所属公司id</Comment>
+      <DataType>SMALLINT(5) UNSIGNED|5s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="59" parent="10" name="head_imgae">
+      <Position>5</Position>
+      <Comment>头像</Comment>
+      <DataType>VARCHAR(100)|12s</DataType>
+      <NotNull>1</NotNull>
+      <DefaultExpression>&apos;&apos;</DefaultExpression>
+    </column>
+    <index id="60" parent="10" name="id">
+      <ColNames>id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="61" parent="10" name="company">
+      <ColNames>company_id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="62" parent="10" name="file">
+      <ColNames>head_imgae</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="63" parent="10" name="company">
+      <ColNames>company_id</ColNames>
+    </key>
+    <key id="64" parent="10" name="file">
+      <ColNames>head_imgae</ColNames>
+    </key>
+    <key id="65" parent="10" name="id">
+      <ColNames>id</ColNames>
+    </key>
+    <foreign-key id="66" parent="10" name="id">
+      <ColNames>id</ColNames>
+      <RefSchemaName>nurse</RefSchemaName>
+      <RefTableName>user</RefTableName>
+      <RefKeyName>PRIMARY</RefKeyName>
+      <RefColNames>id</RefColNames>
+      <OnUpdate>cascade</OnUpdate>
+      <OnDelete>cascade</OnDelete>
+    </foreign-key>
+    <foreign-key id="67" parent="10" name="company">
+      <ColNames>company_id</ColNames>
+      <RefSchemaName>nurse</RefSchemaName>
+      <RefTableName>company</RefTableName>
+      <RefColNames>id</RefColNames>
+      <OnUpdate>cascade</OnUpdate>
+      <OnDelete>cascade</OnDelete>
+    </foreign-key>
+    <foreign-key id="68" parent="10" name="file">
+      <ColNames>head_imgae</ColNames>
+      <RefSchemaName>nurse</RefSchemaName>
+      <RefTableName>files</RefTableName>
+      <RefKeyName>PRIMARY</RefKeyName>
+      <RefColNames>id</RefColNames>
+      <OnUpdate>cascade</OnUpdate>
+      <OnDelete>cascade</OnDelete>
+    </foreign-key>
+    <column id="69" parent="11" name="id">
+      <Position>1</Position>
+      <Comment>权限id</Comment>
+      <DataType>TINYINT(3) UNSIGNED|-6s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="70" parent="11" name="name">
+      <Position>2</Position>
+      <DataType>VARCHAR(20)|12s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="71" parent="11" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="72" parent="11" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="73" parent="12" name="user_id">
+      <Position>1</Position>
+      <Comment>用户id</Comment>
+      <DataType>SMALLINT(5) UNSIGNED|5s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="74" parent="12" name="right_id">
+      <Position>2</Position>
+      <Comment>权限id</Comment>
+      <DataType>TINYINT(3) UNSIGNED|-6s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="75" parent="12" name="user_id">
+      <ColNames>user_id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="76" parent="12" name="right_id">
+      <ColNames>right_id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="77" parent="12" name="right_id">
+      <ColNames>right_id</ColNames>
+    </key>
+    <key id="78" parent="12" name="user_id">
+      <ColNames>user_id</ColNames>
+    </key>
+    <foreign-key id="79" parent="12" name="user_id">
+      <ColNames>user_id</ColNames>
+      <RefSchemaName>nurse</RefSchemaName>
+      <RefTableName>user</RefTableName>
+      <RefKeyName>PRIMARY</RefKeyName>
+      <RefColNames>id</RefColNames>
+      <OnUpdate>cascade</OnUpdate>
+      <OnDelete>cascade</OnDelete>
+    </foreign-key>
+    <foreign-key id="80" parent="12" name="right_id">
+      <ColNames>right_id</ColNames>
+      <RefSchemaName>nurse</RefSchemaName>
+      <RefTableName>user_right</RefTableName>
+      <RefKeyName>PRIMARY</RefKeyName>
+      <RefColNames>id</RefColNames>
+      <OnUpdate>cascade</OnUpdate>
+      <OnDelete>cascade</OnDelete>
+    </foreign-key>
+  </database-model>
+</dataSource>

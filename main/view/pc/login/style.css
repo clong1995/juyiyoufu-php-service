@@ -1,0 +1,83 @@
+.header{
+    height: 28px;
+    line-height: 28px;
+    font-size: 14px;
+    color:#666;
+    padding:0 5px;
+}
+
+.header > .setting,.header > .close{
+    float: right;
+    margin-left:5px;
+    cursor: pointer;
+}
+.header .iconfont{
+    font-size: 14px;
+}
+.header .iconfont:hover{
+    color:#000;
+}
+
+.login{
+    width: 200px;
+    margin:90px auto 0 auto;
+}
+.login .icon{
+    width: 27px;
+    height: 25px;
+    text-align: center;
+    border:1px solid #ccc;
+    border-right: none;
+    float: left;
+    background: #fff;
+    color:#666666;
+}
+.login  input{
+    font-size: 14px;
+    text-indent: 5px;
+    width: 170px;
+    height: 25px;
+    margin-bottom: 10px;
+    border:1px solid #ccc;
+    background: #fff;
+    border-left: none;
+    float: left;
+}
+
+.login > .msg{
+    text-align: center;
+    color: red;
+    font-size: 12px;
+    margin-top:20px;
+}
+
+.login button{
+    float: left;
+    margin: 30px 40px 0 40px;
+    width: 120px;
+    height: 30px;
+    background: green;
+    border:none;
+    font-size: 14px;
+    color:#fff;
+    border-radius: 3px;
+    cursor: pointer;
+}
+.sign,.back{
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    font-size: 14px;
+    color:#6c6c6c;
+    text-align: center;
+    cursor: pointer;
+}
+.sign-box{
+    display: none;
+}
+.back{
+    display: none;
+}
+.sign:hover,.back:hover{
+    color: blue;
+}

@@ -1,0 +1,4 @@
+
+$item = 'asfDDF!@#$%^^&**(()___+123';
+
+echo preg_replace('/[^0-9a-zA-Z]+/', '', $item);

@@ -1,0 +1,57 @@
+.main > .item > .headImg {
+    width: 100px;
+    height: 100px;
+    background: #ccc;
+    float: left;
+    border-radius: 3px;
+    margin-right: 15px;
+}
+
+.main > .item > .row {
+    float: left;
+    height: 23px;
+    line-height: 23px;
+}
+
+.main > .item > .row .iconfont{
+    margin-right: 5px;
+    color: #666;
+}
+.main > .item > .row .title{
+    color: #ccc;
+}
+
+.main > .item > .row1,
+.main > .item > .row2,
+.main > .item > .row3,
+.main > .item > .row4 {
+    width: calc(100% - 117px);
+}
+
+.main > .item > .row5{
+    width: 100%;
+    margin-top: 10px;
+}
+.main > .item > .row4 > span{
+    padding-right: 10px;
+}
+.main > .item > .row4 > .progress{
+    color: #20CF9C;
+}
+.main > .item > .row4 > .sum{
+    color: #666;
+}
+
+
+.main > .item > .row1 {
+    height: 30px;
+    line-height: 30px;
+}
+
+.main > .item > .row1 > .name {
+    font-size: 18px;
+}
+
+.main > .item > .row5 > .title {
+    padding-left: 20px;
+}

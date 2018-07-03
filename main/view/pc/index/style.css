@@ -1,0 +1,167 @@
+body{
+    background: #f5f5f5;
+}
+.left {
+    width: 150px;
+    height: 100%;
+    background: #3E3D41;
+    float: left;
+}
+
+/*logo*/
+.left > .logo {
+    width: 120px;
+    height: 70px;
+    margin: 20px 15px 0 15px;
+    background: #ccc;
+}
+
+.left > .logo > img {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.left > .list {
+    width: 100%;
+    margin-top: 40px;
+    color: #fff;
+}
+
+.left > .list > .item {
+    padding-left: 20px;
+    height: 45px;
+    line-height: 45px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.left > .list > .item.active, .left > .list > .item:hover {
+    color: #20CF9C;
+}
+
+.left > .list > .item > .iconfont {
+    font-size: 20px;
+    margin-right: 10px;
+}
+
+.left > .list > .item.disable{
+    opacity: .2;
+}
+
+/*头部*/
+.nav {
+    width: calc(100% - 150px);
+    height: 50px;
+    background: #fff;
+    float: left;
+    border-bottom: 1px solid #ccc;
+    -webkit-app-region: drag;
+}
+
+/*搜索*/
+.nav > .search {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 200px;
+    height: 25px;
+    margin: 13px 0 0 20px;
+    overflow: hidden;
+    -webkit-app-region: no-drag;
+    float: left;
+}
+
+.nav > .search > input {
+    width: 150px;
+    height: 25px;
+    line-height: 25px;
+    font-size: 14px;
+    text-indent: 10px;
+    border: none;
+    float: left;
+}
+
+.nav > .search > .search-btn {
+    width: 50px;
+    height: 25px;
+    line-height: 25px;
+    text-align: center;
+    float: left;
+    cursor: pointer;
+}
+
+.nav > .search > .search-btn:hover {
+    color:#20CF9C;
+}
+
+/*菜单*/
+.nav > .menu {
+    -webkit-app-region: no-drag;
+    float: right;
+    height: 50px;
+    margin-right: 10px;
+}
+
+.nav > .menu > .item {
+    float: left;
+    height: 50px;
+}
+
+.nav > .menu > .win {
+    line-height: 50px;
+    width: 40px;
+    text-align: center;
+}
+.nav > .menu .iconfont{
+    cursor: pointer;
+}
+
+
+.nav > .menu > .win > i {
+    font-size: 20px;
+}
+
+.nav > .menu > .span {
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    color: #ccc;
+}
+
+/*头像*/
+.nav > .menu > .headImg {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    margin: 7px 0;
+    background: #ccc;
+    overflow: hidden;
+}
+
+.nav > .menu > .headImg > img {
+    width: 100%;
+    height: 100%;
+}
+
+/*消息*/
+.nav > .menu > .msg {
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+}
+
+.nav > .menu > .msg > i {
+    font-size: 25px;
+    color: #20CF9C;
+}
+
+/*主体*/
+.main {
+    width: calc(100% - 190px);
+    margin: 10px 20px;
+    height: calc(100% - 50px - 1px - 20px);
+    border: none;
+    float: left;
+}

@@ -1,0 +1,41 @@
+.main > .item{
+    width: 500px;
+    height: 149px;
+}
+.main > .item > .headImg{
+    width: 100px;
+    height: 130px;
+    float: left;
+    margin-right: 10px;
+    background: #ccc;
+}
+
+.main > .item > .row{
+    height: 25px;
+    line-height: 25px;
+    float: left;
+}
+
+
+.main > .item > .row{
+    width: calc(100% - 100px - 10px);
+}
+
+.main > .item > .row.row1{
+    height: 25px;
+    line-height: 25px;
+}
+.main > .item > .row.row1 > .name{
+    font-size: 18px;
+}
+.main > .item > .row.row1 > .iconfont{
+    font-size: 16px;
+    margin-left: 5px;
+}
+
+.main > .item > .row.row2{
+    margin-bottom: 5px;
+}
+.main > .item > .row.row2 > span {
+    margin-right: 5px;
+}

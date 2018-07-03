@@ -1,0 +1,44 @@
+<div class="nav" id="nav">
+    <span class="title"><i class="iconfont">&#xe60c;</i>客户列表</span>
+    <button class="add"><i class="iconfont">&#xe68e;</i>增加客户</button>
+    <button class="reload" onclick="location.reload()"><i class="iconfont">&#xe60d;</i>刷新</button>
+</div>
+<div class="main">
+    <?php
+    for ($i = 0; $i < 7; ++$i) {
+        ?>
+        <div class="item">
+            <div class="headImg"></div>
+            <div class="row row1">
+                <span class="name">成龙哥哥</span>
+                <span>男</span>
+                <span>23岁</span>
+            </div>
+            <div class="row row2">
+                <span><i class="iconfont">&#xe60f;</i>15166011258</span>
+            </div>
+            <div class="row row3">
+                <span><i class="iconfont">&#xe6bb;</i>淄博市张店区和平家园</span>
+            </div>
+            <div class="row row5">
+                <span class="title">最近业务：</span>挂号陪着
+                <span class="title">最近护工：</span>成龙妹妹
+            </div>
+            <div class="option">
+                <button class="edit"><i class="iconfont">&#xe626;</i>编辑</button>
+                <button class="detail"><i class="iconfont">&#xe60e;</i>详情</button>
+            </div>
+        </div>
+        <?php
+    }
+    ?>
+</div>
+<div class="page">
+    <?php
+    for ($i = 0; $i < 9; ++$i) {
+    ?>
+    <span><?= $i?></span>
+        <?php
+    }
+    ?>
+</div>
