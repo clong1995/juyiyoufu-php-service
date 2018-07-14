@@ -2,45 +2,47 @@
 
 CLASS('bar', //类名
     param => {
+        //【图表类型】
+        param.type = 'bar';
         //默认数据
-        ejs.assignDeep({
+        ejs.assignDeep(param, {
             data: {
-                value: [3, 25, 33, 49, 51, 91, -61],
+                value: [[3, 25, 33, 49, 51, 91, 61]],
                 key: ['周一', '周二', '周三', '周四', '周五', '周六', '周七']
             }
-        },param);
-
-        //基类提供的必要函数
+        });
+        //【基类提供的必要函数】
         const {
-            svg,        // svg工具类
-            render,     // 渲染器
-            X,          // 坐标转换器
-            Y,          // 坐标转换器
-            className,  // 类名生成器
-            option,     // 配置项
-            figure     // 关键点
+            render,//渲染函数
+            option,//最终配置
+            svg //svg操作类
         } = NEW_ASYNC(ejs.root + 'charts/chartBase', param);
 
+        //【你的渲染逻辑】
+        render(figure => {
+            //根据数据绘制图像
+            let bars = [];//柱子
+            let barWidth = figure.axisSpan.x / figure.dataPoints.length / 2;
 
-        //你的逻辑
-        let point = [];
-        figure.dataPoints.forEach(v => {
-            point.push(svg.draw('circle', {
-                cx: v.x,
-                cy: v.y,
-                r: 5
-            }));
+            //生成图形
+            figure.dataPoints.forEach((v, i) => {
+                v.forEach((vi) => {
+                    let x = vi.x - (figure.dataPoints.length / 2) * (barWidth + barWidth / 2) + (barWidth / 4) + (barWidth + barWidth / 2) * i;
+                    let bar = svg.create('rect', {
+                        x: x,
+                        y: vi.y,
+                        width: barWidth,
+                        height: figure.O.y - vi.y,
+                        fill: option.theme.colors[i][0],
+                        stroke: 'none',
+                    });
+                    bars.push(bar);
+                });
+            });
+
+            return [...bars];
         });
-
-
-        //执行渲染
-        render([
-            ...point,//折点
-        ]);
-
-        //向外界抛出你的公共方法
-        return {
-
-        }
+        //【向外界抛出你的公共方法】
+        return {}
     }
 );

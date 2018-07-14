@@ -1322,7 +1322,7 @@ class EBase {
      */
     _require(path, option = {}, callback = () => {
     }, className = path.split('/').pop()) {
-        option.className = className;
+        //option.className = className;
         option.call ? option.call.push(className) : option.call = [className];
         this.loadScript(path + '.class.js', () => callback(this._moduleStack.get(className)(option)))
     }
@@ -1336,7 +1336,7 @@ class EBase {
      */
     _requireAsync(path, option = {}, className = path.split('/').pop()) {
         this.loadScriptAsync(path + '.class.js');
-        option.className = className;
+        //option.className = className;
         option.call ? option.call.push(className) : option.call = [className];
         return this._moduleStack.get(className)(option);
     }

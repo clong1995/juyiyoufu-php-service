@@ -1,0 +1,16 @@
+.main > .item {
+    width: 500px;
+    height: 115px;
+}
+.main > .item >.row.row1 {
+    width: 200px;
+    margin: 0 10px 0 0;
+    height: 100px;
+    background: #ccc;
+}
+.main > .item >.row.row2,
+.main > .item >.row.row3,
+.main > .item >.row.row4
+{
+    width: calc(100% - 200px - 10px);
+}

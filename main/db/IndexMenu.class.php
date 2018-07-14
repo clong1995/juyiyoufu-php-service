@@ -1,0 +1,14 @@
+<?php
+/**
+ * Created by IntelliJ IDEA.
+ * User: clong
+ * Date: 18-6-24
+ * Time: 上午6:57
+ */
+
+namespace db;
+
+interface IndexMenu extends Base
+{
+    public function getAllByEmployeeId($employeeId);
+}

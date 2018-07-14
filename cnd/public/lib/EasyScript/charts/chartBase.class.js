@@ -31,35 +31,67 @@ CLASS(
             'pie': 'center.paper',
             'map': 'map.paper'
         }[param.type];
+
         if (!currPaper) {
             ejs.log('当前的图标表类型为[' + param.type + ']，此类型暂不支持，详情参阅www.xxxxxx.com/api/xxx', 'error');
             return;
         }
 
-        //【获取容器大小】
-        ejs.css(elem, {padding: 0, position: 'relative'});
-        let offsetSize = {width: elem.offsetWidth, height: elem.offsetHeight};
-
         //【svg操作类】
         const svg = NEW_ASYNC(ejs.root + 'svg/svg');
 
+        //【获取容器大小】
+        ejs.css(elem, {
+            padding: 0,
+            position: 'relative'
+        });
+        let offsetSize = {width: elem.offsetWidth, height: elem.offsetHeight};
+
         //【追加信息】
-        ejs.assignDeep(param, {
-            // 【大小】
-            offsetSize: offsetSize,
+        param['offsetSize'] = offsetSize;
+        param = ejs.assignDeep({
             //【默认样式】
             theme: {
                 display: 'block',
-                color: ['#333', '#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#bda29a', '#6e7074', '#546570', '#c4ccd3'],
+                colors: [
+                    ['#61a0a8','#3f777f'],
+                    ['#2f4554','#203241'],
+                    ['#c23531','#712521'],
+                    ['#91c7ae','#4a6951'],
+                    ['#749f83','#2b4f35'],
+                    ['#ca8622','#855421'],
+                    ['#bda29a','#634a48'],
+                    ['#6e7074','#313337'],
+                    ['#546570','#323a45'],
+                    ['#c4ccd3','#656d74']
+                ],
+                color: '#333',
                 fontSize: 14,
                 fontWeight: 'normal',
-                fontFamily: '\'Microsoft YaHei\',sans-serif',
+                fontFamily: 'Microsoft YaHei,sans-serif',
                 borderWidth: 2
             }
-        });
+        }, param);
 
         //【使用图纸】
-        const {initPaper} = NEW_ASYNC(ejs.root + 'charts/' + currPaper, param);
+        const {option, initPaper, defs,chartPartMap} = NEW_ASYNC(ejs.root + 'charts/' + currPaper, param);
+
+        //渐变
+        function gradient(type = 'linear', opt={}) {
+            let gradient = null;
+            if (type === 'linear') {
+                gradient = svg.linearGradient(defs,opt);
+            }else{
+                gradient  = svg.radialGradient(defs,opt);
+            }
+            return 'url(' + gradient + ')';
+        }
+
+        //模糊
+        function blur(width,height,opt={}) {
+            return 'url(' + svg.blur(defs,width,height,opt) + ')';
+        }
+
 
         //【设置样式表】
         /*function setSheet(select, rule) {
@@ -91,34 +123,38 @@ CLASS(
 
         //【渲染】
         function render(fn) {
-            //【创建svg元素】
+            //创建svg元素
             let svgNode = svg.createSvg();
             ejs.attr(svgNode, {
                 viewBox: "0 0 " + offsetSize.width + " " + offsetSize.height,
                 //preserveAspectRatio:"none"//无比例填充
             });
-            ejs.append(elem, svgNode);
-
-
-
+            ejs.css(elem, {background: option.style.background});
             //生成图纸
-            initPaper(svgNode,fn);
+            initPaper(svgNode, fn);
+            //添加到页面
+            ejs.append(elem, svgNode);
         }
 
         //加载
-        function load(data) {
+        /*function load(data) {
             //删除旧的
             ejs.empty(ejs.query(param.element));
             //重绘新的
             param.data = data;
             NEW(ejs.root + 'charts/' + param.type + '/' + param.call[0], param, fn => {
             })
-        }
+        }*/
 
 
         //【公共属性】
         return {
             render: render,
+            option: option,
+            svg: svg,
+            gradient:gradient,
+            blur:blur,
+            chartPartMap:chartPartMap
             //addEvent: addEvent,
             //setSheet: setSheet,
             //getPaper: getPaper,
