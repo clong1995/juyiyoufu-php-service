@@ -15,4 +15,5 @@ interface Base
     public function delete($param);
     public function update($param, $condition);
     public function select($field, $condition);
+    public function count($condition);
 }

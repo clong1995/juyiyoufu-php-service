@@ -72,11 +72,25 @@ body{
     border-bottom: 1px solid #ccc;
     font-size: 14px;
     position: relative;
+    color: #666666;
 }
 .main > .item:hover{
     box-shadow: 10px 10px 5px #999;
     top:-5px;
     left: -5px;
+}
+
+
+.main > .item >.row {
+    float: left;
+    height: 25px;
+    line-height: 25px;
+}
+
+.main > .item >.row > .title{
+    color: #000;
+    float: left;
+    width: 70px;
 }
 
 .main > .item > .option{
@@ -86,7 +100,7 @@ body{
     width: 100%;
     text-align: center;
     display: none;
-    height: 30px;
+    height: 27px;
 }
 .main > .item > .option > button{
     padding:0 10px;
@@ -109,6 +123,9 @@ body{
 }
 .main > .item > .option > .detail{
     background: #8fa9ff;
+}
+.main > .item > .option > .delete{
+    background: #ff3e31;
 }
 .main > .item:hover .option{
     display: block;

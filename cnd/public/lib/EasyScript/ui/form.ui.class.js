@@ -91,22 +91,18 @@ CLASS(
             return flag;
         }
 
-
         if (flag === true) {
             let xhr = new XMLHttpRequest();
-            xhr.onload = () => {
-                return JSON.parse(xhr.responseText);
-            };
-            xhr.open("POST", action, true);
-            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            let data = null;
+            xhr.onload = () => data = JSON.parse(xhr.responseText);
+            xhr.open("POST", action, false);
             xhr.send(formData);
+            return data;
         } else {
             return {
                 state: 'fail',
                 data: error
             }
         }
-
-        return {}
     }
 );

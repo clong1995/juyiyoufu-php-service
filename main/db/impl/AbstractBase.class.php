@@ -15,11 +15,14 @@ abstract class AbstractBase
 
     //private $table = get_class($this);
 
-    private function getTableName(){
+    protected function tableName()
+    {
         $name = get_class($this);
         $arr = explode('\\', $name);
         $className = array_pop($arr);
-        $tableName = str_replace('Impl','',$className);
+        $tableName = str_replace('Impl', '', $className);
+        $tableName = lcfirst($tableName);
+        $tableName = underscored($tableName);
         return strtolower($tableName);
     }
 
@@ -27,19 +30,17 @@ abstract class AbstractBase
     public function insert($param)
     {
         $keys = DB::clean(array_keys($param[0]));
-        return DB::update('insert into ' . $this->getTableName() . ' (' . implode(',', $keys) . ') values(:' . implode(',:', $keys) . ')', $param);
+        return DB::update('insert into ' . $this->tableName() . ' (' . implode(',', $keys) . ') values(:' . implode(',:', $keys) . ')', $param);
     }
 
     //根据条件
     public function delete($param)
     {
-        //TODO 未测试
-        /*$keys = DB::clean($param);
+        $keys = DB::clean(array_keys($param[0]));
         $condition = [];
-        foreach ($keys as $v) {
+        foreach ($keys as $v)
             array_push($condition, $v . '=:' . $v);
-        }
-        return DB::update('delete from ' . $this->getTableName() . ' where ' . implode(' and ', $condition), $param);*/
+        return DB::update('delete from ' . $this->tableName() . ' where ' . implode(' and ', $condition), $param);
     }
 
     //根据条件更新
@@ -56,18 +57,34 @@ abstract class AbstractBase
         foreach ($keys1 as $v) {
             array_push($con, $v . '=:' . $v);
         }
-        return DB::update('update ' . $this->getTableName() . ' set ' . implode(',', $field) . ' where ' . implode(',', $con), $param);*/
+        return DB::update('update ' . $this->tableName() . ' set ' . implode(',', $field) . ' where ' . implode(',', $con), $param);*/
     }
 
     //根据条件查询
-    public function select($field, $condition)
+    public function select($field, $condition = [])
     {
         $field = DB::clean($field);
+        $sql = 'select ' . implode(',', $field) . ' from ' . $this->tableName();
+        if (is_array($condition) && count($condition)) {
+            $keys = DB::clean(array_keys($condition));
+            $con = [];
+            foreach ($keys as $v) {
+                array_push($con, $v . '=:' . $v);
+            }
+            $sql .= ' where ' . implode(' and ', $con);
+        }
+
+        return DB::query($sql, $condition);
+    }
+
+    //根据条件计数
+    public function count($condition)
+    {
         $keys = DB::clean(array_keys($condition));
         $con = [];
         foreach ($keys as $v) {
             array_push($con, $v . '=:' . $v);
         }
-        return DB::query('select ' . implode(',', $field) . ' from ' . $this->getTableName() . ' where ' . implode(' and ', $con), $condition);
+        return DB::query('select count(*) as count from ' . $this->tableName() . ' where ' . implode(' and ', $con), $condition);
     }
 }

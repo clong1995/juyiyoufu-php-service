@@ -3,69 +3,16 @@ const {send} = NEW_ASYNC(ejs.root + 'electron/electron');
 ejs.ready(() => {
     //登录注册块
     let login = ejs.query('#login');
-
-    //切换登录注册
-    let signLogin = ejs.query('#signLogin');
-
     //标题栏模块
     let header = ejs.query('#header');
-
     //信息框
     let msg = ejs.query('.msg', login);
 
     //点击登录
-    ejs.on('.login-btn', login, 'click', t => loginSign('/api/login/pc'));
-
-    //点击注册
-    ejs.on('.sign-btn', login, 'click', t => ejs.query('.password', login).value === ejs.query('.password1', login).value
-        ? loginSign('/api/signin/pc')
-        : ejs.html(msg, '密码不一致！'));
-
-    //去掉信息
-    ejs.on('INPUT', login, 'click', t => ejs.empty(msg));
-
-    //点击切换注册
-    ejs.on('.sign', signLogin, 'click', t => {
-        //隐藏注册
-        ejs.hide(t, {
-            duration: .1
-        });
-        //显示登录
-        ejs.show(ejs.query('.back', signLogin), {
-            duration: .1
-        });
-        //显示重复密码和注册按钮
-        ejs.show(ejs.query('.sign-box', login), {
-            duration: .1
-        });
-        //隐藏登录按钮
-        ejs.hide(ejs.query('.login-btn', login), {
-            duration: .1
-        });
-    });
-    //点击切换登录
-    ejs.on('.back', signLogin, 'click', t => {
-        ejs.hide(t);
-        //显示注册
-        ejs.show(ejs.query('.sign', signLogin));
-        //隐藏重复密码和注册按钮
-        ejs.hide(ejs.query('.sign-box', login), {
-            duration: .1
-        });
-        //显示登录按钮
-        ejs.show(ejs.query('.login-btn', login), {
-            duration: .5
-        });
-    });
-
-    //关闭
-    ejs.on('.close', header, 'click', t => send('window/close'));
-
-
-    function loginSign(url) {
-
+    ejs.on('.login-btn', login, 'click', t => {
         let phone = ejs.query('.phone', login),
-            password = ejs.query('.password', login);
+            password = ejs.query('.password', login),
+            salt = ejs.query('.salt', login);
 
         //校验字段
         if (!phone.value) {
@@ -77,7 +24,7 @@ ejs.ready(() => {
             return;
         }
 
-        if (!/^[0-9]*$/.test(phone.value) || phone.value.length !== 11) {
+        if (/*!/^[0-9]*$/.test(phone.value) || */phone.value.length > 11) {
             ejs.html(msg, '手机号格式错误！');
             return;
         }
@@ -87,19 +34,27 @@ ejs.ready(() => {
             return;
         }
 
-        ejs.ajax(url, {
+        ejs.ajax('/api/login/pc', {
             method: 'POST',
             data: {
                 phone: phone.value,
-                password: ejs.md5(password.value)
+                password: ejs.md5(ejs.md5(password.value) +''+ salt.value)
             },
-            success: res => res.state === 'success'
-                ? send('login/login')
-                : ejs.html(msg, '用户名或密码错误！'),
-            error: res => {
-
+            success: res => {
+                if (res.state === 'success') {
+                    //登录成功
+                    send('login/main');
+                } else {
+                    //通知错误
+                    ejs.html(msg, res.data)
+                }
             }
-        })
-    }
-})
-;
+        });
+    });
+
+    //去掉信息
+    ejs.on('INPUT', login, 'click', t => ejs.empty(msg));
+
+    //关闭
+    ejs.on('.close', header, 'click', t => send('window/close'));
+});

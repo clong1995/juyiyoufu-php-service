@@ -1,16 +1,24 @@
+<?php
+
+use model\impl;
+
+//获取菜单
+$indexMenu = new impl\IndexMenuImpl();
+$res = $indexMenu->getIndexMenu();
+?>
 <div class="left" id="left">
     <!--logo-->
     <div class="logo">
-        <img src="/cnd/public/image/logo.jpg">
+        <img src="">
     </div>
     <div class="list">
-        <div class="item consumer active"><i class="iconfont">&#xe602;</i>客户管理</div>
-        <div class="item nurse"><i class="iconfont">&#xe61c;</i>护工管理</div>
-        <div class="item order"><i class="iconfont">&#xe6e4;</i>订单管理</div>
-        <div class="item disable"><i class="iconfont">&#xe60a;</i>护工调度</div>
-        <div class="item disable"><i class="iconfont">&#xe67d;</i>客户工单</div>
-        <div class="item position"><i class="iconfont">&#xe67c;</i>业务分布</div>
-        <div class="item disable"><i class="iconfont">&#xe60b;</i>文件管理</div>
+        <?php
+        foreach ($res as &$value) {
+            ?>
+            <a class="item" href="/<?= $value['path'] ?>" target="main"><i class="iconfont"><?= $value['icon'] ?></i><?= $value['name'] ?></a>
+            <?php
+        }
+        ?>
     </div>
 </div>
 <div class="nav" id="nav">
@@ -44,5 +52,5 @@
         </div>
     </div>
 </div>
-<!--<iframe class="main" id="main" src="/pc/consumer/part/list"></iframe>-->
-<iframe class="main" src="/pc/nurse/part/add"></iframe>
+<iframe class="main" name="main" src="/<?= $res[0]['path'] ?>"></iframe>
+<!--<iframe class="main" src="/pc/company/part/list"></iframe>-->

@@ -23,13 +23,11 @@ class SignInImpl implements SignIn
             'password' => $password
         ]]);
 
-        if ($res) {//成功
-            //写入session
-            session_start();
-            $_SESSION['company_id']=$res['id'];
-            return 'success';
+        if ($res && count($res) == 1) {//成功
+            $_SESSION['id'] = $res[0]['id'];
+            return['state'=>'success','data'=>'注册成功！'];
         } else {//失败
-            return 'fail';
+            return ['state'=>'fail','data'=>'注册失败！'];
         }
     }
 }
