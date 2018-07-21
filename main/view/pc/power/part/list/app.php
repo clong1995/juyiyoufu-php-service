@@ -5,6 +5,9 @@ use model\impl;
 //获取菜单
 $privilege = new impl\PowerImpl();
 $res = $privilege->getAllPower();
+
+$data = $res['data'];
+
 ?>
 <div class="nav" id="nav">
     <span class="title"><i class="iconfont">&#xe60c;</i>权限列表</span>
@@ -13,7 +16,7 @@ $res = $privilege->getAllPower();
 </div>
 <div class="main" id="main">
     <?php
-    foreach ($res as $value) {
+    foreach ($data as $value) {
         ?>
         <div class="item" data-id="<?= $value['id'] ?>">
             <div class="row">
@@ -35,7 +38,6 @@ $res = $privilege->getAllPower();
             </div>
             <div class="option">
                 <button class="edit"><i class="iconfont">&#xe626;</i>编辑</button>
-                <button class="detail"><i class="iconfont">&#xe60e;</i>详情</button>
                 <button class="delete"><i class="iconfont">&#xe60e;</i>删除</button>
             </div>
         </div>

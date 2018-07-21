@@ -2,15 +2,25 @@
 /**
  * Created by IntelliJ IDEA.
  * User: clong
- * Date: 18-6-24
- * Time: 上午6:57
+ * Date: 18-7-1
+ * Time: 上午1:45
  */
 
-namespace db;
+namespace model;
 
-interface Role extends Base
+
+interface Role
 {
+    /**
+     * 获取权限类型
+     * @return mixed
+     */
     public function getAll();
+
+    /**
+     * @param $roleId
+     * @return mixed
+     */
     public function getAllById($roleId);
 
     /**

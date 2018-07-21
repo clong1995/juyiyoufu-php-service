@@ -103,6 +103,7 @@ class EBase {
 
 
     /**
+     * TODO 一次添加多个样式
      * 添加类名
      * @param dom
      * @param clazz
@@ -822,7 +823,15 @@ class EBase {
      * @param url
      * @param target
      */
-    link(url, target = 'self') {
+    link(url, data = {}) {
+        let param = '?';
+        for (let k in data) {
+            param += k + '=' + data[k] + '&';
+        }
+        if (param !== '?') {
+            param = param.substring(0, param.length - 1);
+            url += param;
+        }
         window.location.href = url;
     }
 
@@ -876,8 +885,8 @@ class EBase {
                     this.append(this._head, oScript);
                     this._scriptSet.add(path);
                     this.remove(oScript);
-                }else{
-                    ejs.log('加载js失败！','error');
+                } else {
+                    ejs.log('加载js失败！', 'error');
                     return null;
                 }
             };

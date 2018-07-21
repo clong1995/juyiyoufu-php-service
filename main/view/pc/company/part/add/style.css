@@ -3,8 +3,60 @@
 }
 
 .main > form table .title{
-    width: 80px;
+    width: 140px;
 }
 .main > form table .value{
     width: 180px;
+}
+.main > form table .phone,
+.main > form table .name,
+.main > form table .password{
+    width: 180px;
+}
+.main > form table .hint{
+    font-size: 12px;
+}
+
+
+.main table .licenseImg {
+    width: 250px;
+    height: 300px;
+    text-align: center;
+    background: #ccc;
+    margin: 0 auto;
+    position: relative;
+}
+
+.main table .licenseImg > img {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+.main table .licenseImg:hover {
+    color: #0f99ff !important;
+}
+
+.main table .licenseImg:hover img {
+    opacity: .5;
+}
+
+.main table .licenseImg > .iconfont {
+    display: block;
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    font-size: 50px;
+    position: absolute;
+    top: 100px;
+    left: 0;
+    z-index: 2;
+    text-align: center;
+}
+
+.main table .licenseImg > .iconfont > span {
+    font-size: 20px;
 }

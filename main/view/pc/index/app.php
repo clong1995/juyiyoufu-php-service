@@ -5,6 +5,7 @@ use model\impl;
 //获取菜单
 $indexMenu = new impl\IndexMenuImpl();
 $res = $indexMenu->getIndexMenu();
+$menu = $res['data'];
 ?>
 <div class="left" id="left">
     <!--logo-->
@@ -13,7 +14,7 @@ $res = $indexMenu->getIndexMenu();
     </div>
     <div class="list">
         <?php
-        foreach ($res as &$value) {
+        foreach ($menu as &$value) {
             ?>
             <a class="item" href="/<?= $value['path'] ?>" target="main"><i class="iconfont"><?= $value['icon'] ?></i><?= $value['name'] ?></a>
             <?php
@@ -52,5 +53,5 @@ $res = $indexMenu->getIndexMenu();
         </div>
     </div>
 </div>
-<iframe class="main" name="main" src="/<?= $res[0]['path'] ?>"></iframe>
-<!--<iframe class="main" src="/pc/company/part/list"></iframe>-->
+<!--<iframe class="main" name="main" src="/--><?//= $menu[0]['path'] ?><!--"></iframe>-->
+<iframe class="main" src="/pc/company/part/add"></iframe>

@@ -16,17 +16,20 @@ class RegionalImpl implements Regional
 {
     public function province()
     {
-        // TODO: Implement province() method.
+        $province = new impl\ProvincesImpl();
+        return $province->select(['provinceid','province']);
     }
 
     public function city($id)
     {
-        // TODO: Implement City() method.
+        $province = new impl\CitiesImpl();
+        return $province->select(['cityid','city'],['provinceid'=>$id]);
     }
 
     public function ares($id)
     {
-        // TODO: Implement Ares() method.
+        $province = new impl\AreasImpl();
+        return $province->select(['areaid','area'],['cityid'=>$id]);
     }
 
 }

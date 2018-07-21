@@ -72,7 +72,7 @@ class UploadImpl implements Upload
         ]);
 
         //成功
-        if (!$res['count'])
+        if ($res['state'] !== 'success')
             return ['type'=>'fail','data'=>['info' => '文件保存数据库失败']];
 
         return ['type'=>'success','data'=>['id'=>$md5]];

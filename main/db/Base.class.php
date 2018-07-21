@@ -12,8 +12,12 @@ namespace db;
 interface Base
 {
     public function insert($param);
-    public function delete($param);
+
+    public function delete($condition);
+
     public function update($param, $condition);
+
     public function select($field, $condition);
+
     public function count($condition);
 }

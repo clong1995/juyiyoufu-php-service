@@ -2,7 +2,6 @@
 use model\impl;
 $power = new impl\PowerImpl();
 $res = $power->getAllType();
-$type = $res['data'];
 ?>
 <div class="nav" id="nav">
     <span class="title"><i class="iconfont">&#xe60c;</i>增加权限</span>
@@ -22,7 +21,7 @@ $type = $res['data'];
                 <select name="type">
                     <option value=""></option>
                     <?php
-                    foreach ($type as $value){
+                    foreach ($res as $value){
                         ?>
                         <option value="<?=$value['privilege_type_id']?>"><?=$value['name']?></option>
                     <?php

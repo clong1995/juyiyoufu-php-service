@@ -21,6 +21,13 @@
         <link rel="stylesheet" href="/cnd/public/style/add.css">
         <?php
     }
+    //编辑页面样式
+    if (strpos(PATH, '/part/edit/') !== false) {
+        ?>
+        <link rel="stylesheet" href="/cnd/public/style/edit.css">
+        <?php
+    }
+
 
     //引入各个模块自己的样式
     $stylePath = PATH . 'style.css';

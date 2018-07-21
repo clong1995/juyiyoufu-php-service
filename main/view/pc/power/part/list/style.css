@@ -1,7 +1,7 @@
 .main > .item {
     max-width: 820px;
     width: calc(100% - 40px);
-    height: 75px;
+    height: 45px;
 }
 
 .main > .item > .row {
@@ -15,7 +15,7 @@
 .main > .item > .row.row4 > p {
     float: left;
     width: calc(100% - 75px);
-    height: 60px;
+    height: 30px;
 }
 
 .main > .item > .option {

@@ -1,0 +1,10 @@
+.main > form table{
+    margin: 0 auto;
+}
+
+.main > form table .title{
+    width: 80px;
+}
+.main > form table .value{
+    width: 180px;
+}

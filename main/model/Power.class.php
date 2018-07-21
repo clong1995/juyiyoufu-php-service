@@ -18,6 +18,8 @@ interface Power
      */
     public function add($data);
 
+    public function update($data);
+
     /**
      * 删除权限
      * @param $id
@@ -30,6 +32,8 @@ interface Power
      * @return mixed
      */
     public function getAllPower();
+
+    public function getPowerById($id);
 
     /**
      * 获取权限类型

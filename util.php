@@ -6,16 +6,19 @@
  * Time: 上午12:07
  */
 
+//查询session
 function hasSession($key)
 {
     return isset($_SESSION[$key]) ? true : false;
 }
 
+//获取cession
 function getSession($key)
 {
     return hasSession($key) ? $_SESSION[$key] : null;
 }
 
+//增加session
 function setSession($key, $value)
 {
     if (hasSession($key))
@@ -23,6 +26,7 @@ function setSession($key, $value)
     $_SESSION[$key] = $value;
 }
 
+//删除session
 function delSession($key)
 {
     if ($key === 'ALL') {
@@ -35,12 +39,14 @@ function delSession($key)
 
 }
 
+//更新session
 function updateSession($key, $value){
     if (!hasSession($key))
         exit('session不存在！');
     $_SESSION[$key] = $value;
 }
 
+//销毁session
 function destroy($varArr)
 {
     foreach ($varArr as &$value) {
@@ -103,6 +109,9 @@ function underscored($str){
 }
 
 
+//TODO 校验
+
+
 //发起http请求
 function request($url, $opt = [
     'method' => 'GET',
@@ -136,7 +145,6 @@ function request($url, $opt = [
     curl_close($curl); // 关闭CURL会话
     return json_decode($tmpInfo, true); // 返回数据
 }
-
 function rolling_curl($urls, $callback, $custom_options = null)
 {
 

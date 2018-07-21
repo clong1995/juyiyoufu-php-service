@@ -12,4 +12,5 @@ interface Privilege  extends Base
 {
     public function getAllByEmployeeId($employeeId);
     public function getAll();
+    public function getPowerById($id);
 }

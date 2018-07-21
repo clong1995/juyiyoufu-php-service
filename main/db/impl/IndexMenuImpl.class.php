@@ -9,12 +9,13 @@
 namespace db\impl;
 
 use db\IndexMenu;
+use conn\mysqlConn;
 
 class IndexMenuImpl extends AbstractBase implements IndexMenu
 {
     public function getAllByEmployeeId($employeeId)
     {
-        return DB::query('
+        return mysqlConn::query('
     SELECT index_menu.name as name,path,in_order,icon
     FROM index_menu 
 	INNER JOIN privilege USING ( privilege_id ) 

@@ -29,22 +29,28 @@ class LoginImpl implements Login
             'phone' => $phone
         ]);
 
-        if ($res && count($res) == 1) {
+        if ($res['state'] == 'success') {
             //校验密码合法性
-            $str = strtoupper(md5($res[0]['password'] . getSession('salt')));
+            $data = $res['data'][0];
+            $str = strtoupper(md5($data['password'] . getSession('salt')));
             if ($str === $password) {
-                $employeeId = $res[0]['id'];
+                $employeeId = $data['id'];
                 //注册id
                 setSession('id', $employeeId);
                 //注册权限
                 $Privilege = new impl\PrivilegeImpl();
                 $res = $Privilege->getAllByEmployeeId($employeeId);
-                foreach ($res as &$value)
-                    $value = $value['path'];
-                setSession('privilege', $res);
-                //清除salt
-                delSession('salt');
-                return ['state' => 'success', 'data' => '登录成功！'];
+                if($res['state'] == 'success'){
+                    $data = $res['data'];
+                    foreach ($data as &$value)
+                        $value = $value['path'];
+                    setSession('privilege', $data);
+                    //清除salt
+                    delSession('salt');
+                    return ['state' => 'success', 'data' => '登录成功！'];
+                }else{
+                    return ['state' => 'fail', 'data' => '权限注册错误！'];
+                }
             } else {
                 return ['state' => 'fail', 'data' => '密码错误！'];
             }

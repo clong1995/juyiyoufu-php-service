@@ -7,6 +7,7 @@
  */
 
 namespace db\impl;
+use conn\mysqlConn;
 
 abstract class AbstractBase
 {
@@ -29,62 +30,82 @@ abstract class AbstractBase
     // 增加
     public function insert($param)
     {
-        $keys = DB::clean(array_keys($param[0]));
-        return DB::update('insert into ' . $this->tableName() . ' (' . implode(',', $keys) . ') values(:' . implode(',:', $keys) . ')', $param);
+        $keys = mysqlConn::key($param);
+        $sql = 'insert into ' . $this->tableName() . ' (' . implode(',', $keys) . ') values(:' . implode(',:', $keys) . ')';
+        return mysqlConn::update($sql, $param);
     }
 
     //根据条件
-    public function delete($param)
+    public function delete($condition)
     {
-        $keys = DB::clean(array_keys($param[0]));
+        $keys = mysqlConn::key($condition);
         $condition = [];
         foreach ($keys as $v)
             array_push($condition, $v . '=:' . $v);
-        return DB::update('delete from ' . $this->tableName() . ' where ' . implode(' and ', $condition), $param);
+        return mysqlConn::update('delete from ' . $this->tableName() . ' where ' . implode(' and ', $condition), $condition);
     }
 
-    //根据条件更新
-    public function update($param, $condition)
+    /**
+     * 根据条件更新
+     * @param $param
+     * @param array $condition
+     * @return array|bool
+     *
+     * ([[],[]],[[],[]])
+     *
+     */
+    public function update($param,$condition)
     {
-        //TODO 未测试
-        /*$keys = DB::clean($param);
-        $keys1 = DB::clean($condition);
+        $keys = mysqlConn::key($param);
         $field = [];
         foreach ($keys as $v) {
             array_push($field, $v . '=:' . $v);
         }
+
         $con = [];
-        foreach ($keys1 as $v) {
+        $keys = mysqlConn::key($condition);
+        foreach ($keys as $v) {
             array_push($con, $v . '=:' . $v);
         }
-        return DB::update('update ' . $this->tableName() . ' set ' . implode(',', $field) . ' where ' . implode(',', $con), $param);*/
+
+        $arr = [];
+        foreach ($param as $key => $value)
+            array_push($arr,array_merge($value,$condition[$key]));
+
+        return mysqlConn::update('update ' . $this->tableName() . ' set ' . implode(',', $field) . ' where ' . implode(',', $con), $arr);
     }
 
     //根据条件查询
     public function select($field, $condition = [])
     {
-        $field = DB::clean($field);
+        $field = mysqlConn::key($field);
         $sql = 'select ' . implode(',', $field) . ' from ' . $this->tableName();
-        if (is_array($condition) && count($condition)) {
-            $keys = DB::clean(array_keys($condition));
+        if (count($condition)) {
+            $keys = mysqlConn::key($condition);
             $con = [];
             foreach ($keys as $v) {
                 array_push($con, $v . '=:' . $v);
             }
             $sql .= ' where ' . implode(' and ', $con);
         }
-
-        return DB::query($sql, $condition);
+        return mysqlConn::query($sql, $condition);
     }
 
     //根据条件计数
     public function count($condition)
     {
-        $keys = DB::clean(array_keys($condition));
+        $keys = mysqlConn::clean(array_keys($condition));
         $con = [];
         foreach ($keys as $v) {
             array_push($con, $v . '=:' . $v);
         }
-        return DB::query('select count(*) as count from ' . $this->tableName() . ' where ' . implode(' and ', $con), $condition);
+            $res = mysqlConn::query('select count(*) as count from ' . $this->tableName() . ' where ' . implode(' and ', $con), $condition);
+
+        if($res['state'] == 'success'){
+            $res['data']=$res['data'][0];
+        }
+
+        return $res;
+
     }
 }

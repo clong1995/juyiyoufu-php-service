@@ -1,4 +1,6 @@
 <?php
+
+
 session_start();
 //接收路由
 $route = $_GET['route'];
@@ -10,6 +12,14 @@ date_default_timezone_set("PRC");
 
 //工具函数
 include DIR . 'util.php';
+
+//请求头限制
+$head = getallheaders();
+if($head['Host'] !== 'weixin.cxdgtm.com')
+    notFound('非法部署的应用！');
+if(strpos($head['User-Agent'],'Electron') ==false)
+    notFound('非法客户端！');
+
 
 //自动加载
 spl_autoload_register(function ($class_name) {
@@ -43,7 +53,7 @@ if (!$route) $route = 'index';
 $routeArr = explode('/', $route);
 
 //聚合请求参数
-$param = array_merge($_GET, $_POST/*, $_FILES*/);
+$param = array_merge($_GET, $_POST, $_FILES);
 
 
 //=====>api路由

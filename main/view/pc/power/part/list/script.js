@@ -5,17 +5,19 @@ ejs.ready(() => {
     ejs.on('.add', nav, 'click', t => ejs.link('/pc/power/part/add'));
     //删除
     ejs.on('.delete', main, 'click', t => {
+        let item = t.parentNode.parentNode;
         ejs.ajax('/api/power/delById', {
             method: 'POST',
             data: {
-                id: 0
+                id: ejs.attr(item, 'data-id')
             },
             success: data => {
                 if (data.state === 'success')
-                    ejs.remove(t.parentNode.parentNode);
-                //非法删除要从后端解决
+                    ejs.remove(item);
             }
         });
     });
 
+    //编辑
+    ejs.on('.edit', main, 'click', t => ejs.link('/pc/power/part/edit?id=' + ejs.attr(t.parentNode.parentNode, 'data-id')))
 });

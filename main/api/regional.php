@@ -2,16 +2,16 @@
 
 use model\impl;
 switch (ORDER) {
-    case 'province'://添加
-        $regional = new impl\RegionalImpl();
-        $regional->province();
-        break;
+    /*case 'province'://添加
+        break;*/
     case 'city'://添加
         $regional = new impl\RegionalImpl();
-        $regional->city(0);
+        $res = $regional->city(PARAM['id']);
+        response($res['state'], $res['data']);
         break;
     case 'area'://添加
         $regional = new impl\RegionalImpl();
-        $regional->ares(0);
+        $res = $regional->ares(PARAM['id']);
+        response($res['state'], $res['data']);
         break;
 }

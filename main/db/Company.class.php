@@ -8,7 +8,7 @@
 
 namespace db;
 
-interface Company  extends Base
+interface Company extends Base
 {
-
+    public function getAll();
 }

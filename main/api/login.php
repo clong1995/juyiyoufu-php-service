@@ -9,7 +9,7 @@
 use model\impl;
 
 switch (ORDER) {
-    case 'weixin'://添加
+    case 'weixin'://微信登录
         $data = request('https://api.weixin.qq.com/sns/jscode2session', [
             'method' => 'GET',
             'data' => [
@@ -22,7 +22,7 @@ switch (ORDER) {
         response('success', $data);
         break;
 
-    case 'pc'://添加
+    case 'pc'://pc登录
         $login = new impl\LoginImpl();
         $res = $login->pc(PARAM['phone'], PARAM['password']);
         response($res['state'], $res['data']);
