@@ -19,8 +19,9 @@ class RoleImpl implements Role
         //TODO 过滤数据
         $role = new impl\RoleImpl();
         $res = $role->getAll();
+        $data = $res['data'];
         $map = [];
-        foreach ($res as $value) {
+        foreach ($data as $value) {
             $role_id = $value['role_id'];
             if (!array_key_exists($role_id, $map))
                 $map[$role_id] = [
@@ -36,6 +37,7 @@ class RoleImpl implements Role
                 'type' => $value['privilege_type'],
             ]);
         }
+
         return $map;
     }
 
@@ -44,8 +46,9 @@ class RoleImpl implements Role
         //TODO 过滤数据
         $role = new impl\RoleImpl();
         $res = $role->getAllById($roleId);
+        $data = $res['data'];
         $map = [];
-        foreach ($res as $key => $value) {
+        foreach ($data as $key => $value) {
             if (!$key) {
                 $map['role'] = [
                     'id' => $value['role_id'],
@@ -68,7 +71,7 @@ class RoleImpl implements Role
         $returnData = ['state' => 'success', 'data' => '关联成功'];
         $role = new impl\RoleImpl();
         $res = $role->relPrivilege($roleId, $privilegeId);
-        if (!$res)
+        if ($res['state'] != 'success')
             $returnData = ['state' => 'fail', 'data' => '关联失败'];
 
         return $returnData;

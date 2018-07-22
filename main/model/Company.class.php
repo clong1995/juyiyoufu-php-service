@@ -13,4 +13,6 @@ interface Company
 {
     public function add($data);
     public function getAll();
+    public function delete($id);
+    public function getById($id);
 }

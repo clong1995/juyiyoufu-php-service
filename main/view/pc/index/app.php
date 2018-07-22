@@ -53,5 +53,5 @@ $menu = $res['data'];
         </div>
     </div>
 </div>
-<!--<iframe class="main" name="main" src="/--><?//= $menu[0]['path'] ?><!--"></iframe>-->
-<iframe class="main" src="/pc/company/part/add"></iframe>
+<iframe class="main" name="main" src="/<?= $menu[0]['path'] ?>"></iframe>
+<!--<iframe class="main" src="/pc/role/part/list"></iframe>-->

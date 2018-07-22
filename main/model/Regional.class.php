@@ -13,5 +13,5 @@ interface Regional
 {
     public function province();
     public function city($id);
-    public function ares($id);
+    public function area($id);
 }

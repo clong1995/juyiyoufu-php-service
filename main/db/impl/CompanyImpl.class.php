@@ -9,13 +9,13 @@
 namespace db\impl;
 
 use db\Company;
-use conn\mysqlConn;
+use conn\mysql;
 
 class CompanyImpl extends AbstractBase implements Company
 {
     public function getAll()
     {
-       return mysqlConn::query('
+        return mysql::query('
             SELECT
                 company.id as id,
                 company.name as company,
@@ -36,4 +36,44 @@ class CompanyImpl extends AbstractBase implements Company
                 LEFT JOIN file on file.id = company.logo
 	');
     }
+
+    public function getById($id)
+    {
+        return mysql::query('
+            SELECT 
+                company.NAME AS company,
+                logo,
+                province,
+                city,
+                area,
+                info,
+                license,
+                license_img,
+                employee_id,
+                employee_info.NAME AS employee,
+                employee.phone AS phone 
+            FROM company 
+            LEFT JOIN employee_info USING ( employee_id ) 
+            LEFT JOIN employee on  employee_info.employee_id = employee.id 
+            where company.id = :id
+	',['id'=>$id]);
+    }
+
+
+    public function has($id, $license)
+    {
+         $res = mysql::query('
+            SELECT count( * ) AS count 
+            FROM company 
+            WHERE license = :license
+            AND id != :id
+        ',['id'=>$id,'license'=>$license]);
+
+        if($res['state'] == 'success'){
+            $res['data']=$res['data'][0];
+        }
+
+        return $res;
+    }
+
 }

@@ -42,7 +42,7 @@
             </td>
         </tr>
         <tr>
-            <td class="title">地址</td>
+            <td class="title">公司地址</td>
             <td>
 
                 <select class="province" name="province">

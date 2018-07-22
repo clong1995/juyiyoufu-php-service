@@ -9,13 +9,13 @@
 namespace db\impl;
 
 use db\Role;
-use conn\mysqlConn;
+use conn\mysql;
 
 class RoleImpl extends AbstractBase implements Role
 {
     public function getAll()
     {
-        return mysqlConn::query('
+        return mysql::query('
             SELECT
                 role_id,
                 role_info.name as role_name,
@@ -33,7 +33,7 @@ class RoleImpl extends AbstractBase implements Role
 
     public function relPrivilege($roleId, $privilegeId)
     {
-        return mysqlConn::update('INSERT INTO role_privilege_relation (role_id, privilege_id) VALUES (:roleId,:privilegeId)', [
+        return mysql::update('INSERT INTO role_privilege_relation (role_id, privilege_id) VALUES (:roleId,:privilegeId)', [
             ['roleId' => $roleId, 'privilegeId' => $privilegeId]
         ]);
     }
@@ -45,7 +45,7 @@ class RoleImpl extends AbstractBase implements Role
      */
     public function getAllById($roleId)
     {
-        return mysqlConn::query('
+        return mysql::query('
             SELECT 
                 role_id, 
                 role_info.name as role_name, 

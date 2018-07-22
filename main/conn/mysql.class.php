@@ -11,7 +11,7 @@ namespace conn;
 use \PDO;
 use \PDOException;
 
-final class mysqlConn
+final class mysql
 {
 //数据库链接信息
     private static $connInfo = [
@@ -19,7 +19,7 @@ final class mysqlConn
         'port' => 3306,
         'dbname' => 'nurse',
         'username' => 'nurse',
-        'passwd' => 'nurse'
+        'passwd' => 'jyyf2018'
     ];
 
     /**
@@ -99,7 +99,6 @@ final class mysqlConn
      */
     public static function key($param)
     {
-        $keys = [];
         if (is_array(reset($param))) {
             $isEqual = true;
             $keys = array_keys($param[0]);

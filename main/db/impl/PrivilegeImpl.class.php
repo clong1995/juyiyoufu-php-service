@@ -9,7 +9,7 @@
 namespace db\impl;
 
 use db\Privilege;
-use conn\mysqlConn;
+use conn\mysql;
 
 class PrivilegeImpl extends AbstractBase implements Privilege
 {
@@ -17,7 +17,7 @@ class PrivilegeImpl extends AbstractBase implements Privilege
 
     public function getAllByEmployeeId($employeeId)
     {
-        return mysqlConn::query('
+        return mysql::query('
             SELECT 
               path 
             FROM 
@@ -32,7 +32,7 @@ class PrivilegeImpl extends AbstractBase implements Privilege
 
     public function getPowerById($id)
     {
-        return mysqlConn::query('
+        return mysql::query('
             SELECT
                 privilege.privilege_id AS id,
                 privilege_info.name,
@@ -49,6 +49,6 @@ class PrivilegeImpl extends AbstractBase implements Privilege
 
     public function getAll()
     {
-        return mysqlConn::query('SELECT privilege.privilege_id AS id,privilege_info.name,info,privilege_type.NAME AS type,path FROM privilege_info INNER JOIN privilege_type USING (privilege_type_id) INNER JOIN privilege USING ( privilege_id )');
+        return mysql::query('SELECT privilege.privilege_id AS id,privilege_info.name,info,privilege_type.NAME AS type,path FROM privilege_info INNER JOIN privilege_type USING (privilege_type_id) INNER JOIN privilege USING ( privilege_id )');
     }
 }

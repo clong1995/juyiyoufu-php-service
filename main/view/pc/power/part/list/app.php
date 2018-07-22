@@ -5,7 +5,6 @@ use model\impl;
 //获取菜单
 $privilege = new impl\PowerImpl();
 $res = $privilege->getAllPower();
-
 $data = $res['data'];
 
 ?>
@@ -18,27 +17,29 @@ $data = $res['data'];
     <?php
     foreach ($data as $value) {
         ?>
-        <div class="item" data-id="<?= $value['id'] ?>">
-            <div class="row">
-                <span class="title">名称:</span><?= $value['name'] ?>
-            </div>
-            <div class="row">
-                <span class="title">类型:</span>
-                <?= $value['type'] ?>
-            </div>
-            <div class="row row3">
-                <span class="title">资源:</span>
-                <?= $value['path'] ?>
-            </div>
-            <div class="row row4">
-                <span class="title">说明:</span>
-                <p>
-                    <?= $value['info'] ?>
-                </p>
-            </div>
-            <div class="option">
-                <button class="edit"><i class="iconfont">&#xe626;</i>编辑</button>
-                <button class="delete"><i class="iconfont">&#xe60e;</i>删除</button>
+        <div class="item">
+            <div class="inner" data-id="<?= $value['id'] ?>">
+                <div class="row">
+                    <span class="title">名称:</span><?= $value['name'] ?>
+                </div>
+                <div class="row row2">
+                    <span class="title">类型:</span>
+                    <?= $value['type'] ?>
+                </div>
+                <div class="row row3">
+                    <span class="title">资源:</span>
+                    <?= $value['path'] ?>
+                </div>
+                <div class="row row4">
+                    <span class="title">说明:</span>
+                    <p>
+                        <?= $value['info'] ?>
+                    </p>
+                </div>
+                <div class="option">
+                    <button class="edit"><i class="iconfont">&#xe626;</i>编辑</button>
+                    <button class="delete"><i class="iconfont">&#xe60e;</i>删除</button>
+                </div>
             </div>
         </div>
         <?php

@@ -7,11 +7,10 @@ $role = new impl\RoleImpl();
 
 $roles = $role->getAllById(PARAM['id']);
 
-//$roles = $role->getAllById(1);
-
 //获取所有权限
 $power = new impl\PowerImpl();
 $powers = $power->getAllPower();
+$powersData = $powers['data'];
 
 ?>
 <div class="nav" id="nav">
@@ -54,7 +53,7 @@ $powers = $power->getAllPower();
                         <select class="privilege">
                             <option></option>
                             <?php
-                            foreach ($powers as $value) {
+                            foreach ($powersData as $value) {
                                 ?>
                                 <option value="<?= $value['id'] ?>">
                                     <?= $value['name'] ?>

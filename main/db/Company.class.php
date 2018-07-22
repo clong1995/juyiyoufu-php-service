@@ -11,4 +11,6 @@ namespace db;
 interface Company extends Base
 {
     public function getAll();
+    public function getById($id);
+    public function has($id,$license);
 }

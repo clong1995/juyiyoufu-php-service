@@ -15,7 +15,7 @@ include DIR . 'util.php';
 
 //请求头限制
 $head = getallheaders();
-if($head['Host'] !== 'weixin.cxdgtm.com')
+if($head['Host'] !== 'nurse.juyiyoufu.com')
     notFound('非法部署的应用！');
 if(strpos($head['User-Agent'],'Electron') ==false)
     notFound('非法客户端！');

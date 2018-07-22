@@ -11,7 +11,7 @@ switch (ORDER) {
         break;
     case 'area'://添加
         $regional = new impl\RegionalImpl();
-        $res = $regional->ares(PARAM['id']);
+        $res = $regional->area(PARAM['id']);
         response($res['state'], $res['data']);
         break;
 }

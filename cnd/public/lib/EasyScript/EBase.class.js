@@ -510,7 +510,8 @@ class EBase {
                 width:100%;
                 height:100%;
                 cursor:auto;
-                user-select:auto
+                user-select:auto;
+                overflow:hidden;
             }
             
             body, button, input, select, textarea, a, li {

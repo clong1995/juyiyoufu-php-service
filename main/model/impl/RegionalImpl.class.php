@@ -26,7 +26,7 @@ class RegionalImpl implements Regional
         return $province->select(['cityid','city'],['provinceid'=>$id]);
     }
 
-    public function ares($id)
+    public function area($id)
     {
         $province = new impl\AreasImpl();
         return $province->select(['areaid','area'],['cityid'=>$id]);
