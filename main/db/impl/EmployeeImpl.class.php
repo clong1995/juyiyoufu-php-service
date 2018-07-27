@@ -6,10 +6,11 @@
  * Time: 下午4:28
  */
 
-namespace db\impl;
+namespace main\db\impl;
 
-use db\Employee;
+use main\db\Employee;
 
-class EmployeeImpl extends AbstractBase implements Employee
+class EmployeeImpl extends AbstractMysqlBase implements Employee
 {
+
 }

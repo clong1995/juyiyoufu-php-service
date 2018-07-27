@@ -6,11 +6,12 @@
  * Time: 17:25
  */
 
-use model\impl;
+use EasyPhp\util\Util;
+use main\model\impl;
 
 switch (ORDER) {
     case 'weixin'://微信登录
-        $data = request('https://api.weixin.qq.com/sns/jscode2session', [
+        $data = Util::request('https://api.weixin.qq.com/sns/jscode2session', [
             'method' => 'GET',
             'data' => [
                 'appid' => 'wx25c3dff3ae7fa3b9',
@@ -19,12 +20,12 @@ switch (ORDER) {
                 'grant_type' => 'authorization_code'
             ]
         ]);
-        response('success', $data);
+        Util::response('success', $data);
         break;
 
     case 'pc'://pc登录
         $login = new impl\LoginImpl();
         $res = $login->pc(PARAM['phone'], PARAM['password']);
-        response($res['state'], $res['data']);
+        Util::response($res['state'], $res['data']);
         break;
 }

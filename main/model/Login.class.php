@@ -6,7 +6,7 @@
  * Time: 上午1:24
  */
 
-namespace model;
+namespace main\model;
 
 
 interface Login

@@ -8,13 +8,11 @@
 
 namespace model\impl;
 
-
 use model\Power;
 use db\impl;
 
-class PowerImpl implements Power
+class PowerImpl extends AbstractBase implements Power
 {
-
 
     /**
      * TODO 这里应该开启事物
@@ -24,6 +22,9 @@ class PowerImpl implements Power
      */
     public function add($data)
     {
+
+        $pdo = $this->pdo;
+
         $returnData = ['state' => 'success', 'data' => '添加成功'];
 
         //TODO 过滤数据
@@ -40,6 +41,8 @@ class PowerImpl implements Power
         $res = $privilegeInfo->insert([
             ['privilege_id' => $res['data']['id'], 'name' => $data['name'], 'info' => $data['info'], 'privilege_type_id' => $data['type']]
         ]);
+
+
 
         if ($res['state'] != 'success') {//失败
             $returnData['state'] = 'fail';

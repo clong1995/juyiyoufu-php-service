@@ -6,7 +6,7 @@
  * Time: 上午1:45
  */
 
-namespace model;
+namespace main\model;
 
 
 interface IndexMenu

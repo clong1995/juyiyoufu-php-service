@@ -6,18 +6,17 @@
  * Time: 下午4:28
  */
 
-namespace db\impl;
+namespace main\db\impl;
 
-use db\Privilege;
-use conn\mysql;
+use main\db\Privilege;
 
-class PrivilegeImpl extends AbstractBase implements Privilege
+class PrivilegeImpl extends AbstractMysqlBase implements Privilege
 {
 
 
     public function getAllByEmployeeId($employeeId)
     {
-        return mysql::query('
+        return $this->exec->query('
             SELECT 
               path 
             FROM 

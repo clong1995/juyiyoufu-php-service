@@ -1,6 +1,6 @@
 <?php
 
-use model\impl;
+use main\model\impl;
 
 //获取菜单
 $indexMenu = new impl\IndexMenuImpl();

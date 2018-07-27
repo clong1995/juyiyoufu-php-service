@@ -1,7 +1,9 @@
 <?php
-$salt = randStr(6) . time();
-if (!hasSession('salt'))
-    setSession('salt', $salt)
+use EasyPhp\util\Util;
+
+$salt = Util::randStr(6) . time();
+if (!Util::hasSession('salt'))
+    Util::setSession('salt', $salt)
 ?>
 <div class="header" id="header">
     <span class="title">巨蚁医护</span>
@@ -13,7 +15,7 @@ if (!hasSession('salt'))
     </span>-->
 </div>
 <div id="login" class="login">
-    <input class="salt" type="hidden" value="<?= getSession('salt', $salt) ?>"/>
+    <input class="salt" type="hidden" value="<?= Util::getSession('salt', $salt) ?>"/>
     <div class="icon">
         <i class="iconfont">&#xe639;</i>
     </div>

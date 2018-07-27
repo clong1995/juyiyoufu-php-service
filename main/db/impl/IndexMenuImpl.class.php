@@ -6,24 +6,23 @@
  * Time: 下午4:28
  */
 
-namespace db\impl;
+namespace main\db\impl;
 
-use db\IndexMenu;
-use conn\mysql;
+use main\db\IndexMenu;
 
-class IndexMenuImpl extends AbstractBase implements IndexMenu
+class IndexMenuImpl extends AbstractMysqlBase implements IndexMenu
 {
     public function getAllByEmployeeId($employeeId)
     {
-        return mysql::query('
-    SELECT index_menu.name as name,path,in_order,icon
-    FROM index_menu 
-	INNER JOIN privilege USING ( privilege_id ) 
-	INNER JOIN menu_index_menu_group_relation USING ( index_menu_id )
-	INNER JOIN employee_info USING ( index_menu_group_id ) 
-    WHERE employee_info.employee_id =  :employeeId
-    ORDER BY in_order
-    ',
+        return $this->exec->query('
+                SELECT index_menu.name as name,path,in_order,icon
+                FROM index_menu 
+                INNER JOIN privilege USING ( privilege_id ) 
+                INNER JOIN menu_index_menu_group_relation USING ( index_menu_id )
+                INNER JOIN employee_info USING ( index_menu_group_id ) 
+                WHERE employee_info.employee_id =  :employeeId
+                ORDER BY in_order
+            ',
             ['employeeId' => $employeeId]
         );
     }

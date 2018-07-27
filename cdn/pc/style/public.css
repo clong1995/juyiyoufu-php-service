@@ -1,12 +1,12 @@
 body{
     color: #333;
     cursor: default;
-    background: #f5f5f5;
+    /*background: #f5f5f5;*/
 }
 
 @font-face {
     font-family: "iconfont";
-    src:url('/cnd/public/iconfont/iconfont.ttf') format('truetype')
+    src:url('/cdn/pc/iconfont/iconfont.ttf') format('truetype')
 }
 .iconfont {
     font-family: "iconfont" !important;

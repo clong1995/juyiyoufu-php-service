@@ -13,6 +13,9 @@ use conn\mysql;
 
 class CompanyImpl extends AbstractBase implements Company
 {
+
+
+
     public function getAll()
     {
         return mysql::query('

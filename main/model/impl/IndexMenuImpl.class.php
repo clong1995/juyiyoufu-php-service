@@ -6,18 +6,33 @@
  * Time: 上午1:51
  */
 
-namespace model\impl;
+namespace main\model\impl;
 
 
-use model\IndexMenu;
-use db\impl;
+use EasyPhp\util\Util;
+use main\model\IndexMenu;
+use main\db\impl;
+use main\db\conn\Mysql;
 
 class IndexMenuImpl implements IndexMenu
 {
+    //数据库句柄
+    private $handle = null;
+
+    public function __construct()
+    {
+        $this->handle = Mysql::getHandle();
+    }
+
     public function getIndexMenu()
     {
-        $indexMenu = new impl\IndexMenuImpl();
-        $res = $indexMenu->getAllByEmployeeId(getSession('id'));
+        $indexMenu = new impl\IndexMenuImpl($this->handle);
+        $res = $indexMenu->getAllByEmployeeId(Util::getSession('user_id'));
+        if($res['state'] === 'success'){
+            foreach ($res['data'] as &$value){
+                $value = str_replace('pc/','',$value);
+            }
+        }
         return $res;
     }
 

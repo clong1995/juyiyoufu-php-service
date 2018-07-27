@@ -1,3 +1,4 @@
 RewriteEngine On
+#RewriteRule ^/?view/(.*) main/view/$1
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule (.*) route.php?route=$1 [QSA]
+RewriteRule (.*) EasyPhp/route.php?route=$1 [QSA,L]

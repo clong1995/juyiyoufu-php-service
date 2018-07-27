@@ -6,40 +6,16 @@
  * Time: 下午6:18
  */
 
-namespace conn;
+namespace EasyPhp\db\exec;
 
 use \PDO;
-use \PDOException;
 
-final class mysql
+class Mysql
 {
-//数据库链接信息
-    private static $connInfo = [
-        'host' => '127.0.0.1',
-        'port' => 3306,
-        'dbname' => 'nurse',
-        'username' => 'nurse',
-        'passwd' => 'jyyf2018'
-    ];
-
-    /**
-     * PDO
-     * @return null|PDO
-     */
-    private static function pdo()
+    private $pdo = null;
+    public function __construct(PDO $pdo)
     {
-        $pdo = null;
-        try {
-            $pdo = new PDO(
-                "mysql:host=" . self::$connInfo['host'] . ";port=" . self::$connInfo['port'] . ";dbname=" . self::$connInfo['dbname'],
-                self::$connInfo['username'],
-                self::$connInfo['passwd'],
-                array(PDO::ATTR_PERSISTENT => true)//持久链接
-            );
-        } catch (PDOException $e) {
-            die("数据库连接失败" . $e->getMessage());
-        }
-        return $pdo;
+        $this->pdo = $pdo;
     }
 
     /**
@@ -48,9 +24,9 @@ final class mysql
      * @param array $param
      * @return array|bool
      */
-    public static function query($sql, $param = [])
+    public function query($sql, array $param = [])
     {
-        $pdostatement = self::pdo()->prepare($sql);
+        $pdostatement = $this->pdo->prepare($sql);
         $res = $pdostatement->execute($param);
         $data = [];
         if ($res) {
@@ -66,10 +42,9 @@ final class mysql
      * @param array $param
      * @return array|bool
      */
-    public static function update($sql, $param = [])
+    public function update($sql, array $param = [])
     {
-        $pdo = self::pdo();
-        $pdostatement = $pdo->prepare($sql);
+        $pdostatement = $this->pdo->prepare($sql);
         $res = true;
         $data = [];
         //批处理
@@ -83,7 +58,7 @@ final class mysql
             if ($type == 'u') {//更新
                 $data = $res ? ['count' => $pdostatement->rowCount()] : [];
             } else if ($type == 'i') {//插入
-                $data = $res ? ['id' => $pdo->lastInsertId()] : [];
+                $data = $res ? ['id' => $this->pdo->lastInsertId()] : [];
             } else {//删除
                 $data = [];
             }
@@ -97,7 +72,7 @@ final class mysql
      * @param $param
      * @return mixed
      */
-    public static function key($param)
+    public function key(array $param)
     {
         if (is_array(reset($param))) {
             $isEqual = true;

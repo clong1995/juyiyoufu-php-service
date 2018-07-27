@@ -24,6 +24,9 @@ class CompanyImpl implements Company
      */
     public function add($data)
     {
+
+        //拿到 pdo
+
         $returnData = ['state' => 'success', 'data' => '添加成功'];
         //TODO 过滤数据
         $company = new impl\CompanyImpl();
