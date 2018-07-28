@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 use main\model\impl;
 
@@ -53,5 +54,5 @@ $menu = $res['data'];
         </div>
     </div>
 </div>
-<iframe class="main" name="main" src="/<?= $menu[0]['path'] ?>"></iframe>
-<!--<iframe class="main" src="/pc/role/part/list"></iframe>-->
+<!--<iframe class="main" name="main" src="/--><?//= $menu[0]['path'] ?><!--"></iframe>-->
+<!--<iframe class="main" src="/power/add"></iframe>-->

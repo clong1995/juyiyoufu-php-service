@@ -29,7 +29,7 @@ ejs.ready(() => {
                 ejs.html(info, res.data.msg);
                 ejs.append(error, info);
             }else{
-                ejs.link('/pc/power/part/list');
+                ejs.link('/power/list');
             }
         });
     });
@@ -40,5 +40,5 @@ ejs.ready(() => {
     });
 
     //返回
-    ejs.on('.back', nav, 'click', t => ejs.link('/pc/power/part/list'));
+    ejs.on('.back', nav, 'click', t => ejs.link('/power/list'));
 });

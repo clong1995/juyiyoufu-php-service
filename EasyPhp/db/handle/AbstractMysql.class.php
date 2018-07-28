@@ -8,6 +8,7 @@
 
 namespace EasyPhp\db\handle;
 
+use \Exception;
 use \PDO;
 use \PDOException;
 
@@ -18,12 +19,27 @@ use \PDOException;
  */
 abstract class AbstractMysql
 {
-    /**
-     * 获取mysql的pdo链接句柄
-     * @param $connInfo
-     * @return null|PDO
-     */
-    protected static function pdo($connInfo)
+    public $pdo = null;
+    public function __construct($connInfo)
+    {
+        try {
+            $this->pdo = new PDO(
+                "mysql:host=" . $connInfo['host'] . ";port=" . $connInfo['port'] . ";dbname=" . $connInfo['dbname'],
+                $connInfo['username'],
+                $connInfo['passwd'],
+                array(PDO::ATTR_PERSISTENT => true)//持久链接
+            );
+        } catch (PDOException $e) {
+            die("数据库连接失败" . $e->getMessage());
+        }
+    }
+
+    /*
+     *protected abstract function getHandle();
+     * /
+
+    /*
+     protected function pdo($connInfo)
     {
         $pdo = null;
         try {
@@ -37,6 +53,24 @@ abstract class AbstractMysql
             die("数据库连接失败" . $e->getMessage());
         }
         return $pdo;
+    }*/
+
+    /**
+     * @param callable $fn
+     * @throws Exception
+     */
+    public function transaction(callable $fn)
+    {
+        $this->pdo->beginTransaction();
+        try {
+            $fn($this->pdo);
+            //提交事物
+            $this->pdo->commit();
+        } catch (Exception $e) {
+            $this->pdo->rollBack();
+            throw new Exception($e->getMessage());
+        }
     }
+
 
 }

@@ -6,6 +6,8 @@
  * Time: 上午1:51
  */
 
+declare(strict_types=1);
+
 namespace main\model\impl;
 
 
@@ -13,6 +15,7 @@ use EasyPhp\util\Util;
 use main\model\IndexMenu;
 use main\db\impl;
 use main\db\conn\Mysql;
+use \Exception;
 
 class IndexMenuImpl implements IndexMenu
 {
@@ -21,19 +24,25 @@ class IndexMenuImpl implements IndexMenu
 
     public function __construct()
     {
-        $this->handle = Mysql::getHandle();
+        $mysql = new Mysql();
+        $this->handle = $mysql->pdo;
     }
 
-    public function getIndexMenu()
+    public function getIndexMenu(): array
     {
         $indexMenu = new impl\IndexMenuImpl($this->handle);
-        $res = $indexMenu->getAllByEmployeeId(Util::getSession('user_id'));
-        if($res['state'] === 'success'){
-            foreach ($res['data'] as &$value){
-                $value = str_replace('pc/','',$value);
-            }
+        try {
+            $res = $indexMenu->getAllByEmployeeId((int)Util::getSession('user_id'));
+        } catch (Exception $e) {
+            //TODO 日志
+            return ['state' => 'fail', 'data' => '获取首页菜单失败！'];
         }
-        return $res;
+
+        foreach ($res as &$value) {
+            $value = str_replace('pc/', '', $value);
+        }
+
+        return ['state' => 'success', 'data' => $res];
     }
 
 }

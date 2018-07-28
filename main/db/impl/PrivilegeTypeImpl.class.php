@@ -6,10 +6,10 @@
  * Time: 下午4:28
  */
 
-namespace db\impl;
+namespace main\db\impl;
 
-use db\PrivilegeType;
+use main\db\PrivilegeType;
 
-class PrivilegeTypeImpl extends AbstractBase implements PrivilegeType
+class PrivilegeTypeImpl extends AbstractMysqlBase implements PrivilegeType
 {
 }

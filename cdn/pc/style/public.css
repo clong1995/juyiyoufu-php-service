@@ -1,7 +1,10 @@
+html{
+    background: transparent;
+}
 body{
     color: #333;
     cursor: default;
-    /*background: #f5f5f5;*/
+    background: transparent;
 }
 
 @font-face {

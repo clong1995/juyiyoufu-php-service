@@ -6,10 +6,10 @@
  * Time: 下午4:28
  */
 
-namespace db\impl;
+namespace main\db\impl;
 
-use db\PrivilegeInfo;
+use main\db\PrivilegeInfo;
 
-class PrivilegeInfoImpl extends AbstractBase implements PrivilegeInfo
+class PrivilegeInfoImpl extends AbstractMysqlBase implements PrivilegeInfo
 {
 }

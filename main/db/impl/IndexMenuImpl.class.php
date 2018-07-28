@@ -6,13 +6,15 @@
  * Time: 下午4:28
  */
 
+declare(strict_types=1);
+
 namespace main\db\impl;
 
 use main\db\IndexMenu;
 
 class IndexMenuImpl extends AbstractMysqlBase implements IndexMenu
 {
-    public function getAllByEmployeeId($employeeId)
+    public function getAllByEmployeeId(int $employeeId) :array
     {
         return $this->exec->query('
                 SELECT index_menu.name as name,path,in_order,icon

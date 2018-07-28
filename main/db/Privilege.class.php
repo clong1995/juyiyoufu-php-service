@@ -10,7 +10,7 @@ namespace main\db;
 
 interface Privilege  extends Base
 {
-    public function getAllByEmployeeId($employeeId);
+    public function getAllByEmployeeId(int $employeeId);
     public function getAll();
-    public function getPowerById($id);
+    public function getPowerById(int $id);
 }

@@ -6,50 +6,53 @@
  * Time: 上午1:51
  */
 
-namespace model\impl;
+namespace main\model\impl;
 
-use model\Power;
-use db\impl;
+use main\db\conn\Mysql;
+use main\model\Power;
+use main\db\impl;
+use \Exception;
 
-class PowerImpl extends AbstractBase implements Power
+class PowerImpl implements Power
 {
+    //数据库句柄
+    private $mysql = null;
+
+    public function __construct()
+    {
+        $this->mysql = new Mysql();
+    }
 
     /**
-     * TODO 这里应该开启事物
      * 增加权限
      * @param $data
-     * @return array
+     * @return array|mixed
+     * @throws Exception
      */
     public function add($data)
     {
-
-        $pdo = $this->pdo;
-
-        $returnData = ['state' => 'success', 'data' => '添加成功'];
-
         //TODO 过滤数据
-        $privilege = new impl\PrivilegeImpl();
 
+        try{
+            //开启事物
+            $this->mysql->transaction(function ($pdo) use ($data){
+                //T1:增加权限
+                $privilege = new impl\PrivilegeImpl($pdo);
+                $res = $privilege->insert([
+                    ['path' => $data['path']]
+                ]);
 
-        //增加权限
-        $res = $privilege->insert([
-            ['path' => $data['path']]
-        ]);
-
-        //增加权限信息
-        $privilegeInfo = new impl\PrivilegeInfoImpl();
-        $res = $privilegeInfo->insert([
-            ['privilege_id' => $res['data']['id'], 'name' => $data['name'], 'info' => $data['info'], 'privilege_type_id' => $data['type']]
-        ]);
-
-
-
-        if ($res['state'] != 'success') {//失败
-            $returnData['state'] = 'fail';
-            $returnData['data'] = '权限增加失败';
+                //T2:增加权限信息
+                $privilegeInfo = new impl\PrivilegeInfoImpl($pdo);
+                $privilegeInfo->insert([
+                    ['privilege_id' => $res['data']['id'], 'name' => $data['name'], 'info' => $data['info'], 'privilege_type_id' => $data['type']]
+                ]);
+            });
+        }catch (Exception $e){
+            return ['state' => 'fail', 'data' => '添加失败','exception'=>$e];
         }
 
-        return $returnData;
+        return ['state' => 'success', 'data' => '添加成功'];
     }
 
     /**
@@ -60,7 +63,7 @@ class PowerImpl extends AbstractBase implements Power
     public function update($data)
     {
         $returnData = ['state' => 'success', 'data' => '修改成功'];
-        $privilege = new impl\PrivilegeImpl();
+        $privilege = new impl\PrivilegeImpl($this->handle);
 
         //权限修改
         $privilege->update([
@@ -70,7 +73,7 @@ class PowerImpl extends AbstractBase implements Power
         ]);
 
         //修改信息
-        $privilegeInfo = new impl\PrivilegeInfoImpl();
+        $privilegeInfo = new impl\PrivilegeInfoImpl($this->handle);
         $res = $privilegeInfo->update([
             ['name' => $data['name'], 'info' => $data['info'], 'privilege_type_id' => $data['type']]
         ], [
@@ -87,7 +90,7 @@ class PowerImpl extends AbstractBase implements Power
     public function delById($id)
     {
         $returnData = ['state' => 'success', 'data' => '删除成功'];
-        $privilege = new impl\PrivilegeImpl();
+        $privilege = new impl\PrivilegeImpl($this->handle);
 
         //查询这个人是否真的有这个权限
 
@@ -106,7 +109,7 @@ class PowerImpl extends AbstractBase implements Power
      */
     public function getAllPower()
     {
-        $privilege = new impl\PrivilegeImpl();
+        $privilege = new impl\PrivilegeImpl($this->handle);
         $res = $privilege->getAll();
         return $res;
     }
@@ -119,7 +122,7 @@ class PowerImpl extends AbstractBase implements Power
      */
     public function getPowerById($id)
     {
-        $privilege = new impl\PrivilegeImpl();
+        $privilege = new impl\PrivilegeImpl($this->handle);
         $res = $privilege->getPowerById($id);
         if ($res['state'] != 'success') {
             $res['data'] = '根据id获取权限失败';
@@ -135,7 +138,7 @@ class PowerImpl extends AbstractBase implements Power
      */
     public function getAllType()
     {
-        $privilegeType = new impl\PrivilegeTypeImpl();
+        $privilegeType = new impl\PrivilegeTypeImpl($this->handle);
         $res = $privilegeType->select(['privilege_type_id', 'name']);
         return $res;
     }

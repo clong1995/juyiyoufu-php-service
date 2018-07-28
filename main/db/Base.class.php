@@ -11,13 +11,13 @@ namespace main\db;
 
 interface Base
 {
-    public function insert($param);
+    public function insert(array $param);
 
-    public function delete($condition);
+    public function delete(array $condition);
 
-    public function update($param, $condition);
+    public function update(array $param, array $condition);
 
-    public function select($field, $condition);
+    public function select(array $field, array $condition);
 
-    public function count($condition);
+    public function count(array $condition);
 }

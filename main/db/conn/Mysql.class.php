@@ -6,10 +6,11 @@
  * Time: 下午6:18
  */
 
+declare(strict_types=1);
+
 namespace main\db\conn;
 
 use EasyPhp\db\handle\AbstractMysql;
-
 /**
  * 链接指定地址的Mysql静态类
  * Class Mysql
@@ -17,12 +18,11 @@ use EasyPhp\db\handle\AbstractMysql;
  */
 final class Mysql extends AbstractMysql
 {
-
     /**
      * 数据库链接信息
      * @var array
      */
-    private static $connInfo = [
+    private $connInfo = [
         'host' => '127.0.0.1',
         'port' => 3306,
         'dbname' => 'nurse',
@@ -30,12 +30,8 @@ final class Mysql extends AbstractMysql
         'passwd' => 'jyyf2018'
     ];
 
-    /**
-     * 获取当前链接信息的数据库句柄
-     * @return null|\PDO
-     */
-    public static function getHandle(){
-        return self::pdo(self::$connInfo);
+    public function __construct()
+    {
+        parent::__construct($this->connInfo);
     }
-
 }

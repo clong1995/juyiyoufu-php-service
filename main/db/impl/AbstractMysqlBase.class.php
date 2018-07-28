@@ -5,6 +5,7 @@
  * Date: 18-6-10
  * Time: 下午6:07
  */
+declare(strict_types=1);
 
 namespace main\db\impl;
 
@@ -26,8 +27,7 @@ abstract class AbstractMysqlBase
     }
 
 
-
-    protected function tableName()
+    protected function tableName() : string
     {
         $name = get_class($this);
         $arr = explode('\\', $name);
@@ -39,7 +39,7 @@ abstract class AbstractMysqlBase
     }
 
     // 增加
-    public function insert($param)
+    public function insert(array $param) : array
     {
         $keys = $this->exec->key($param);
         $sql = 'insert into ' . $this->tableName() . ' (' . implode(',', $keys) . ') values(:' . implode(',:', $keys) . ')';
@@ -47,7 +47,7 @@ abstract class AbstractMysqlBase
     }
 
     //根据条件
-    public function delete($condition)
+    public function delete(array $condition): array
     {
         $keys = $this->exec->key($condition);
         $con = [];
@@ -57,7 +57,7 @@ abstract class AbstractMysqlBase
     }
 
     //更新
-    public function update($param,$condition)
+    public function update(array $param, array $condition): array
     {
         $keys = $this->exec->key($param);
         $field = [];
@@ -73,13 +73,13 @@ abstract class AbstractMysqlBase
 
         $arr = [];
         foreach ($param as $key => $value)
-            array_push($arr,array_merge($value,$condition[$key]));
+            array_push($arr, array_merge($value, $condition[$key]));
 
         return $this->exec->update('update ' . $this->tableName() . ' set ' . implode(',', $field) . ' where ' . implode(',', $con), $arr);
     }
 
     //根据条件查询
-    public function select($field, $condition = [])
+    public function select(array $field, array $condition = []): array
     {
         $field = $this->exec->key($field);
         $sql = 'select ' . implode(',', $field) . ' from ' . $this->tableName();
@@ -95,20 +95,16 @@ abstract class AbstractMysqlBase
     }
 
     //根据条件计数
-    public function count($condition)
+    public function count(array $condition) : int
     {
         $keys = $this->exec->key(array_keys($condition));
         $con = [];
         foreach ($keys as $v) {
             array_push($con, $v . '=:' . $v);
         }
-            $res = $this->exec->query('select count(*) as count from ' . $this->tableName() . ' where ' . implode(' and ', $con), $condition);
+        $res = $this->exec->query('select count(*) as count from ' . $this->tableName() . ' where ' . implode(' and ', $con), $condition);
 
-        if($res['state'] == 'success'){
-            $res['data']=$res['data'][0];
-        }
-
-        return $res;
+        return (int)$res[0]['count'];
 
     }
 }

@@ -14,7 +14,7 @@ class PrivilegeImpl extends AbstractMysqlBase implements Privilege
 {
 
 
-    public function getAllByEmployeeId($employeeId)
+    public function getAllByEmployeeId(int $employeeId)
     {
         return $this->exec->query('
             SELECT 
@@ -29,9 +29,9 @@ class PrivilegeImpl extends AbstractMysqlBase implements Privilege
         );
     }
 
-    public function getPowerById($id)
+    public function getPowerById(int $id)
     {
-        return mysql::query('
+        return $this->exec->query('
             SELECT
                 privilege.privilege_id AS id,
                 privilege_info.name,
@@ -48,6 +48,6 @@ class PrivilegeImpl extends AbstractMysqlBase implements Privilege
 
     public function getAll()
     {
-        return mysql::query('SELECT privilege.privilege_id AS id,privilege_info.name,info,privilege_type.NAME AS type,path FROM privilege_info INNER JOIN privilege_type USING (privilege_type_id) INNER JOIN privilege USING ( privilege_id )');
+        return $this->exec->query('SELECT privilege.privilege_id AS id,privilege_info.name,info,privilege_type.NAME AS type,path FROM privilege_info INNER JOIN privilege_type USING (privilege_type_id) INNER JOIN privilege USING ( privilege_id )');
     }
 }

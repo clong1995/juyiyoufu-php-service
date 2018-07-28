@@ -1,5 +1,5 @@
 <?php
-use model\impl;
+use main\model\impl;
 $power = new impl\PowerImpl();
 $res = $power->getAllType();
 $type = $res['data'];

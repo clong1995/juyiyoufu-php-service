@@ -167,5 +167,6 @@ body {
     margin: 10px 20px;
     height: calc(100% - 50px - 1px - 20px);
     border: none;
+    background: transparent;
     float: left;
 }
