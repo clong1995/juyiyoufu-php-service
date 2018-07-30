@@ -5,23 +5,26 @@
  * Date: 18-7-1
  * Time: 上午1:45
  */
+declare(strict_types=1);
 
-namespace model;
+namespace main\model;
 
 
 interface Role
 {
     /**
      * 获取权限类型
-     * @return mixed
+     * @param int $page
+     * @param int $size
+     * @return array
      */
-    public function getAll();
+    public function getPage(int $page, int $size): array;
 
     /**
-     * @param $roleId
-     * @return mixed
+     * @param int $roleId
+     * @return array
      */
-    public function getAllById($roleId);
+    public function getById(int $roleId): array;
 
     /**
      * 角色关联权限
@@ -29,5 +32,24 @@ interface Role
      * @param $privilegeId
      * @return mixed
      */
-    public function relPrivilege($roleId,$privilegeId);
+    public function relPrivilege(int $roleId, int $privilegeId): array;
+
+    /**
+     * 返回总页数
+     * @param int $pageSize
+     * @return array
+     */
+    public function totalPage(int $pageSize): array;
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    public function update(array $data): array;
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    public function delPrivilege(array $data): array;
 }

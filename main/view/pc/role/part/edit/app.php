@@ -1,15 +1,16 @@
 <?php
+declare(strict_types=1);
 
-use model\impl;
+use main\model\impl;
 
 //获取角色
 $role = new impl\RoleImpl();
 
-$roles = $role->getAllById(PARAM['id']);
+$roles = $role->getById((int)PARAM['id']);
 
 //获取所有权限
 $power = new impl\PowerImpl();
-$powers = $power->getAllPower();
+$powers = $power->getAll();
 $powersData = $powers['data'];
 
 ?>
@@ -20,16 +21,16 @@ $powersData = $powers['data'];
 </div>
 <div id="main" class="main">
     <form class="form">
-        <input type="hidden" class="role" name="roleId" value="<?= $roles['role']['id'] ?>">
+        <input type="hidden" class="role" name="id" value="<?= $roles['role']['id'] ?>">
         <table>
             <tbody>
             <tr>
                 <td class="title">名称</td>
-                <td><input type="text" value="<?= $roles['role']['name'] ?>"></td>
+                <td><input type="text" name="name" value="<?= $roles['role']['name'] ?>"></td>
             </tr>
             <tr>
                 <td class="title">说明</td>
-                <td><textarea><?= $roles['role']['info'] ?></textarea></td>
+                <td><textarea name="info"><?= $roles['role']['info'] ?></textarea></td>
             </tr>
             <tr>
                 <td class="title">权限列表</td>
@@ -41,8 +42,8 @@ $powersData = $powers['data'];
                             <li data-id="<?= $key ?>">
                                 <span class="name"><?= $value['name'] ?></span>
                                 <span class="type"><?= $value['type'] ?></span>
-                                <span class="option li-del"><i class="iconfont">&#xe604;</i></span>
-                                <span class="option li-detail"><i class="iconfont">&#xe60e;</i></span>
+                                <span class="option delete"><i class="iconfont">&#xe604;</i></span>
+                                <span class="option detail"><i class="iconfont">&#xe60e;</i></span>
                             </li>
                             <?php
                         }

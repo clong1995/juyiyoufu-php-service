@@ -2,13 +2,13 @@ ejs.ready(() => {
     let nav = ejs.query('#nav');
     let main = ejs.query('#main');
     //增加权限
-    ejs.on('.save', nav, 'click', t =>{
+    ejs.on('.save', nav, 'click', t => {
         let form = ejs.query('.form', main);
         NEW(ejs.root + 'ui/form.ui', {
             form: form,
             action: '/api/power/update',
             verify: {
-                'id':'number 2',
+                'id': 'number 2',
                 'name': 'string 20',
                 'type': 'number 1',
                 'path': 'string 50',
@@ -16,6 +16,11 @@ ejs.ready(() => {
             }
         }, res => {
             if (res.state !== 'success') {
+                if (typeof res.data === 'string') {
+                    //TODO
+                    alert(res.data);
+                    return;
+                }
                 let field = ejs.query('*[name="' + res.data.name + '"]', form);
                 let td = field.parentNode;
 
@@ -29,8 +34,8 @@ ejs.ready(() => {
                 ejs.addClass(info, 'info');
                 ejs.html(info, res.data.msg);
                 ejs.append(error, info);
-            }else{
-                ejs.link('/pc/power/part/list');
+            } else {
+                ejs.link('/power/list');
             }
         });
     });
@@ -41,5 +46,5 @@ ejs.ready(() => {
     });
 
     //返回
-    ejs.on('.back', nav, 'click', t => ejs.link('/pc/power/part/list'));
+    ejs.on('.back', nav, 'click', t => ejs.link('/power/list'));
 });

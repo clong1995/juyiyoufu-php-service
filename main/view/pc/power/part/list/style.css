@@ -1,6 +1,6 @@
 .main > .item {
     width: 520px;
-    height: 92px;
+    height: 95px;
 }
 
 .main > .item > .inner > .row {
@@ -27,18 +27,3 @@
     width: calc(100% - 70px);
     height: 30px;
 }
-/*
-
-.main > .item > .inner > .option {
-    width: 100px;
-    right: 0;
-    top: 0;
-    height: unset;
-    padding-top: 10px;
-    left: unset;
-    border-bottom: unset;
-}
-
-.main > .item > .inner > .option > button {
-    margin-bottom: 10px;
-}*/

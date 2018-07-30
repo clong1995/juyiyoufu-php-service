@@ -6,6 +6,8 @@
  * Time: 上午1:51
  */
 
+declare(strict_types=1);
+
 namespace main\model\impl;
 
 use main\db\conn\Mysql;
@@ -25,17 +27,16 @@ class PowerImpl implements Power
 
     /**
      * 增加权限
-     * @param $data
-     * @return array|mixed
-     * @throws Exception
+     * @param array $data
+     * @return array
      */
-    public function add($data)
+    public function add(array $data): array
     {
         //TODO 过滤数据
 
-        try{
+        try {
             //开启事物
-            $this->mysql->transaction(function ($pdo) use ($data){
+            $this->mysql->transaction(function ($pdo) use ($data) {
                 //T1:增加权限
                 $privilege = new impl\PrivilegeImpl($pdo);
                 $res = $privilege->insert([
@@ -45,11 +46,12 @@ class PowerImpl implements Power
                 //T2:增加权限信息
                 $privilegeInfo = new impl\PrivilegeInfoImpl($pdo);
                 $privilegeInfo->insert([
-                    ['privilege_id' => $res['data']['id'], 'name' => $data['name'], 'info' => $data['info'], 'privilege_type_id' => $data['type']]
+                    ['privilege_id' => $res['id'], 'name' => $data['name'], 'info' => $data['info'], 'privilege_type_id' => $data['type']]
                 ]);
             });
-        }catch (Exception $e){
-            return ['state' => 'fail', 'data' => '添加失败','exception'=>$e];
+        } catch (Exception $e) {
+            //TODO 写日志
+            return ['state' => 'fail', 'data' => '增加权限失败!'];
         }
 
         return ['state' => 'success', 'data' => '添加成功'];
@@ -60,58 +62,66 @@ class PowerImpl implements Power
      * @param $data
      * @return array
      */
-    public function update($data)
+    public function update(array $data): array
     {
-        $returnData = ['state' => 'success', 'data' => '修改成功'];
-        $privilege = new impl\PrivilegeImpl($this->handle);
+        try {
+            //开启事物
+            $this->mysql->transaction(function ($handle) use ($data) {
+                //T1:修改权限
+                $privilege = new impl\PrivilegeImpl($handle);
+                $privilege->update([
+                    ['path' => $data['path']]
+                ], [
+                    ['privilege_id' => $data['id']]
+                ]);
 
-        //权限修改
-        $privilege->update([
-            ['path' => $data['path']]
-        ], [
-            ['privilege_id' => $data['id']]
-        ]);
-
-        //修改信息
-        $privilegeInfo = new impl\PrivilegeInfoImpl($this->handle);
-        $res = $privilegeInfo->update([
-            ['name' => $data['name'], 'info' => $data['info'], 'privilege_type_id' => $data['type']]
-        ], [
-            ['privilege_id' => $data['id']]
-        ]);
-
-        if ($res['state'] != 'success') {
-            $returnData = ['state' => 'fail', 'data' => '修改失败'];
+                //T2:修改权限信息
+                $privilegeInfo = new impl\PrivilegeInfoImpl($handle);
+                $privilegeInfo->update([
+                    ['name' => $data['name'], 'info' => $data['info'], 'privilege_type_id' => $data['type']]
+                ], [
+                    ['privilege_id' => $data['id']]
+                ]);
+            });
+        } catch (Exception $e) {
+            return ['state' => 'fail', 'data' => '修改失败'];
         }
-        return $returnData;
+
+        return ['state' => 'success', 'data' => '修改成功'];
     }
 
 
-    public function delById($id)
+    public function delById(int $id): array
     {
+        $handle = $this->mysql->pdo;
         $returnData = ['state' => 'success', 'data' => '删除成功'];
-        $privilege = new impl\PrivilegeImpl($this->handle);
+        $privilege = new impl\PrivilegeImpl($handle);
 
-        //查询这个人是否真的有这个权限
+        //TODO 查询这个人是否真的有这个权限
 
         //执行删除
-        $res = $privilege->delete([['privilege_id' => $id]]);
-        if ($res['state'] != 'success') {//失败
-            $returnData['state'] = 'fail';
-            $returnData['data'] = '权限删除失败';
+        try {
+            $privilege->delete([['privilege_id' => $id]]);
+        } catch (Exception $e) {
+            $returnData = ['state' => 'fail', 'data' => '权限删除失败'];
         }
         return $returnData;
     }
 
     /**
      * 获取所有权限
-     * @return array|bool
+     * @return array
      */
-    public function getAllPower()
+    public function getAll(): array
     {
-        $privilege = new impl\PrivilegeImpl($this->handle);
-        $res = $privilege->getAll();
-        return $res;
+        $handle = $this->mysql->pdo;
+        $privilege = new impl\PrivilegeImpl($handle);
+        try {
+            $res = $privilege->getAll();
+        } catch (Exception $e) {
+            return ['state' => 'fail', 'data' => '获取权限列表失败'];
+        }
+        return ['state' => 'success', 'data' => $res];
     }
 
 
@@ -120,27 +130,68 @@ class PowerImpl implements Power
      * @param $id
      * @return mixed
      */
-    public function getPowerById($id)
+    public function getById(int $id): array
     {
-        $privilege = new impl\PrivilegeImpl($this->handle);
-        $res = $privilege->getPowerById($id);
-        if ($res['state'] != 'success') {
-            $res['data'] = '根据id获取权限失败';
-        } else {
-            $res['data'] = $res['data'][0];
+        $handle = $this->mysql->pdo;
+        $privilege = new impl\PrivilegeImpl($handle);
+        try {
+            $res = $privilege->getById($id);
+        } catch (Exception $e) {
+            return ['state' => 'fail', 'data' => '获取权限失败'];
         }
-        return $res;
+        return ['state' => 'success', 'data' => $res[0]];
     }
 
     /**
      * 获取管线类型
-     * @return array|bool
+     * @return array
      */
-    public function getAllType()
+    public function getAllType(): array
     {
-        $privilegeType = new impl\PrivilegeTypeImpl($this->handle);
-        $res = $privilegeType->select(['privilege_type_id', 'name']);
-        return $res;
+        $handle = $this->mysql->pdo;
+        $privilegeType = new impl\PrivilegeTypeImpl($handle);
+        try {
+            $res = $privilegeType->select(['privilege_type_id', 'name']);
+        } catch (Exception $e) {
+            return ['state' => 'fail', 'data' => '获取权类型限列表失败'];
+        }
+
+        return ['state' => 'success', 'data' => $res];
     }
 
+    /**
+     * 获取总页数
+     * @param int $pageSize
+     * @return array
+     */
+    public function totalPage(int $pageSize): array
+    {
+        $handle = $this->mysql->pdo;
+        $privilege = new impl\PrivilegeImpl($handle);
+        try {
+            $res = ceil($privilege->count() / $pageSize);
+        } catch (Exception $e) {
+            return ['state' => 'fail', 'data' => '获取总页数失败'];
+        }
+        return ['state' => 'success', 'data' => $res];
+    }
+
+    /**
+     * 用于分页
+     * @param int $page
+     * @param int $size
+     * @return array
+     */
+    public function getPage(int $page, int $size): array
+    {
+        $handle = $this->mysql->pdo;
+        $privilege = new impl\PrivilegeImpl($handle);
+        $start = ($page - 1) * $size;
+        try {
+            $res = $privilege->getLimit($start, $size);
+        } catch (Exception $e) {
+            return ['state' => 'fail', 'data' => '获取权限列表失败'];
+        }
+        return ['state' => 'success', 'data' => $res];
+    }
 }

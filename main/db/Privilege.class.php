@@ -6,11 +6,17 @@
  * Time: 上午6:57
  */
 
+declare(strict_types=1);
+
 namespace main\db;
 
-interface Privilege  extends Base
+interface Privilege extends Base
 {
-    public function getAllByEmployeeId(int $employeeId);
-    public function getAll();
-    public function getPowerById(int $id);
+    public function getAllByEmployeeId(int $employeeId): array;
+
+    public function getAll(): array;
+
+    public function getById(int $id): array;
+
+    public function getLimit(int $start, int $size): array;
 }

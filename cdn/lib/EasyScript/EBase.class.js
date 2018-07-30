@@ -473,13 +473,20 @@ class EBase {
      * 清空指定元素
      * @param dom 目标对象
      * @param rep 不写默认清空，是节点或者是字符串则填充
+     * @param text 是否以字符模式填充
      */
-    empty(dom, rep = '') {
+    empty(dom, rep = null, text = false) {
         dom.innerHTML = '';
-        if (typeof rep === 'object')
-            dom.appendChild(rep);
-        else if (rep)
-            dom.innerHTML = rep
+        if (rep) {
+            if (typeof rep === 'object')//对象
+                dom.appendChild(rep);
+            else if (typeof rep === 'string') {
+                if (text)//字符
+                    this.text(dom, rep);
+                else//html
+                    this.html(dom, rep)
+            }
+        }
     }
 
     /**
@@ -655,12 +662,32 @@ class EBase {
      * @param dom
      * @param str
      * @param plus
+     * @returns {string|*}
      */
-    html(dom, str, plus = true) {
-        let textNode = this.textNode(str);
-        plus ? dom.innerHTML = '' : null;
-        this.append(dom, textNode);
-        return dom;
+    html(dom, str = null, plus = false) {
+        if (str)
+            plus ? dom.innerHTML += str : dom.innerHTML = str;
+        else
+            return dom.innerHTML;
+    }
+
+    /**
+     *
+     * @param dom
+     * @param str
+     * @param plus
+     * @returns {string}
+     */
+    text(dom, str = null, plus = false) {
+        if (str) {
+            let textNode = this.textNode(str);
+            if(!plus){
+                dom.innerText = ''
+            }
+            this.append(dom, textNode)
+        } else {
+            return dom.innerText;
+        }
     }
 
     /**
@@ -1218,6 +1245,7 @@ class EBase {
      * @private
      */
     _onFunction(node, target, event) {
+
         let keyArr = [node.nodeName];
         if (node.id) keyArr.push('#' + node.id);
         node.classList.forEach(v => keyArr.push('.' + v));

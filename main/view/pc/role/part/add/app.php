@@ -1,47 +1,60 @@
 <?php
-use model\impl;
+declare(strict_types=1);
+
+use main\model\impl;
+
+//获取角色
+$role = new impl\RoleImpl();
+
+//获取所有权限
 $power = new impl\PowerImpl();
-$res = $power->getAllType();
+$powers = $power->getAll();
+$powersData = $powers['data'];
 ?>
 <div class="nav" id="nav">
-    <span class="title"><i class="iconfont">&#xe60c;</i>增加权限</span>
+    <span class="title"><i class="iconfont">&#xe60c;</i>添加角色</span>
     <button class="save"><i class="iconfont">&#xe68e;</i>保存</button>
     <button class="back"><i class="iconfont">&#xe620;</i>返回</button>
 </div>
 <div id="main" class="main">
     <form class="form">
-    <table>
-        <tr>
-            <td class="title">名称</td>
-            <td class="value"><input name="name" type="text"/></td>
-        </tr>
-        <tr>
-            <td class="title">类型</td>
-            <td>
-                <select name="type">
-                    <option value=""></option>
-                    <?php
-                    foreach ($res as $value){
-                        ?>
-                        <option value="<?=$value['privilege_type_id']?>"><?=$value['name']?></option>
-                    <?php
-                    }
-                    ?>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td class="title">资源</td>
-            <td>
-                <input name="path" type="text"/>
-            </td>
-        </tr>
-        <tr>
-            <td class="title">描述</td>
-            <td>
-                <textarea name="info"></textarea>
-            </td>
-        </tr>
-    </table>
+        <table>
+            <tbody>
+            <tr>
+                <td class="title">名称</td>
+                <td><input type="text" name="name" value=""></td>
+            </tr>
+            <tr>
+                <td class="title">说明</td>
+                <td><textarea name="info"></textarea></td>
+            </tr>
+            <tr>
+                <td class="title">权限列表</td>
+                <td>
+                    <ul class="list">
+
+                    </ul>
+                    <div class="opt">
+                        <span class="title"><i class="iconfont">&#xe61d;</i>关联权限：</span>
+                        <select class="privilege">
+                            <option></option>
+                            <?php
+                            foreach ($powersData as $value) {
+                                ?>
+                                <option value="<?= $value['id'] ?>">
+                                    <?= $value['name'] ?>
+                                    [<?= $value['type'] ?>]
+                                </option>
+                                <?php
+                            }
+                            ?>
+                        </select>
+                        <button type="button" class="addPrivilege">关联</button>
+
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </form>
 </div>

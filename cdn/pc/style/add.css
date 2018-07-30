@@ -61,6 +61,12 @@ body {
     height: calc(100% - 60px);
     overflow-x: hidden;
     overflow-y: auto;
+    color: #666;
+}
+
+
+.main table {
+    margin: 0 auto;
 }
 
 .main table tr > td {
@@ -71,6 +77,11 @@ body {
 
 .main table tr > td.title {
     text-align: right;
+    color: #333;
+}
+
+.main table tr > td .title {
+    color: #333;
 }
 
 

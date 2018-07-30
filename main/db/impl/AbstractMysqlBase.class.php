@@ -27,7 +27,7 @@ abstract class AbstractMysqlBase
     }
 
 
-    protected function tableName() : string
+    protected function tableName(): string
     {
         $name = get_class($this);
         $arr = explode('\\', $name);
@@ -39,7 +39,7 @@ abstract class AbstractMysqlBase
     }
 
     // 增加
-    public function insert(array $param) : array
+    public function insert(array $param): array
     {
         $keys = $this->exec->key($param);
         $sql = 'insert into ' . $this->tableName() . ' (' . implode(',', $keys) . ') values(:' . implode(',:', $keys) . ')';
@@ -56,25 +56,34 @@ abstract class AbstractMysqlBase
         return $this->exec->update('delete from ' . $this->tableName() . ' where ' . implode(' and ', $con), $condition);
     }
 
-    //更新
+    /**
+     * 更新
+     * @param array $param
+     * @param array $condition
+     * @return array
+     */
     public function update(array $param, array $condition): array
     {
+        //字段
         $keys = $this->exec->key($param);
         $field = [];
         foreach ($keys as $v) {
             array_push($field, $v . '=:' . $v);
         }
 
+        //条件
         $con = [];
         $keys = $this->exec->key($condition);
         foreach ($keys as $v) {
             array_push($con, $v . '=:' . $v);
         }
 
+        //集合参数
         $arr = [];
         foreach ($param as $key => $value)
             array_push($arr, array_merge($value, $condition[$key]));
 
+        //执行
         return $this->exec->update('update ' . $this->tableName() . ' set ' . implode(',', $field) . ' where ' . implode(',', $con), $arr);
     }
 
@@ -95,16 +104,20 @@ abstract class AbstractMysqlBase
     }
 
     //根据条件计数
-    public function count(array $condition) : int
+    public function count(array $condition = []): int
     {
-        $keys = $this->exec->key(array_keys($condition));
-        $con = [];
-        foreach ($keys as $v) {
-            array_push($con, $v . '=:' . $v);
+        $sql = 'select count(*) as count from ' . $this->tableName();
+        $where = '';
+        if (count($condition)) {
+            $keys = $this->exec->key(array_keys($condition));
+            $con = [];
+            foreach ($keys as $v) {
+                array_push($con, $v . '=:' . $v);
+            }
+            $where = ' where ' . implode(' and ', $con);
         }
-        $res = $this->exec->query('select count(*) as count from ' . $this->tableName() . ' where ' . implode(' and ', $con), $condition);
-
+        $sql .= $where;
+        $res = $this->exec->query($sql, $condition);
         return (int)$res[0]['count'];
-
     }
 }

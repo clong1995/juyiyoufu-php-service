@@ -6,18 +6,20 @@
  * Time: 上午2:15
  */
 
+declare(strict_types=1);
+
 namespace main\db;
 
 
 interface Base
 {
-    public function insert(array $param);
+    public function insert(array $param): array;
 
-    public function delete(array $condition);
+    public function delete(array $condition): array;
 
-    public function update(array $param, array $condition);
+    public function update(array $param, array $condition): array;
 
-    public function select(array $field, array $condition);
+    public function select(array $field, array $condition): array;
 
-    public function count(array $condition);
+    public function count(array $condition): int;
 }

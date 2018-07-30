@@ -26,34 +26,15 @@ abstract class AbstractMysql
             $this->pdo = new PDO(
                 "mysql:host=" . $connInfo['host'] . ";port=" . $connInfo['port'] . ";dbname=" . $connInfo['dbname'],
                 $connInfo['username'],
-                $connInfo['passwd'],
-                array(PDO::ATTR_PERSISTENT => true)//持久链接
+                $connInfo['passwd']
             );
+            $this->pdo->setAttribute( PDO::ATTR_PERSISTENT, true );
+            $this->pdo->setAttribute( PDO::ATTR_EMULATE_PREPARES, false );
+
         } catch (PDOException $e) {
             die("数据库连接失败" . $e->getMessage());
         }
     }
-
-    /*
-     *protected abstract function getHandle();
-     * /
-
-    /*
-     protected function pdo($connInfo)
-    {
-        $pdo = null;
-        try {
-            $pdo = new PDO(
-                "mysql:host=" . $connInfo['host'] . ";port=" . $connInfo['port'] . ";dbname=" . $connInfo['dbname'],
-                $connInfo['username'],
-                $connInfo['passwd'],
-                array(PDO::ATTR_PERSISTENT => true)//持久链接
-            );
-        } catch (PDOException $e) {
-            die("数据库连接失败" . $e->getMessage());
-        }
-        return $pdo;
-    }*/
 
     /**
      * @param callable $fn
@@ -71,6 +52,4 @@ abstract class AbstractMysql
             throw new Exception($e->getMessage());
         }
     }
-
-
 }

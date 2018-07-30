@@ -15,6 +15,13 @@ ejs.ready(() => {
             }
         }, res => {
             if (res.state !== 'success') {
+
+                if(typeof res.data === 'string'){
+                    //TODO 错误提示
+                    alert(res.data);
+                    return;
+                }
+
                 let field = ejs.query('*[name="' + res.data.name + '"]', form);
                 let td = field.parentNode;
 

@@ -27,7 +27,7 @@ class IndexMenuImpl implements IndexMenu
         $mysql = new Mysql();
         $this->handle = $mysql->pdo;
     }
-
+    
     public function getIndexMenu(): array
     {
         $indexMenu = new impl\IndexMenuImpl($this->handle);

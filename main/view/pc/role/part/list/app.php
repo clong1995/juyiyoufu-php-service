@@ -1,11 +1,12 @@
 <?php
+declare(strict_types=1);
 
-use model\impl;
+use main\model\impl;
 
 //获取角色
 $role = new impl\RoleImpl();
-$res = $role->getAll();
-
+$pageSize = 9;
+$res = $role->getPage(1, $pageSize);
 
 ?>
 <div class="nav" id="nav">
@@ -17,8 +18,8 @@ $res = $role->getAll();
     <?php
     foreach ($res as $key => $value) {
         ?>
-        <div class="item" data-id="<?= $key ?>">
-            <div class="inner">
+        <div class="item">
+            <div class="inner" data-id="<?= $key ?>">
                 <div class="row">
                     <span class="title">名称:</span><?= $value['role']['name'] ?>
                 </div>
@@ -54,7 +55,13 @@ $res = $role->getAll();
 </div>
 <div class="page">
     <?php
-    for ($i = 0; $i < 9; ++$i) {
+    //获取总数
+    $res = $role->totalPage($pageSize);
+    $totalPage = $res['data'];
+    ?>
+    <span class="active">1</span>
+    <?php
+    for ($i = 2; $i <= $totalPage; ++$i) {
         ?>
         <span><?= $i ?></span>
         <?php

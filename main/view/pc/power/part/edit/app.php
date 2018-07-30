@@ -1,13 +1,14 @@
 <?php
+declare(strict_types=1);
 
-use model\impl;
+use main\model\impl;
 
 $power = new impl\PowerImpl();
 //权限类型
 $res = $power->getAllType();
 $type = $res['data'];
 //根据id查询权限
-$res = $power->getPowerById(PARAM['id']);
+$res = $power->getPowerById((int)PARAM['id']);
 $onePower = $res['data'];
 ?>
 <div class="nav" id="nav">

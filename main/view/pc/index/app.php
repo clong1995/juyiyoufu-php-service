@@ -55,4 +55,4 @@ $menu = $res['data'];
     </div>
 </div>
 <!--<iframe class="main" name="main" src="/--><?//= $menu[0]['path'] ?><!--"></iframe>-->
-<!--<iframe class="main" src="/power/add"></iframe>-->
+<iframe class="main" src="/role/add"></iframe>

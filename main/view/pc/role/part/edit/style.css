@@ -35,11 +35,11 @@
     cursor: pointer;
 }
 
-.main .list > li > .option.li-detail:hover {
+.main .list > li > .option.detail:hover {
     color: green;
 }
 
-.main .list > li > .option.li-del:hover {
+.main .list > li > .option.delete:hover {
     color: red;
 }
 

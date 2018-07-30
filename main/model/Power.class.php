@@ -6,6 +6,8 @@
  * Time: 上午1:45
  */
 
+declare(strict_types=1);
+
 namespace main\model;
 
 
@@ -14,30 +16,54 @@ interface Power
     /**
      * 添加权限
      * @param $data
-     * @return mixed
+     * @return array
      */
-    public function add($data);
+    public function add(array $data): array;
 
-    public function update($data);
+    /**
+     * @param array $data
+     * @return array
+     */
+    public function update(array $data): array;
 
     /**
      * 删除权限
      * @param $id
-     * @return mixed
+     * @return array
      */
-    public function delById($id);
+    public function delById(int $id): array;
 
     /**
      * 获取所有权限
-     * @return mixed
+     * @return array
      */
-    public function getAllPower();
+    public function getAll(): array;
 
-    public function getPowerById($id);
+    /**
+     * 根据id获取权限
+     * @param int $id
+     * @return array
+     */
+    public function getById(int $id): array;
 
     /**
      * 获取权限类型
-     * @return mixed
+     * @return array
      */
-    public function getAllType();
+    public function getAllType(): array;
+
+    /**
+     * 返回总页数
+     * @param int $pageSize
+     * @return array
+     */
+    public function totalPage(int $pageSize): array;
+
+    /**
+     * 用于分页
+     * @param int $page
+     * @param int $size
+     * @return array
+     */
+    public function getPage(int $page,int $size): array;
 }

@@ -6,6 +6,8 @@
  * Time: 下午4:28
  */
 
+declare(strict_types=1);
+
 namespace main\db\impl;
 
 use main\db\Privilege;
@@ -14,7 +16,7 @@ class PrivilegeImpl extends AbstractMysqlBase implements Privilege
 {
 
 
-    public function getAllByEmployeeId(int $employeeId)
+    public function getAllByEmployeeId(int $employeeId): array
     {
         return $this->exec->query('
             SELECT 
@@ -29,7 +31,12 @@ class PrivilegeImpl extends AbstractMysqlBase implements Privilege
         );
     }
 
-    public function getPowerById(int $id)
+    /**
+     * 根据id获取权限
+     * @param int $id
+     * @return array
+     */
+    public function getById(int $id): array
     {
         return $this->exec->query('
             SELECT
@@ -46,8 +53,48 @@ class PrivilegeImpl extends AbstractMysqlBase implements Privilege
         ', ['id' => $id]);
     }
 
-    public function getAll()
+    /**
+     * 返回所有权限
+     * @return array
+     */
+    public function getAll(): array
     {
-        return $this->exec->query('SELECT privilege.privilege_id AS id,privilege_info.name,info,privilege_type.NAME AS type,path FROM privilege_info INNER JOIN privilege_type USING (privilege_type_id) INNER JOIN privilege USING ( privilege_id )');
+        return $this->exec->query('
+          SELECT 
+            privilege.privilege_id AS id,
+            privilege_info.name,
+            info,
+            privilege_type.NAME AS type,
+            path 
+          FROM 
+            privilege_info 
+          INNER JOIN privilege_type USING (privilege_type_id) 
+          INNER JOIN privilege USING ( privilege_id )');
+    }
+
+    /**
+     * 用于分页
+     * @param int $start
+     * @param int $size
+     * @return array
+     */
+    public function getLimit(int $start, int $size): array
+    {
+        return $this->exec->query('
+          SELECT 
+            privilege.privilege_id AS id,
+            privilege_info.name,
+            info,
+            privilege_type.NAME AS type,
+            path 
+          FROM 
+            privilege_info 
+          INNER JOIN privilege_type USING (privilege_type_id) 
+          INNER JOIN privilege USING ( privilege_id ) 
+          LIMIT :start,:size
+          ', [
+            'start' => $start,
+            'size' => $size
+        ]);
     }
 }

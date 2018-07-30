@@ -55,7 +55,7 @@ ejs.ready(() => {
                     delIcon.innerHTML = '&#xe604;';
                     ejs.append(del, delIcon);
                     ejs.addClass(del, 'option');
-                    ejs.addClass(del, 'li-del');
+                    ejs.addClass(del, 'delete');
                     ejs.append(itemLi, del);
 
                     //详情
@@ -64,7 +64,7 @@ ejs.ready(() => {
                     detailIcon.innerHTML = '&#xe60e;';
                     ejs.append(detail, detailIcon);
                     ejs.addClass(detail, 'option');
-                    ejs.addClass(detail, 'li-detail');
+                    ejs.addClass(detail, 'detail');
                     ejs.append(itemLi, detail);
 
                     ejs.append(list, itemLi);
@@ -78,22 +78,27 @@ ejs.ready(() => {
     //去掉关联错误
     ejs.on('.pri_error', main, 'click', t => ejs.removeClass(t, 'pri_error'));
 
+    //返回
+    ejs.on('.back', nav, 'click', t => ejs.link('/role/list'));
 
-    /*
-    //增加权限
-    ejs.on('.save', nav, 'click', t =>{
+    //保存修改
+    ejs.on('.save', nav, 'click', t => {
         let form = ejs.query('.form', main);
         NEW(ejs.root + 'ui/form.ui', {
             form: form,
-            action: '/api/power/add',
+            action: '/api/role/update',
             verify: {
-                'name': 'string 20',
-                'type': 'number 1',
-                'path': 'string 50',
+                'id': 'number 20',
+                'name': 'string 10',
                 'info': 'string 100'
             }
         }, res => {
             if (res.state !== 'success') {
+                if (typeof res.data === 'string') {
+                    //TODO 错误提示
+                    alert(res.data);
+                    return;
+                }
                 let field = ejs.query('*[name="' + res.data.name + '"]', form);
                 let td = field.parentNode;
 
@@ -107,17 +112,37 @@ ejs.ready(() => {
                 ejs.addClass(info, 'info');
                 ejs.html(info, res.data.msg);
                 ejs.append(error, info);
-            }else{
-                ejs.link('/pc/power/part/list');
+            } else {
+                ejs.link('/role/list');
             }
         });
     });
 
+    //去掉错误提示
     ejs.on('.error', main, 'click', t => {
         ejs.query('.info', t, true).forEach(v => ejs.remove(v));
         ejs.removeClass(t, 'error');
-    });*/
+    });
 
-    //返回
-    ejs.on('.back', nav, 'click', t => ejs.link('/pc/role/part/list'));
+    //删除关联的权限
+    ejs.on('.delete', main, 'click', t => {
+        let target = t.parentNode,
+            privilegeId = ejs.attr(target, 'data-id'),
+            roleId = ejs.query('.role', main).value;
+        ejs.ajax('/api/role/delPrivilege', {
+            method: 'POST',
+            data: {
+                privilegeId: privilegeId,
+                roleId: roleId
+            },
+            success: data => {
+                if (data.state === 'success') {
+                    ejs.remove(target);
+                }else{
+                    //TODO
+                    alert();
+                }
+            }
+        })
+    });
 });

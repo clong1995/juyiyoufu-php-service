@@ -1,12 +1,13 @@
 <?php
+declare(strict_types=1);
 
 use main\model\impl;
 
+$pageSize = 10;
 //获取菜单
 $privilege = new impl\PowerImpl();
-$res = $privilege->getAllPower();
+$res = $privilege->getPage(1, $pageSize);
 $data = $res['data'];
-
 ?>
 <div class="nav" id="nav">
     <span class="title"><i class="iconfont">&#xe60c;</i>权限列表</span>
@@ -46,9 +47,15 @@ $data = $res['data'];
     }
     ?>
 </div>
-<div class="page">
+<div class="page" id="page">
     <?php
-    for ($i = 0; $i < 9; ++$i) {
+    //获取总数
+    $res = $privilege->totalPage($pageSize);
+    $totalPage = $res['data'];
+    ?>
+    <span class="active">1</span>
+    <?php
+    for ($i = 2; $i <= $totalPage; ++$i) {
         ?>
         <span><?= $i ?></span>
         <?php

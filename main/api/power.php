@@ -6,6 +6,8 @@
  * Time: 17:25
  */
 
+declare(strict_types=1);
+
 use EasyPhp\util\Util;
 use main\model\impl;
 
@@ -24,7 +26,12 @@ switch (ORDER) {
 
     case 'delById'://删除
         $power = new impl\PowerImpl();
-        $res = $power->delById(PARAM['id']);
+        $res = $power->delById((int)PARAM['id']);
+        Util::response($res['state'], $res['data']);
+        break;
+    case 'getPage':
+        $power = new impl\PowerImpl();
+        $res = $power->getPage((int)PARAM['page'], 10);
         Util::response($res['state'], $res['data']);
         break;
 }

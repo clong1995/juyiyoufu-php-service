@@ -6,12 +6,17 @@
  * Time: 上午6:57
  */
 
-namespace db;
+declare(strict_types=1);
+
+namespace main\db;
 
 interface Role extends Base
 {
-    public function getAll();
-    public function getAllById($roleId);
+    public function getLimit(int $start, int $size): array;
+
+    public function delPrivilege(int $roleId, int $privilegeId): array;
+
+    public function getById(int $roleId): array;
 
     /**
      * 角色关联权限
@@ -19,5 +24,5 @@ interface Role extends Base
      * @param $privilegeId
      * @return mixed
      */
-    public function relPrivilege($roleId,$privilegeId);
+    public function relPrivilege(int $roleId, int $privilegeId): array;
 }

@@ -158,3 +158,8 @@ body {
     color: #666;
     cursor: pointer;
 }
+.page > span.active {
+    border: none;
+    color: #333;
+    cursor: default;
+}

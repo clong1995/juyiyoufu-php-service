@@ -68,8 +68,6 @@ class Mysql
                 $data = $res ? ['count' => $pdostatement->rowCount()] : [];
             } else if ($type == 'i') {//插入
                 $data = $res ? ['id' => $this->pdo->lastInsertId()] : [];
-            } else {//删除
-                $data = [];
             }
         }
 
