@@ -7,6 +7,24 @@ ejs.ready(() => {
     ejs.on('.edit', main, 'click', t => ejs.link('/role/edit', {
         id: ejs.attr(t.parentNode.parentNode, 'data-id')
     }));
-    //TODO 删除
+    //删除
+    ejs.on('.delete', main, 'click', t => {
+        let target = t.parentNode.parentNode;
+        ejs.ajax('/api/role/delete', {
+            method: 'POST',
+            data: {
+                id: ejs.attr(target, 'data-id')
+            },
+            success: data => {
+                if (data.state === 'success') {
+                    ejs.remove(target);
+                }else{
+                    //TODO
+                    alert();
+                }
+            }
+        })
+    });
+    //TODO 详情
 
 });

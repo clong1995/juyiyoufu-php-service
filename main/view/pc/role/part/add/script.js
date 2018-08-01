@@ -3,6 +3,7 @@ ejs.ready(() => {
     let main = ejs.query('#main');
     let list = ejs.query('.list', main);
 
+    let privilegeSet = new Set();
     //关联权限
     ejs.on('.addPrivilege', main, 'click', t => {
         //id
@@ -13,6 +14,8 @@ ejs.ready(() => {
             ejs.addClass(privilege, 'pri_error');
             return;
         }
+
+        privilegeSet.add(privilegeId);
 
         //文本
         let textArr = privilege.options[privilege.selectedIndex].text.split(' [');
@@ -66,13 +69,18 @@ ejs.ready(() => {
 
     //保存修改
     ejs.on('.save', nav, 'click', t => {
+
+        ejs.query('input[name=privilege]',main).value = [...privilegeSet].join(',');
+
         let form = ejs.query('.form', main);
         NEW(ejs.root + 'ui/form.ui', {
             form: form,
             action: '/api/role/add',
             verify: {
                 'name': 'string 10',
-                'info': 'string 100'
+                'info': 'string 100',
+                'role_name':'string 10',
+                'privilege':'string 100'
             }
         }, res => {
             if (res.state !== 'success') {
@@ -98,6 +106,7 @@ ejs.ready(() => {
                 ejs.link('/role/list');
             }
         });
+
     });
 
     //去掉错误提示

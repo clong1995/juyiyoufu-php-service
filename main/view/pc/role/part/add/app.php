@@ -25,6 +25,10 @@ $powersData = $powers['data'];
                 <td><input type="text" name="name" value=""></td>
             </tr>
             <tr>
+                <td class="title">标识</td>
+                <td><input type="text" name="role_name" value=""></td>
+            </tr>
+            <tr>
                 <td class="title">说明</td>
                 <td><textarea name="info"></textarea></td>
             </tr>
@@ -36,6 +40,7 @@ $powersData = $powers['data'];
                     </ul>
                     <div class="opt">
                         <span class="title"><i class="iconfont">&#xe61d;</i>关联权限：</span>
+                        <input name="privilege" value="" type="hidden">
                         <select class="privilege">
                             <option></option>
                             <?php

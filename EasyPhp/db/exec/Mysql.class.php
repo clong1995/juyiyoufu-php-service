@@ -48,6 +48,7 @@ class Mysql
      */
     public function update(string $sql, array $param = []) : array
     {
+
         $pdostatement = $this->pdo->prepare($sql);
         $res = true;
         $data = [];

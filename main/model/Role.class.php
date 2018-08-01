@@ -51,5 +51,14 @@ interface Role
      * @param array $data
      * @return array
      */
+    public function add(array $data): array;
+
+    /**
+     * @param array $data
+     * @return array
+     */
     public function delPrivilege(array $data): array;
+
+    public function delete(int $id): array;
+
 }

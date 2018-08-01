@@ -19,17 +19,17 @@ use \Exception;
 class RoleImpl implements Role
 {
     //数据库句柄
-    private $handle = null;
+    private $mysql = null;
 
     public function __construct()
     {
-        $mysql = new Mysql();
-        $this->handle = $mysql->pdo;
+        $this->mysql = new Mysql();
     }
 
     public function update(array $data): array
     {
-        $role = new impl\RoleInfoImpl($this->handle);
+        $handle = $this->mysql->pdo;
+        $role = new impl\RoleInfoImpl($handle);
         try {
             $role->update([
                 ['name' => $data['name'], 'info' => $data['info']]
@@ -43,6 +43,38 @@ class RoleImpl implements Role
         return ['state' => 'success', 'data' => '修改角色成功!'];
     }
 
+    public function add(array $data): array
+    {
+        try {
+            //开启事物
+            $this->mysql->transaction(function ($handle) use ($data) {
+                //T1:创建角色
+                $role = new impl\RoleImpl($handle);
+                $res = $role->insert([['name' => $data['role_name']]]);
+                $role_id = $res['id'];
+
+                //T2:添加角色信息
+                $roleInfo = new impl\RoleInfoImpl($handle);
+                $roleInfo->insert([['role_id' => $role_id, 'name' => $data['name'], 'info' => $data['info']]]);
+
+                //T3:权限关联角色
+                $insertData = [];
+                foreach (explode(",", $data['privilege']) as $value) {
+                    array_push($insertData, [
+                        'role_id' => $role_id,
+                        'privilege_id' => $value
+                    ]);
+                }
+                $RolePrivilegeRelation = new impl\RolePrivilegeRelationImpl($handle);
+                $RolePrivilegeRelation->insert($insertData);
+            });
+        } catch (Exception $e) {
+            //TODO 日志
+            return ['state' => 'fail', 'data' => '添加角色失败！'];
+        }
+        return ['state' => 'success', 'data' => '添加角色成功!'];
+    }
+
 
     /**
      * @param array $data
@@ -50,9 +82,10 @@ class RoleImpl implements Role
      */
     public function delPrivilege(array $data): array
     {
-        $role = new impl\RoleImpl($this->handle);
+        $handle = $this->mysql->pdo;
+        $role = new impl\RoleImpl($handle);
         try {
-            $role->delPrivilege((int)$data['roleId'],(int)$data['privilegeId']);
+            $role->delPrivilege((int)$data['roleId'], (int)$data['privilegeId']);
         } catch (Exception $e) {
             //TODO 日志
             return ['state' => 'fail', 'data' => '解除角色关联权限失败！'];
@@ -67,7 +100,8 @@ class RoleImpl implements Role
      */
     public function getPage(int $page, int $size): array
     {
-        $role = new impl\RoleImpl($this->handle);
+        $handle = $this->mysql->pdo;
+        $role = new impl\RoleImpl($handle);
         $start = ($page - 1) * $size;
         try {
             $res = $role->getLimit($start, $size);
@@ -112,7 +146,8 @@ class RoleImpl implements Role
     public function getById(int $roleId): array
     {
         //TODO 过滤数据
-        $role = new impl\RoleImpl($this->handle);
+        $handle = $this->mysql->pdo;
+        $role = new impl\RoleImpl($handle);
         $res = $role->getById($roleId);
         $map = [];
         foreach ($res as $key => $value) {
@@ -135,7 +170,8 @@ class RoleImpl implements Role
 
     public function relPrivilege(int $roleId, int $privilegeId): array
     {
-        $role = new impl\RoleImpl($this->handle);
+        $handle = $this->mysql->pdo;
+        $role = new impl\RoleImpl($handle);
         try {
             $role->relPrivilege($roleId, $privilegeId);
         } catch (Exception $e) {
@@ -151,12 +187,29 @@ class RoleImpl implements Role
      */
     public function totalPage(int $pageSize): array
     {
-        $role = new impl\RoleImpl($this->handle);
+        $handle = $this->mysql->pdo;
+        $role = new impl\RoleImpl($handle);
         try {
             $res = ceil($role->count() / $pageSize);
         } catch (Exception $e) {
             return ['state' => 'fail', 'data' => '获取总页数失败'];
         }
         return ['state' => 'success', 'data' => $res];
+    }
+
+    /**
+     * @param int $id
+     * @return array
+     */
+    public function delete(int $id): array
+    {
+        $handle = $this->mysql->pdo;
+        $role = new impl\RoleImpl($handle);
+        try {
+            $role->delete([['role_id'=>$id]]);
+        } catch (Exception $e) {
+            return ['state' => 'fail', 'data' => '删除角色失败'];
+        }
+        return ['state' => 'success', 'data' => '删除角色成功'];
     }
 }

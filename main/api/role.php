@@ -19,12 +19,22 @@ switch (ORDER) {
         break;
     case 'update':
         $role = new impl\RoleImpl();
-        $res =$role->update(PARAM);
+        $res = $role->update(PARAM);
+        Util::response($res['state'], $res['data']);
+        break;
+    case 'add':
+        $role = new impl\RoleImpl();
+        $res = $role->add(PARAM);
         Util::response($res['state'], $res['data']);
         break;
     case 'delPrivilege'://解除关联权限
         $role = new impl\RoleImpl();
-        $res =$role->delPrivilege(PARAM);
+        $res = $role->delPrivilege(PARAM);
+        Util::response($res['state'], $res['data']);
+        break;
+    case 'delete'://解除关联权限
+        $role = new impl\RoleImpl();
+        $res = $role->delete((int)PARAM['id']);
         Util::response($res['state'], $res['data']);
         break;
 }
