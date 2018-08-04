@@ -1,10 +1,10 @@
 <?php
 
-use model\impl;
+use main\model\impl;
 
 //获取菜单
 $company = new impl\CompanyImpl();
-$res = $company->getAll();
+$res = $company->getPage(1);
 $data = $res['data'];
 ?>
 <div class="nav" id="nav">
@@ -17,14 +17,15 @@ $data = $res['data'];
     foreach ($data as $value) {
         ?>
         <div class="item">
-            <div class="inner" data-id="<?=$value['id']?>">
+            <div class="inner" data-id="<?= $value['id'] ?>">
                 <div class="row row1">
-                    <img src="/<?=$value['path'].'/'.$value['logo']?>">
+                    <img src="/<?= $value['path'] . '/' . $value['logo'] ?>">
                 </div>
-                <div class="row row2"><span class="title">公司名称</span><?=$value['company']?></div>
-                <div class="row row3"><span class="title">负责人</span><?=$value['employee']?></div>
-                <div class="row row4"><span class="title">联系电话</span><?=$value['phone']?></div>
-                <div class="row row4"><span class="title">地址</span><?=$value['province'].$value['city'].$value['area']?></div>
+                <div class="row row2"><span class="title">公司名称</span><?= $value['company'] ?></div>
+                <div class="row row3"><span class="title">负责人</span><?= $value['employee'] ?></div>
+                <div class="row row4"><span class="title">联系电话</span><?= $value['phone'] ?></div>
+                <div class="row row4"><span
+                            class="title">地址</span><?= $value['province'] . $value['city'] . $value['area'] ?></div>
                 <div class="option">
                     <button class="edit"><i class="iconfont">&#xe626;</i>编辑</button>
                     <button class="detail"><i class="iconfont">&#xe60e;</i>详情</button>
@@ -36,9 +37,15 @@ $data = $res['data'];
     }
     ?>
 </div>
-<div class="page">
+<div class="page" id="page">
     <?php
-    for ($i = 0; $i < 9; ++$i) {
+    //获取总数
+    $res = $company->totalPage();
+    $totalPage = $res['data'];
+    ?>
+    <span class="active">1</span>
+    <?php
+    for ($i = 2; $i <= $totalPage; ++$i) {
         ?>
         <span><?= $i ?></span>
         <?php

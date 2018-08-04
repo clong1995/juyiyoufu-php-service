@@ -54,16 +54,14 @@ interface Power
 
     /**
      * 返回总页数
-     * @param int $pageSize
      * @return array
      */
-    public function totalPage(int $pageSize): array;
+    public function totalPage(): array;
 
     /**
      * 用于分页
      * @param int $page
-     * @param int $size
      * @return array
      */
-    public function getPage(int $page,int $size): array;
+    public function getPage(int $page): array;
 }

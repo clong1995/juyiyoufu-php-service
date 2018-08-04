@@ -3,10 +3,9 @@ declare(strict_types=1);
 
 use main\model\impl;
 
-$pageSize = 10;
 //获取菜单
 $privilege = new impl\PowerImpl();
-$res = $privilege->getPage(1, $pageSize);
+$res = $privilege->getPage(1);
 $data = $res['data'];
 ?>
 <div class="nav" id="nav">
@@ -50,7 +49,7 @@ $data = $res['data'];
 <div class="page" id="page">
     <?php
     //获取总数
-    $res = $privilege->totalPage($pageSize);
+    $res = $privilege->totalPage();
     $totalPage = $res['data'];
     ?>
     <span class="active">1</span>

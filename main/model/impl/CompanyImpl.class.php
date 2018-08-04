@@ -6,15 +6,26 @@
  * Time: 上午1:51
  */
 
-namespace model\impl;
+declare(strict_types=1);
+
+namespace main\model\impl;
 
 
-use model\Company;
-use db\impl;
+use main\db\conn\Mysql;
+use main\model\Company;
+use \Exception;
+use main\db\impl;
 
 class CompanyImpl implements Company
 {
 
+    private $mysql = null;
+    private $pageSize = 2;
+
+    public function __construct()
+    {
+        $this->mysql = new Mysql();
+    }
 
     /**
      * TODO 这里应该开启事物
@@ -22,7 +33,7 @@ class CompanyImpl implements Company
      * @param $data
      * @return array
      */
-    public function add($data)
+    public function add(array $data): array
     {
 
         //拿到 pdo
@@ -117,16 +128,17 @@ class CompanyImpl implements Company
      * @param $data
      * @return array
      */
-    public function update($data){
+    public function update(array $data): array
+    {
         $returnData = ['state' => 'success', 'data' => '添加成功'];
         //TODO 过滤数据
         $company = new impl\CompanyImpl();
         //查询公司是否存在
-        $companyCountRes = $company->has($data['id'],$data['license']);
+        $companyCountRes = $company->has($data['id'], $data['license']);
         if ($companyCountRes['state'] == 'success' && $companyCountRes['data']['count'] == 0) {
             $employee = new impl\EmployeeImpl();
             //查询是否存在员工
-            $employeeCountRes = $employee->has(['id'=>$data['employee_id'],'phone' => $data['phone']]);
+            $employeeCountRes = $employee->has(['id' => $data['employee_id'], 'phone' => $data['phone']]);
             //TODO 开启事物
             //修改员工
             $employeeRes = $employee->insert([
@@ -137,8 +149,7 @@ class CompanyImpl implements Company
             ]);
 
 
-
-        }else{//TODO 公司已存在
+        } else {//TODO 公司已存在
             $returnData['state'] = 'fail';
             $returnData['data'] = ['name' => 'license', 'msg' => '公司已存在'];
         }
@@ -148,19 +159,21 @@ class CompanyImpl implements Company
     /**
      *
      */
-    public function getAll()
+    public function getAll(): array
     {
         $company = new impl\CompanyImpl();
         $res = $company->getAll();
         return $res;
     }
 
+
+
     /**
      * 根据id删除公司
      * @param $id
      * @return array|bool
      */
-    public function delete($id)
+    public function delete(int $id): array
     {
         $company = new impl\CompanyImpl();
         $res = $company->delete([['id' => $id]]);
@@ -168,7 +181,7 @@ class CompanyImpl implements Company
     }
 
 
-    public function getById($id)
+    public function getById(int $id): array
     {
         // TODO: Implement getById() method.
         $company = new impl\CompanyImpl();
@@ -177,7 +190,39 @@ class CompanyImpl implements Company
         return $res;
     }
 
+    /**
+     * 获取指定页的内容
+     * @param int $page
+     * @return array
+     */
+    public function getPage(int $page): array
+    {
+        $handle = $this->mysql->pdo;
+        $company = new impl\CompanyImpl($handle);
+        $start = ($page - 1) * $this->pageSize;
+        try {
+            $res = $company->getLimit($start, $this->pageSize);
+        } catch (Exception $e) {
+            return ['state'=>'fail','data'=>'获取公司失败'];
+        }
 
+        return ['state'=>'success','data'=>$res];
+    }
 
+    /**
+     * 获取总页数
+     * @return array
+     */
+    public function totalPage(): array
+    {
+        $handle = $this->mysql->pdo;
+        $company = new impl\CompanyImpl($handle);
+        try {
+            $res = ceil($company->count() / $this->pageSize);
+        } catch (Exception $e) {
+            return ['state' => 'fail', 'data' => '获取总页数失败'];
+        }
+        return ['state' => 'success', 'data' => $res];
+    }
 
 }

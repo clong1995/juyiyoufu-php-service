@@ -6,13 +6,22 @@
  * Time: 上午1:45
  */
 
-namespace model;
+declare(strict_types=1);
+
+namespace main\model;
 
 
 interface Company
 {
-    public function add($data);
-    public function getAll();
-    public function delete($id);
-    public function getById($id);
+    public function add(array $data): array;
+
+    public function getAll(): array;
+
+    public function getPage(int $page): array;
+
+    public function delete(int $id): array;
+
+    public function getById(int $id): array;
+
+    public function totalPage(): array;
 }

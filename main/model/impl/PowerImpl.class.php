@@ -19,6 +19,7 @@ class PowerImpl implements Power
 {
     //数据库句柄
     private $mysql = null;
+    private $pageSize = 10;
 
     public function __construct()
     {
@@ -164,12 +165,12 @@ class PowerImpl implements Power
      * @param int $pageSize
      * @return array
      */
-    public function totalPage(int $pageSize): array
+    public function totalPage(): array
     {
         $handle = $this->mysql->pdo;
         $privilege = new impl\PrivilegeImpl($handle);
         try {
-            $res = ceil($privilege->count() / $pageSize);
+            $res = ceil($privilege->count() / $this->pageSize);
         } catch (Exception $e) {
             return ['state' => 'fail', 'data' => '获取总页数失败'];
         }
@@ -182,13 +183,13 @@ class PowerImpl implements Power
      * @param int $size
      * @return array
      */
-    public function getPage(int $page, int $size): array
+    public function getPage(int $page): array
     {
         $handle = $this->mysql->pdo;
         $privilege = new impl\PrivilegeImpl($handle);
-        $start = ($page - 1) * $size;
+        $start = ($page - 1) * $this->pageSize;
         try {
-            $res = $privilege->getLimit($start, $size);
+            $res = $privilege->getLimit($start, $this->pageSize);
         } catch (Exception $e) {
             return ['state' => 'fail', 'data' => '获取权限列表失败'];
         }

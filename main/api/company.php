@@ -6,7 +6,7 @@
  * Time: 17:25
  */
 
-use model\impl;
+use main\model\impl;
 
 switch (ORDER) {
     case 'add'://增加公司
@@ -23,5 +23,10 @@ switch (ORDER) {
         $company = new impl\CompanyImpl();
         $res = $company->update(PARAM);
         response($res['state'], $res['data']);
+        break;
+    case 'getPage':
+        $company = new impl\CompanyImpl();
+        $res = $company->getPage((int)PARAM['page']);
+        Util::response($res['state'], $res['data']);
         break;
 }

@@ -6,17 +6,16 @@
  * Time: 下午4:28
  */
 
-namespace db\impl;
+declare(strict_types=1);
 
-use db\Company;
-use conn\mysql;
+namespace main\db\impl;
 
-class CompanyImpl extends AbstractBase implements Company
+use main\db\Company;
+
+class CompanyImpl extends AbstractMysqlBase implements Company
 {
 
-
-
-    public function getAll()
+    public function getAll(): array
     {
         return mysql::query('
             SELECT
@@ -40,7 +39,35 @@ class CompanyImpl extends AbstractBase implements Company
 	');
     }
 
-    public function getById($id)
+    public function getLimit(int $start, int $size): array
+    {
+        return $this->exec->query('
+            SELECT
+                company.id as id,
+                company.name as company,
+                employee_info.name as employee,
+                employee.phone as phone,
+                provinces.province as province,
+                cities.city as city,
+                areas.area as area,
+                company.logo as logo,
+	            file.path as path
+            FROM
+                company
+                LEFT JOIN provinces ON company.province = provinces.provinceid
+                LEFT JOIN cities ON company.city = cities.cityid
+                LEFT JOIN areas ON company.area = areas.areaid
+                LEFT JOIN employee_info USING(employee_id)
+                LEFT JOIN employee on employee.id = employee_info.employee_id
+                LEFT JOIN file on file.id = company.logo
+            LIMIT :start,:size
+	', [
+            'start' => $start,
+            'size' => $size
+        ]);
+    }
+
+    public function getById(int $id): array
     {
         return mysql::query('
             SELECT 
@@ -59,21 +86,21 @@ class CompanyImpl extends AbstractBase implements Company
             LEFT JOIN employee_info USING ( employee_id ) 
             LEFT JOIN employee on  employee_info.employee_id = employee.id 
             where company.id = :id
-	',['id'=>$id]);
+	', ['id' => $id]);
     }
 
 
-    public function has($id, $license)
+    public function has(int $id, string $license): array
     {
-         $res = mysql::query('
+        $res = mysql::query('
             SELECT count( * ) AS count 
             FROM company 
             WHERE license = :license
             AND id != :id
-        ',['id'=>$id,'license'=>$license]);
+        ', ['id' => $id, 'license' => $license]);
 
-        if($res['state'] == 'success'){
-            $res['data']=$res['data'][0];
+        if ($res['state'] == 'success') {
+            $res['data'] = $res['data'][0];
         }
 
         return $res;

@@ -6,11 +6,17 @@
  * Time: 上午6:57
  */
 
-namespace db;
+declare(strict_types=1);
+
+namespace main\db;
 
 interface Company extends Base
 {
-    public function getAll();
-    public function getById($id);
-    public function has($id,$license);
+    public function getAll(): array;
+
+    public function getLimit(int $start, int $size): array;
+
+    public function getById(int $id): array;
+
+    public function has(int $id, string $license): array;
 }
