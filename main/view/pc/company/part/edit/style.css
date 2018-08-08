@@ -1,22 +1,24 @@
-.main > form table{
+.main > form table {
     margin: 0 auto;
 }
 
-.main > form table .title{
+.main > form table .title {
     width: 140px;
 }
-.main > form table .value{
+
+.main > form table .value {
     width: 180px;
-}
-.main > form table .phone,
-.main > form table .name,
-.main > form table .password{
-    width: 180px;
-}
-.main > form table .hint{
-    font-size: 12px;
 }
 
+.main > form table .phone,
+.main > form table .name,
+.main > form table .password {
+    width: 180px;
+}
+
+.main > form table .hint {
+    font-size: 12px;
+}
 
 .main table .licenseImg {
     width: 250px;

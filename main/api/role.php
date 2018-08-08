@@ -32,9 +32,14 @@ switch (ORDER) {
         $res = $role->delPrivilege(PARAM);
         Util::response($res['state'], $res['data']);
         break;
-    case 'delete'://解除关联权限
+    case 'delete'://删除角色
         $role = new impl\RoleImpl();
         $res = $role->delete((int)PARAM['id']);
+        Util::response($res['state'], $res['data']);
+        break;
+    case 'getPage':
+        $role = new impl\RoleImpl();
+        $res = $role->getPage((int)PARAM['page']);
         Util::response($res['state'], $res['data']);
         break;
 }

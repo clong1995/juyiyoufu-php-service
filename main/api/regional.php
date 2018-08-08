@@ -1,17 +1,19 @@
 <?php
 
-use model\impl;
+declare(strict_types=1);
+
+use EasyPhp\util\Util;
+use main\model\impl;
+
 switch (ORDER) {
-    /*case 'province'://添加
-        break;*/
     case 'city'://添加
         $regional = new impl\RegionalImpl();
-        $res = $regional->city(PARAM['id']);
-        response($res['state'], $res['data']);
+        $res = $regional->city((int)PARAM['id']);
+        Util::response($res['state'], $res['data']);
         break;
     case 'area'://添加
         $regional = new impl\RegionalImpl();
-        $res = $regional->area(PARAM['id']);
-        response($res['state'], $res['data']);
+        $res = $regional->area((int)PARAM['id']);
+        Util::response($res['state'], $res['data']);
         break;
 }

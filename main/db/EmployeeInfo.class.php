@@ -6,7 +6,9 @@
  * Time: 上午6:57
  */
 
-namespace db;
+declare(strict_types=1);
+
+namespace main\db;
 
 interface EmployeeInfo extends Base
 {

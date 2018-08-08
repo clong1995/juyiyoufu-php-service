@@ -6,11 +6,14 @@
  * Time: 上午1:45
  */
 
-namespace model;
+declare(strict_types=1);
+
+namespace main\model;
 
 
 interface Upload
 {
-    public function image($file,$path,$size=1024,$allowed=[]);
-    public function file($file,$path,$size=1024,$allowed);
+    public function image(array $file, int $size = 1024, array $allowed = []): array;
+
+    public function file($file, $path, $size = 1024, $allowed);
 }

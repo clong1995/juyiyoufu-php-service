@@ -6,10 +6,12 @@
  * Time: 下午4:28
  */
 
-namespace db\impl;
+declare(strict_types=1);
 
-use db\EmployeeInfo;
+namespace main\db\impl;
 
-class EmployeeInfoImpl extends AbstractBase implements EmployeeInfo
+use main\db\EmployeeInfo;
+
+class EmployeeInfoImpl extends AbstractMysqlBase implements EmployeeInfo
 {
 }

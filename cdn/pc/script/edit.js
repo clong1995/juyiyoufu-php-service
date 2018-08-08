@@ -14,17 +14,24 @@ ejs.ready(() => {
     ejs.on('.back', nav, 'click', t => ejs.link('/' + domain + '/list'));
 });
 
-//需要参数的方法
-function save(verify) {
+/**
+ * 需要参数的方法
+ * @param verify
+ * @param fn
+ */
+function save(verify, fn = null) {
     let nav = ejs.query('#nav'),
         main = ejs.query('#main'),
         form = ejs.query('.form', main),
         domain = document.location.pathname.split('/')[1];
 
     ejs.on('.save', nav, 'click', t => {
+        //提交前置函数
+        fn && fn();
+        //提交
         NEW(ejs.root + 'ui/form.ui', {
             form: form,
-            action: '/api/' + domain + '/add',
+            action: '/api/' + domain + '/update',
             verify: verify
         }, res => {
             if (res.state !== 'success') {
@@ -47,7 +54,7 @@ function save(verify) {
                 ejs.html(info, res.data.msg);
                 ejs.append(error, info);
             } else {
-                ejs.link('/'+domain+'/list');
+                ejs.link('/' + domain + '/list');
             }
         });
     });

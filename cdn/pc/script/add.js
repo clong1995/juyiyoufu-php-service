@@ -15,13 +15,14 @@ ejs.ready(() => {
 });
 
 //需要参数的方法
-function save(verify) {
+function save(verify, fn) {
     let nav = ejs.query('#nav'),
         main = ejs.query('#main'),
         form = ejs.query('.form', main),
         domain = document.location.pathname.split('/')[1];
 
     ejs.on('.save', nav, 'click', t => {
+        fn && fn();
         NEW(ejs.root + 'ui/form.ui', {
             form: form,
             action: '/api/' + domain + '/add',
@@ -47,7 +48,7 @@ function save(verify) {
                 ejs.html(info, res.data.msg);
                 ejs.append(error, info);
             } else {
-                ejs.link('/'+domain+'/list');
+                ejs.link('/' + domain + '/list');
             }
         });
     });

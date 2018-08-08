@@ -55,7 +55,6 @@ $powersData = $powers['data'];
                             ?>
                         </select>
                         <button type="button" class="addPrivilege">关联</button>
-
                     </div>
                 </td>
             </tr>

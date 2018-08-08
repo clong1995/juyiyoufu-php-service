@@ -6,7 +6,9 @@
  * Time: 上午2:15
  */
 
-namespace db;
+declare(strict_types=1);
+
+namespace main\db;
 
 interface File extends Base
 {

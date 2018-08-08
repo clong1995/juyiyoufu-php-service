@@ -6,7 +6,8 @@ use main\model\impl;
 //获取角色
 $role = new impl\RoleImpl();
 
-$roles = $role->getById((int)PARAM['id']);
+$res = $role->getById((int)PARAM['id']);
+$role = $res['data'];
 
 //获取所有权限
 $power = new impl\PowerImpl();
@@ -21,25 +22,25 @@ $powersData = $powers['data'];
 </div>
 <div id="main" class="main">
     <form class="form">
-        <input type="hidden" class="role" name="id" value="<?= $roles['role']['id'] ?>">
+        <input type="hidden" class="role" name="id" value="<?= $role['id'] ?>">
         <table>
             <tbody>
             <tr>
                 <td class="title">名称</td>
-                <td><input type="text" name="name" value="<?= $roles['role']['name'] ?>"></td>
+                <td><input type="text" name="name" value="<?= $role['name'] ?>"></td>
             </tr>
             <tr>
                 <td class="title">说明</td>
-                <td><textarea name="info"><?= $roles['role']['info'] ?></textarea></td>
+                <td><textarea name="info"><?= $role['info'] ?></textarea></td>
             </tr>
             <tr>
                 <td class="title">权限列表</td>
                 <td>
                     <ul class="list">
                         <?php
-                        foreach ($roles['privilege'] as $key => $value) {
+                        foreach ($role['privilege'] as $value) {
                             ?>
-                            <li data-id="<?= $key ?>">
+                            <li data-id="<?= $value['id'] ?>">
                                 <span class="name"><?= $value['name'] ?></span>
                                 <span class="type"><?= $value['type'] ?></span>
                                 <span class="option delete"><i class="iconfont">&#xe604;</i></span>

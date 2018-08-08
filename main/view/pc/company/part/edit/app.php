@@ -1,6 +1,6 @@
 <?PHP
 
-use model\impl;
+use main\model\impl;
 
 //公司信息
 $company = new impl\CompanyImpl();
@@ -32,7 +32,10 @@ $areas = $res['data'];
         <table>
             <tr>
                 <td class="title">公司名称</td>
-                <td class="value"><input name="companyName" type="text" value="<?= $companyData['company'] ?>"/></td>
+                <td class="value">
+                    <input name="id" type="hidden" value="<?= $companyData['id'] ?>">
+                    <input name="companyName" type="text" value="<?= $companyData['company'] ?>"/>
+                </td>
             </tr>
             <tr>
                 <td class="title">统一社会信用代码</td>
@@ -41,6 +44,7 @@ $areas = $res['data'];
             <tr>
                 <td class="title">负责人</td>
                 <td>
+                    <input name="employee" type="hidden" value="<?= $companyData['employee_id'] ?>"/>
                     <input class="name" name="name" type="text" value="<?= $companyData['employee'] ?>"/>
                 </td>
             </tr>
@@ -54,7 +58,6 @@ $areas = $res['data'];
             <tr>
                 <td class="title">公司地址</td>
                 <td>
-
                     <select class="province" name="province">
                         <?php
                         foreach ($provinces as $value) {
@@ -102,14 +105,14 @@ $areas = $res['data'];
             <tr>
                 <td class="title">营业执照</td>
                 <td>
-                    <input name="licenseImg" type="hidden" value="">
+                    <input name="licenseImg" type="hidden" value="<?= $companyData['license_img'] ?>">
                     <div class="licenseImg">
                         <i class="iconfont">
                             &#xe61b;
                             <br>
                             <span>修改照片</span>
                         </i>
-                        <img src="/file/<?= $companyData['logo'] ?>">
+                        <img class="oldImg" src="/file/<?= $companyData['license_img'] ?>">
                     </div>
                 </td>
             </tr>

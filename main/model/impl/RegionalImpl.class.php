@@ -6,30 +6,59 @@
  * Time: 上午1:51
  */
 
-namespace model\impl;
+declare(strict_types=1);
+
+namespace main\model\impl;
 
 
-use model\Regional;
-use db\impl;
+use main\model\Regional;
+use main\db\impl;
+use main\db\conn\Mysql;
+use \Exception;
 
 class RegionalImpl implements Regional
 {
-    public function province()
+    private $mysql = null;
+
+    public function __construct()
     {
-        $province = new impl\ProvincesImpl();
-        return $province->select(['provinceid','province']);
+        $this->mysql = new Mysql();
     }
 
-    public function city($id)
+    public function province(): array
     {
-        $province = new impl\CitiesImpl();
-        return $province->select(['cityid','city'],['provinceid'=>$id]);
+        $handle = $this->mysql->pdo;
+        $province = new impl\ProvincesImpl($handle);
+        try {
+            $res = $province->select(['provinceid', 'province']);
+        } catch (Exception $e) {
+            return ['state' => 'fail', 'data' => '获取省份失败！'];
+        }
+        return ['state' => 'success', 'data' => $res];
     }
 
-    public function area($id)
+    public function city(int $id): array
     {
-        $province = new impl\AreasImpl();
-        return $province->select(['areaid','area'],['cityid'=>$id]);
+        $handle = $this->mysql->pdo;
+        $city = new impl\CitiesImpl($handle);
+        try {
+            $res = $city->select(['cityid', 'city'], ['provinceid' => $id]);
+        } catch (Exception $e) {
+            return ['state' => 'fail', 'data' => '获取市区失败！'];
+        }
+        return ['state' => 'success', 'data' => $res];
+    }
+
+    public function area(int $id): array
+    {
+        $handle = $this->mysql->pdo;
+        $area = new impl\AreasImpl($handle);
+        try {
+            $res = $area->select(['areaid', 'area'], ['cityid' => $id]);
+        } catch (Exception $e) {
+            return ['state' => 'fail', 'data' => '获取区县失败！'];
+        }
+        return ['state' => 'success', 'data' => $res];
     }
 
 }

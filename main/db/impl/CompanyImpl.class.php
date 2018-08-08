@@ -17,7 +17,7 @@ class CompanyImpl extends AbstractMysqlBase implements Company
 
     public function getAll(): array
     {
-        return mysql::query('
+        return $this->exec->query('
             SELECT
                 company.id as id,
                 company.name as company,
@@ -67,10 +67,15 @@ class CompanyImpl extends AbstractMysqlBase implements Company
         ]);
     }
 
+    /**
+     * @param int $id
+     * @return array
+     */
     public function getById(int $id): array
     {
-        return mysql::query('
+        return $this->exec->query('
             SELECT 
+                company.id as id,
                 company.NAME AS company,
                 logo,
                 province,
@@ -92,18 +97,12 @@ class CompanyImpl extends AbstractMysqlBase implements Company
 
     public function has(int $id, string $license): array
     {
-        $res = mysql::query('
+        return $this->exec->query('
             SELECT count( * ) AS count 
             FROM company 
             WHERE license = :license
             AND id != :id
         ', ['id' => $id, 'license' => $license]);
-
-        if ($res['state'] == 'success') {
-            $res['data'] = $res['data'][0];
-        }
-
-        return $res;
     }
 
 }

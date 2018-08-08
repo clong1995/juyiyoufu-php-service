@@ -6,10 +6,12 @@
  * Time: 上午2:21
  */
 
-namespace db\impl;
+declare(strict_types=1);
 
-use db\Areas;
+namespace main\db\impl;
 
-class AreasImpl extends AbstractBase implements Areas
+use main\db\Areas;
+
+class AreasImpl extends AbstractMysqlBase implements Areas
 {
 }

@@ -18,7 +18,7 @@ interface Role
      * @param int $size
      * @return array
      */
-    public function getPage(int $page, int $size): array;
+    public function getPage(int $page): array;
 
     /**
      * @param int $roleId
@@ -36,10 +36,9 @@ interface Role
 
     /**
      * 返回总页数
-     * @param int $pageSize
      * @return array
      */
-    public function totalPage(int $pageSize): array;
+    public function totalPage(): array;
 
     /**
      * @param array $data

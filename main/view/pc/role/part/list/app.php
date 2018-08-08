@@ -5,9 +5,8 @@ use main\model\impl;
 
 //获取角色
 $role = new impl\RoleImpl();
-$pageSize = 9;
-$res = $role->getPage(1, $pageSize);
-
+$res = $role->getPage(1);
+$data = $res['data'];
 ?>
 <div class="nav" id="nav">
     <span class="title"><i class="iconfont">&#xe60c;</i>角色列表</span>
@@ -16,10 +15,10 @@ $res = $role->getPage(1, $pageSize);
 </div>
 <div class="main" id="main">
     <?php
-    foreach ($res as $key => $value) {
+    foreach ($data as $value) {
         ?>
         <div class="item">
-            <div class="inner" data-id="<?= $key ?>">
+            <div class="inner" data-id="<?= $value['role']['id'] ?>">
                 <div class="row">
                     <span class="title">名称:</span><?= $value['role']['name'] ?>
                 </div>
@@ -30,7 +29,7 @@ $res = $role->getPage(1, $pageSize);
                     <span class="title">权限:</span>
                     <ul>
                         <?php
-                        foreach ($value['privilege'] as $key1 => $value1) {
+                        foreach ($value['privilege'] as $value1) {
                             ?>
                             <li>
                                 <span class="name"><?= $value1['name'] ?></span>
@@ -53,10 +52,10 @@ $res = $role->getPage(1, $pageSize);
     }
     ?>
 </div>
-<div class="page">
+<div class="page" id="page">
     <?php
     //获取总数
-    $res = $role->totalPage($pageSize);
+    $res = $role->totalPage();
     $totalPage = $res['data'];
     ?>
     <span class="active">1</span>

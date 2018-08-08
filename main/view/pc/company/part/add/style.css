@@ -60,3 +60,45 @@
 .main table .licenseImg > .iconfont > span {
     font-size: 20px;
 }
+.main table .logoImg {
+    width: 250px;
+    height: 120px;
+    text-align: center;
+    background: #ccc;
+    margin: 0 auto;
+    position: relative;
+}
+
+.main table .logoImg > img {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+.main table .logoImg:hover {
+    color: #0f99ff !important;
+}
+
+.main table .logoImg:hover img {
+    opacity: .5;
+}
+
+.main table .logoImg > .iconfont {
+    display: block;
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    font-size: 50px;
+    position: absolute;
+    top: 10px;
+    left: 0;
+    z-index: 2;
+    text-align: center;
+}
+
+.main table .logoImg > .iconfont > span {
+    font-size: 20px;
+}

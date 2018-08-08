@@ -61,6 +61,11 @@
         <?php
     }
     //编辑
+    if (strpos(PATH, '/part/edit/') !== false) {
+        ?>
+        <script src="/cdn/pc/script/edit.js"></script>
+        <?php
+    }
 
     ?>
 

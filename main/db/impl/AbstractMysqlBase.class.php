@@ -53,6 +53,7 @@ abstract class AbstractMysqlBase
         $con = [];
         foreach ($keys as $v)
             array_push($con, $v . '=:' . $v);
+
         return $this->exec->update('delete from ' . $this->tableName() . ' where ' . implode(' and ', $con), $condition);
     }
 

@@ -6,12 +6,15 @@
  * Time: 上午1:45
  */
 
-namespace main\model;
+declare(strict_types=1);
 
+namespace main\model;
 
 interface Regional
 {
-    public function province();
-    public function city($id);
-    public function area($id);
+    public function province(): array;
+
+    public function city(int $id): array;
+
+    public function area(int $id): array;
 }

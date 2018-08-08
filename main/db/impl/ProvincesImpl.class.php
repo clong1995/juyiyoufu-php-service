@@ -6,10 +6,12 @@
  * Time: 上午2:21
  */
 
-namespace db\impl;
+declare(strict_types=1);
 
-use db\Provinces;
+namespace main\db\impl;
 
-class ProvincesImpl extends AbstractBase implements Provinces
+use main\db\Provinces;
+
+class ProvincesImpl extends AbstractMysqlBase implements Provinces
 {
 }

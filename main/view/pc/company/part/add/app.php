@@ -1,5 +1,5 @@
 <?PHP
-    use model\impl;
+    use main\model\impl;
     //省份
     $province = new impl\RegionalImpl();
     $res = $province->province();

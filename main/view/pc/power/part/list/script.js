@@ -1,6 +1,5 @@
 //翻页
-page(v=>`<div class="item">
-    <div class="inner" data-id="${v.id}">
+page(v => `<div class="inner" data-id="${v.id}">
         <div class="row">
             <span class="title">名称:</span>${v.name}
         </div>
@@ -18,6 +17,5 @@ page(v=>`<div class="item">
             <button class="edit"><i class="iconfont">&#xe626;</i>编辑</button>
             <button class="delete"><i class="iconfont">&#xe60e;</i>删除</button>
         </div>
-    </div>
-</div>`
+    </div>`
 );

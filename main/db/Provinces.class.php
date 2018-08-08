@@ -6,7 +6,7 @@
  * Time: 上午2:15
  */
 
-namespace db;
+namespace main\db;
 
 interface Provinces extends Base
 {

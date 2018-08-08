@@ -59,7 +59,6 @@ class PowerImpl implements Power
     }
 
     /**
-     * TODO 要开启事物
      * @param $data
      * @return array
      */

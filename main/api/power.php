@@ -24,14 +24,14 @@ switch (ORDER) {
         Util::response($res['state'], $res['data']);
         break;
 
-    case 'delById'://删除
+    case 'delete'://删除
         $power = new impl\PowerImpl();
         $res = $power->delById((int)PARAM['id']);
         Util::response($res['state'], $res['data']);
         break;
     case 'getPage':
         $power = new impl\PowerImpl();
-        $res = $power->getPage((int)PARAM['page'], 10);
+        $res = $power->getPage((int)PARAM['page']);
         Util::response($res['state'], $res['data']);
         break;
 }

@@ -8,7 +8,7 @@ $power = new impl\PowerImpl();
 $res = $power->getAllType();
 $type = $res['data'];
 //根据id查询权限
-$res = $power->getPowerById((int)PARAM['id']);
+$res = $power->getById((int)PARAM['id']);
 $onePower = $res['data'];
 ?>
 <div class="nav" id="nav">

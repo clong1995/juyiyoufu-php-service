@@ -6,10 +6,12 @@
  * Time: 上午2:21
  */
 
-namespace db\impl;
+declare(strict_types=1);
 
-use db\Cities;
+namespace main\db\impl;
 
-class CitiesImpl extends AbstractBase implements Cities
+use main\db\Cities;
+
+class CitiesImpl extends AbstractMysqlBase implements Cities
 {
 }

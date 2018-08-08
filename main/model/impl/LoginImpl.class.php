@@ -43,12 +43,14 @@ class LoginImpl implements Login
         }
 
         $employee = new impl\EmployeeImpl($this->handle);
+
         try {
             $res = $employee->select(['id', 'password'], ['phone' => $phone]);
         } catch (Exception $e) {
             //TODO 记录日志
             return ['state' => 'fail', 'data' => '登录失败！'];
         }
+
 
 
         if (count($res) === 1) {

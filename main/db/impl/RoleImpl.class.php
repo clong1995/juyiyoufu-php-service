@@ -31,10 +31,10 @@ class RoleImpl extends AbstractMysqlBase implements Role
                 group_concat(privilege_info.name) as privilege_name
             FROM
                 role
-            INNER JOIN role_info USING ( role_id )
-            INNER JOIN role_privilege_relation USING ( role_id )
-            INNER JOIN privilege_info USING ( privilege_id )
-            INNER JOIN privilege_type USING ( privilege_type_id )
+            LEFT JOIN role_info USING ( role_id )
+            LEFT JOIN role_privilege_relation USING ( role_id )
+            LEFT JOIN privilege_info USING ( privilege_id )
+            LEFT JOIN privilege_type USING ( privilege_type_id )
             group by role_id
             LIMIT :start,:size', [
             'start' => $start,
@@ -69,10 +69,10 @@ class RoleImpl extends AbstractMysqlBase implements Role
                 privilege_type.name as privilege_type, 
                 privilege_info.name as privilege_name 
             FROM role 
-            INNER JOIN role_info USING ( role_id ) 
-            INNER JOIN role_privilege_relation USING ( role_id ) 
-            INNER JOIN privilege_info USING ( privilege_id ) 
-            INNER JOIN privilege_type USING ( privilege_type_id )
+            LEFT JOIN role_info USING ( role_id ) 
+            LEFT JOIN role_privilege_relation USING ( role_id ) 
+            LEFT JOIN privilege_info USING ( privilege_id ) 
+            LEFT JOIN privilege_type USING ( privilege_type_id )
             WHERE
             role_id = :roleId
         ', ['roleId' => $roleId]);

@@ -6,11 +6,13 @@
  * Time: 上午2:21
  */
 
-namespace db\impl;
+declare(strict_types=1);
 
-use db\File;
+namespace main\db\impl;
 
-class FileImpl extends AbstractBase implements File
+use main\db\File;
+
+class FileImpl extends AbstractMysqlBase implements File
 {
 
 

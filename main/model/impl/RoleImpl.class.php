@@ -19,6 +19,7 @@ use \Exception;
 class RoleImpl implements Role
 {
     //数据库句柄
+    private $pageSize = 6;
     private $mysql = null;
 
     public function __construct()
@@ -95,16 +96,15 @@ class RoleImpl implements Role
 
     /**
      * @param int $page
-     * @param int $size
      * @return array
      */
-    public function getPage(int $page, int $size): array
+    public function getPage(int $page): array
     {
         $handle = $this->mysql->pdo;
         $role = new impl\RoleImpl($handle);
-        $start = ($page - 1) * $size;
+        $start = ($page - 1) * $this->pageSize;
         try {
-            $res = $role->getLimit($start, $size);
+            $res = $role->getLimit($start, $this->pageSize);
         } catch (Exception $e) {
             //TODO 日志
             return ['state' => 'fail', 'data' => '获取角色列表失败！'];
@@ -112,31 +112,31 @@ class RoleImpl implements Role
 
         $map = [];
         foreach ($res as $value) {
-            $role_id = $value['role_id'];
-            //if (!array_key_exists($role_id, $map))
-            $map[$role_id] = [
+            $role = [
                 'role' => [
+                    'id' => $value['role_id'],
                     'name' => $value['role_name'],
                     'info' => $value['role_info']
                 ],
                 'privilege' => []
             ];
 
-            $privilege_id_arr = explode(',', $value['privilege_id']);
-            $privilege_type_arr = explode(',', $value['privilege_type']);
-            $privilege_name_arr = explode(',', $value['privilege_name']);
-
-
-            foreach ($privilege_id_arr as $item2 => $value2) {
-                array_push($map[$role_id]['privilege'], [
-                    'id' => $value2,
-                    'name' => $privilege_name_arr[$item2],
-                    'type' => $privilege_type_arr[$item2]
-                ]);
+            if ($value['privilege_id'] != '') {
+                $privilege_id_arr = explode(',', $value['privilege_id']);
+                $privilege_type_arr = explode(',', $value['privilege_type']);
+                $privilege_name_arr = explode(',', $value['privilege_name']);
+                foreach ($privilege_id_arr as $item2 => $value2) {
+                    array_push($role['privilege'], [
+                        'id' => $value2,
+                        'name' => $privilege_name_arr[$item2],
+                        'type' => $privilege_type_arr[$item2]
+                    ]);
+                }
             }
+            array_push($map, $role);
         }
 
-        return $map;
+        return ['state' => 'success', 'data' => $map];
     }
 
     /**
@@ -149,23 +149,22 @@ class RoleImpl implements Role
         $handle = $this->mysql->pdo;
         $role = new impl\RoleImpl($handle);
         $res = $role->getById($roleId);
-        $map = [];
-        foreach ($res as $key => $value) {
-            if (!$key) {
-                $map['role'] = [
-                    'id' => $value['role_id'],
-                    'name' => $value['role_name'],
-                    'info' => $value['role_info']
-                ];
-                $map['privilege'] = [];
-            }
+        $data = $res[0];
+        $map = [
+            'id' => $data['role_id'],
+            'name' => $data['role_name'],
+            'info' => $data['role_info'],
+            'privilege' => []
+        ];
 
-            $map['privilege'][$value['privilege_id']] = [
+        foreach ($res as $value) {
+            array_push($map['privilege'], [
+                'id' => $value['privilege_id'],
                 'name' => $value['privilege_name'],
-                'type' => $value['privilege_type'],
-            ];
+                'type' => $value['privilege_type']
+            ]);
         }
-        return $map;
+        return ['state' => 'success', 'data' => $map];
     }
 
     public function relPrivilege(int $roleId, int $privilegeId): array
@@ -185,12 +184,12 @@ class RoleImpl implements Role
      * @param int $pageSize
      * @return array
      */
-    public function totalPage(int $pageSize): array
+    public function totalPage(): array
     {
         $handle = $this->mysql->pdo;
         $role = new impl\RoleImpl($handle);
         try {
-            $res = ceil($role->count() / $pageSize);
+            $res = ceil($role->count() / $this->pageSize);
         } catch (Exception $e) {
             return ['state' => 'fail', 'data' => '获取总页数失败'];
         }
@@ -206,7 +205,7 @@ class RoleImpl implements Role
         $handle = $this->mysql->pdo;
         $role = new impl\RoleImpl($handle);
         try {
-            $role->delete([['role_id'=>$id]]);
+            $role->delete([['role_id' => $id]]);
         } catch (Exception $e) {
             return ['state' => 'fail', 'data' => '删除角色失败'];
         }

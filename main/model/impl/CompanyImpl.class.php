@@ -20,7 +20,7 @@ class CompanyImpl implements Company
 {
 
     private $mysql = null;
-    private $pageSize = 2;
+    private $pageSize = 6;
 
     public function __construct()
     {
@@ -35,33 +35,30 @@ class CompanyImpl implements Company
      */
     public function add(array $data): array
     {
+        //TODO 过滤数据
 
         //拿到 pdo
-
-        $returnData = ['state' => 'success', 'data' => '添加成功'];
-        //TODO 过滤数据
-        $company = new impl\CompanyImpl();
+        $handle = $this->mysql->pdo;
+        $company = new impl\CompanyImpl($handle);
         //查询公司是否存在
-        $companyCountRes = $company->count(['license' => $data['license']]);
-        if ($companyCountRes['state'] == 'success' && $companyCountRes['data']['count'] == 0) {
-
-            $employee = new impl\EmployeeImpl();
+        $res = $company->count(['license' => $data['license']]);
+        if (!$res) {
+            $employee = new impl\EmployeeImpl($handle);
             //查询是否存在员工
-            $employeeCountRes = $employee->count(['phone' => $data['phone']]);
-            if ($employeeCountRes['state'] == 'success' && $employeeCountRes['data']['count'] == 0) {
-                //TODO 开启事物
-                //增加员工
-                $employeeRes = $employee->insert([
-                    [
-                        'phone' => $data['phone'],
-                        'password' => strtoupper(md5('123456'))
-                    ]
-                ]);
+            $res = $employee->count(['phone' => $data['phone']]);
+            if (!$res) {
+                try {
+                    $this->mysql->transaction(function ($handle) use ($data) {
+                        //T1:增加员工
+                        $employee = new impl\EmployeeImpl($handle);
+                        $employeeRes = $employee->insert([[
+                            'phone' => $data['phone'],
+                            'password' => strtoupper(md5('123456'))
+                        ]]);
 
-                if ($employeeRes['state'] == 'success') {
-                    //增加公司
-                    $companyRes = $company->insert([
-                        [
+                        //T2:增加公司
+                        $company = new impl\CompanyImpl($handle);
+                        $companyRes = $company->insert([[
                             'name' => $data['companyName'],
                             'province' => (int)$data['province'],
                             'city' => (int)$data['city'],
@@ -69,91 +66,95 @@ class CompanyImpl implements Company
                             'license' => $data['license'],
                             'license_img' => $data['licenseImg'],
                             'info' => $data['info'],
-                            'employee_id' => (int)$employeeRes['data']['id']
-                        ]
-                    ]);
+                            'employee_id' => (int)$employeeRes['id']
+                        ]]);
 
-                    if ($companyRes['state'] == 'success') {
-                        //增加员工信息
-                        $employeeInfo = new impl\EmployeeInfoImpl();
-                        $employeeInfoRes = $employeeInfo->insert([
-                            [
-                                'employee_id' => (int)$employeeRes['data']['id'],
-                                'name' => $data['name'],
-                                'company_id' => (int)$companyRes['data']['id'],
-                                'role_id' => 2,
-                                'index_menu_group_id' => 2
-                            ]
-                        ]);
-
-                        if ($employeeInfoRes['state'] == 'success') {
-                            //TODO 成功 提交事物
-                        } else {
-                            //TODO 添加员工信息失败 回滚
-                            $returnData['state'] = 'fail';
-                            $returnData['data'] = '员工信息添加失败';
-                        }
-
-                    } else {
-                        //TODO 添加公司失败 回滚
-                        $returnData['state'] = 'fail';
-                        $returnData['data'] = '公司添加失败';
-                    }
-
-                } else {
-                    //TODO 添加员工失败 回滚
-                    $returnData['state'] = 'fail';
-                    $returnData['data'] = '员工添加失败';
-                }
+                        //T3:增加员工信息
+                        $employeeInfo = new impl\EmployeeInfoImpl($handle);
+                        $employeeInfo->insert([[
+                            'employee_id' => (int)$employeeRes['id'],
+                            'name' => $data['name'],
+                            'company_id' => (int)$companyRes['id'],
+                            'role_id' => 2,
+                            'index_menu_group_id' => 2
+                        ]]);
+                    });
+                } catch (Exception $e) {
+                    //TODO 日志
+                    return ['state' => 'fail', 'data' => '添加失败'];
+                };
 
             } else {
-                //TODO 员工已存在 回滚
-                $returnData['state'] = 'fail';
-                $returnData['data'] = ['name' => 'phone', 'msg' => '员工添已存在'];
+                //员工已存在
+                return ['state' => 'fail', 'data' => '员工添已存在'];
             }
-
         } else {
-            //TODO 公司已存在
-            $returnData['state'] = 'fail';
-            $returnData['data'] = ['name' => 'license', 'msg' => '公司已存在'];
+            //公司已存在
+            return ['state' => 'fail', 'data' => '公司已存在'];
         }
 
-
-        return $returnData;
+        return ['state' => 'success', 'data' => '添加成功'];
     }
 
     /**
-     * TODO 这里应该开启事物
      * 修改公司
      * @param $data
      * @return array
      */
     public function update(array $data): array
     {
-        $returnData = ['state' => 'success', 'data' => '添加成功'];
-        //TODO 过滤数据
-        $company = new impl\CompanyImpl();
         //查询公司是否存在
-        $companyCountRes = $company->has($data['id'], $data['license']);
-        if ($companyCountRes['state'] == 'success' && $companyCountRes['data']['count'] == 0) {
-            $employee = new impl\EmployeeImpl();
-            //查询是否存在员工
-            $employeeCountRes = $employee->has(['id' => $data['employee_id'], 'phone' => $data['phone']]);
-            //TODO 开启事物
-            //修改员工
-            $employeeRes = $employee->insert([
-                [
-                    'phone' => $data['phone'],
-                    'password' => strtoupper(md5('123456'))
-                ]
-            ]);
+        try {
+            //开启事物
+            $this->mysql->transaction(function ($handle) use ($data) {
+                //T1:查询公公司是否存在
+                $company = new impl\CompanyImpl($handle);
+                $res = $company->has((int)$data['id'], (string)$data['license']);
+                if ($res[0]['count'] == 0) {
+                    //T2:查询是否存在员工
+                    $employee = new impl\EmployeeImpl($handle);
+                    $res = $employee->has((int)$data['employee'], (string)$data['phone']);
+                    if ($res[0]['count'] == 0) {
+                        //T3:修改员工
+                        $employee->update([[
+                            'phone' => $data['phone'],
+                            'password' => strtoupper(md5('123456'))
+                        ]], [[
+                            'id' => $data['employee']
+                        ]]);
 
+                        //T3:修改员工信息
+                        $employeeInfo = new impl\EmployeeInfoImpl($handle);
+                        $employeeInfo->update([[
+                            'name' => $data['name']
+                        ]], [[
+                            'employee_id' => $data['employee']
+                        ]]);
 
-        } else {//TODO 公司已存在
-            $returnData['state'] = 'fail';
-            $returnData['data'] = ['name' => 'license', 'msg' => '公司已存在'];
+                        //T4修改公司
+                        $company->update([[
+                            //TODO
+                            'name' => $data['companyName'],
+                            'province' => $data['province'],
+                            'city' => $data['city'],
+                            'area' => $data['area'],
+                            'info' => $data['info'],
+                            'license' => $data['license'],
+                            'license_img' => $data['licenseImg']
+                        ]], [
+                            ['id' => $data['id']]
+                        ]);
+                    } else {
+                        return ['state' => 'fail', 'data' => '负责人电话已存在!'];
+                    }
+                } else {
+                    return ['state' => 'fail', 'data' => '公司已存在!'];
+                }
+            });
+        } catch (Exception $e) {
+            return ['state' => 'fail', 'data' => '修改失败!'];
         }
-        return $returnData;
+        return ['state' => 'success', 'data' => '修改成功!'];
     }
 
     /**
@@ -167,7 +168,6 @@ class CompanyImpl implements Company
     }
 
 
-
     /**
      * 根据id删除公司
      * @param $id
@@ -175,19 +175,31 @@ class CompanyImpl implements Company
      */
     public function delete(int $id): array
     {
-        $company = new impl\CompanyImpl();
-        $res = $company->delete([['id' => $id]]);
-        return $res;
+        $handle = $this->mysql->pdo;
+        $company = new impl\CompanyImpl($handle);
+        try {
+            $company->delete([['id' => $id]]);
+        } catch (Exception $e) {
+            return ['state' => 'fail', 'data' => '删除失败'];
+        }
+        return ['state' => 'success', 'data' => '删除成功'];
     }
 
-
+    /**
+     * @param int $id
+     * @return array
+     */
     public function getById(int $id): array
     {
-        // TODO: Implement getById() method.
-        $company = new impl\CompanyImpl();
-        //$res = $company->select(['name', 'logo', 'province', 'city', 'area', 'info', 'license', 'license_img'], ['id' => $id]);
-        $res = $company->getById($id);
-        return $res;
+        $handle = $this->mysql->pdo;
+        $company = new impl\CompanyImpl($handle);
+        try {
+            $res = $company->getById($id);
+        } catch (Exception $e) {
+            return ['state' => 'fail', 'data' => '获取公司失败'];
+        }
+
+        return ['state' => 'success', 'data' => $res];
     }
 
     /**
@@ -203,10 +215,10 @@ class CompanyImpl implements Company
         try {
             $res = $company->getLimit($start, $this->pageSize);
         } catch (Exception $e) {
-            return ['state'=>'fail','data'=>'获取公司失败'];
+            return ['state' => 'fail', 'data' => '获取公司失败'];
         }
 
-        return ['state'=>'success','data'=>$res];
+        return ['state' => 'success', 'data' => $res];
     }
 
     /**

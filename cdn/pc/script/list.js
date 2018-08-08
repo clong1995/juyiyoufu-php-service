@@ -1,4 +1,3 @@
-
 //全自动公共方法
 ejs.ready(() => {
 
@@ -7,15 +6,15 @@ ejs.ready(() => {
         domain = document.location.pathname.split('/')[1];
 
     //添加
-    ejs.on('.add', nav, 'click', t => ejs.link('/power/add'));
+    ejs.on('.add', nav, 'click', t => ejs.link('/' + domain + '/add'));
 
     //编辑
-    ejs.on('.edit', main, 'click', t => ejs.link('/'+domain+'/edit?id=' + ejs.attr(t.parentNode.parentNode, 'data-id')));
+    ejs.on('.edit', main, 'click', t => ejs.link('/' + domain + '/edit?id=' + ejs.attr(t.parentNode.parentNode, 'data-id')));
 
     //删除
     ejs.on('.delete', main, 'click', t => {
         let item = t.parentNode.parentNode;
-        ejs.ajax('/api/'+domain+'/delById', {
+        ejs.ajax('/api/' + domain + '/delete', {
             method: 'POST',
             data: {
                 id: ejs.attr(item, 'data-id')
@@ -30,18 +29,24 @@ ejs.ready(() => {
             }
         });
     });
+
+    //详情
+    ejs.on('.detail', main, 'click', t => {
+        alert('待开发!');
+        //ejs.link('/' + domain + '/detail?id=' + ejs.attr(t.parentNode.parentNode, 'data-id'))
+    });
 });
 
 //需要外界参数的方法
 //翻页
 function page(callback) {
     let page = ejs.query('#page'),
-    main = ejs.query('#main'),
-    domain = document.location.pathname.split('/')[1];
+        main = ejs.query('#main'),
+        domain = document.location.pathname.split('/')[1];
 
     ejs.on('SPAN', page, 'click', t => {
         if (!ejs.hasClass(t, 'active')) {
-            ejs.ajax('/api/'+domain+'/getPage', {
+            ejs.ajax('/api/' + domain + '/getPage', {
                 method: 'POST',
                 data: {
                     page: ejs.html(t)
@@ -50,7 +55,7 @@ function page(callback) {
                     if (res.state === 'success') {
                         //添加新的
                         let newPage = '';
-                        res.data.forEach(v => newPage += callback(v));
+                        res.data.forEach(v => newPage += '<div class="item">' + callback(v) + '</div>');
                         //清除上一页
                         ejs.empty(main, newPage);
                         //更改页数样式
