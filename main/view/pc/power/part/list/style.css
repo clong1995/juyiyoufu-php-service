@@ -1,23 +1,20 @@
 .main > .item {
-    width: 520px;
-    height: 95px;
+    width: calc(50% - 10px * 2);
+    max-width: 554px;
 }
 
 .main > .item > .inner > .row {
-    width: 33%;
+    width: 130px;
 }
 
 .main > .item > .inner > .row >.title{
     width: 45px;
 }
 
-.main > .item > .inner > .row.row2 {
-    width: 20%;
+.main > .item > .inner > .row.row3 {
+    width: 215px;
 }
 
-.main > .item > .inner > .row.row3 {
-    width: 45%;
-}
 .main > .item > .inner > .row.row4 {
     width: 100%;
 }

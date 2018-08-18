@@ -39,9 +39,9 @@ class RoleImpl implements Role
             ]);
         } catch (Exception $e) {
             //TODO 日志
-            return ['state' => 'fail', 'data' => '获取角色列表失败！'];
+            return ['state' => false, 'data' => '获取角色列表失败！'];
         }
-        return ['state' => 'success', 'data' => '修改角色成功!'];
+        return ['state' => true, 'data' => '修改角色成功!'];
     }
 
     public function add(array $data): array
@@ -71,9 +71,9 @@ class RoleImpl implements Role
             });
         } catch (Exception $e) {
             //TODO 日志
-            return ['state' => 'fail', 'data' => '添加角色失败！'];
+            return ['state' => false, 'data' => '添加角色失败！'];
         }
-        return ['state' => 'success', 'data' => '添加角色成功!'];
+        return ['state' => true, 'data' => '添加角色成功!'];
     }
 
 
@@ -89,9 +89,9 @@ class RoleImpl implements Role
             $role->delPrivilege((int)$data['roleId'], (int)$data['privilegeId']);
         } catch (Exception $e) {
             //TODO 日志
-            return ['state' => 'fail', 'data' => '解除角色关联权限失败！'];
+            return ['state' => false, 'data' => '解除角色关联权限失败！'];
         }
-        return ['state' => 'success', 'data' => '解除角色关联权限成功！'];
+        return ['state' => true, 'data' => '解除角色关联权限成功！'];
     }
 
     /**
@@ -107,7 +107,7 @@ class RoleImpl implements Role
             $res = $role->getLimit($start, $this->pageSize);
         } catch (Exception $e) {
             //TODO 日志
-            return ['state' => 'fail', 'data' => '获取角色列表失败！'];
+            return ['state' => false, 'data' => '获取角色列表失败！'];
         }
 
         $map = [];
@@ -136,7 +136,7 @@ class RoleImpl implements Role
             array_push($map, $role);
         }
 
-        return ['state' => 'success', 'data' => $map];
+        return ['state' => true, 'data' => $map];
     }
 
     /**
@@ -164,7 +164,7 @@ class RoleImpl implements Role
                 'type' => $value['privilege_type']
             ]);
         }
-        return ['state' => 'success', 'data' => $map];
+        return ['state' => true, 'data' => $map];
     }
 
     public function relPrivilege(int $roleId, int $privilegeId): array
@@ -174,9 +174,9 @@ class RoleImpl implements Role
         try {
             $role->relPrivilege($roleId, $privilegeId);
         } catch (Exception $e) {
-            return ['state' => 'fail', 'data' => '关联失败'];
+            return ['state' => false, 'data' => '关联失败'];
         }
-        return ['state' => 'success', 'data' => '关联成功'];
+        return ['state' => true, 'data' => '关联成功'];
     }
 
     /**
@@ -191,9 +191,9 @@ class RoleImpl implements Role
         try {
             $res = ceil($role->count() / $this->pageSize);
         } catch (Exception $e) {
-            return ['state' => 'fail', 'data' => '获取总页数失败'];
+            return ['state' => false, 'data' => '获取总页数失败'];
         }
-        return ['state' => 'success', 'data' => $res];
+        return ['state' => true, 'data' => $res];
     }
 
     /**
@@ -207,8 +207,8 @@ class RoleImpl implements Role
         try {
             $role->delete([['role_id' => $id]]);
         } catch (Exception $e) {
-            return ['state' => 'fail', 'data' => '删除角色失败'];
+            return ['state' => false, 'data' => '删除角色失败'];
         }
-        return ['state' => 'success', 'data' => '删除角色成功'];
+        return ['state' => true, 'data' => '删除角色成功'];
     }
 }

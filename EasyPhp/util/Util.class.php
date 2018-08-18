@@ -90,25 +90,17 @@ final class Util
     {
         header("HTTP/1.1 404 Not Found");
         header("Status: 404 Not Found");
-        self::response('fail', ['massage' =>  $mag]);
+        self::response(['state' => false, 'data' => $mag]);
         exit();
     }
 
     /**
      * 输出
-     * @param $type
      * @param $arr
      */
-    public static function response($type, $arr)
+    public static function response($arr)
     {
-        $res = array();
-        if ($type === 'success') {
-            $res['state'] = 'success';
-        } else {
-            $res['state'] = 'fail';
-        }
-        $res['data'] = $arr;
-        exit(json_encode($res, JSON_UNESCAPED_UNICODE));
+        exit(json_encode($arr, JSON_UNESCAPED_UNICODE));
     }
 
     /**
@@ -260,5 +252,32 @@ final class Util
         return true;
     }
 
+    /**
+     * @param int $length
+     * @param array $type
+     * @return string
+     */
+    public static function random($length = 4, $type = ['number', 'string', 'symbol'])
+    {
+        $number = '0123456789';
+        $string = 'abcdefghijklmnopqrstuvwxyz';
+        $symbol = '~!@#$%^&*()_+/*-<>?{}|:".-=`;,/';
 
+        $characters = '';
+        foreach ($type as $value) {
+            if ($value == 'number') {
+                $characters .= $number;
+            } else if ($value == 'string') {
+                $characters .= $string;
+            } else if ($value == 'symbol') {
+                $characters .= $symbol;
+            }
+        }
+
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, strlen($characters) - 1)];
+        }
+        return $randomString;
+    }
 }

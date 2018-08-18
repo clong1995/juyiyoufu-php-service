@@ -1,12 +1,11 @@
 <?php
 declare(strict_types=1);
 
-use main\model\impl;
+use \EasyPhp\util\Util;
 
-//获取菜单
-$indexMenu = new impl\IndexMenuImpl();
-$res = $indexMenu->getIndexMenu();
-$menu = $res['data'];
+$menu = Util::getSession('menu');
+$firstMenu = null;
+
 ?>
 <div class="left" id="left">
     <!--logo-->
@@ -15,10 +14,16 @@ $menu = $res['data'];
     </div>
     <div class="list">
         <?php
-        foreach ($menu as &$value) {
-            ?>
-            <a class="item" href="/<?= $value['path'] ?>" target="main"><i class="iconfont"><?= $value['icon'] ?></i><?= $value['name'] ?></a>
-            <?php
+        foreach ($menu as $value) {
+            if ($value['type'] == 1) {
+                if (!$firstMenu) $firstMenu = $value['path'];
+                ?>
+                <a class="item" href="/<?= $value['path'] ?>" target="main">
+                    <i class="iconfont"><?= $value['icon'] ?></i>
+                    <?= $value['name'] ?>
+                </a>
+                <?php
+            }
         }
         ?>
     </div>
@@ -54,5 +59,5 @@ $menu = $res['data'];
         </div>
     </div>
 </div>
-<iframe class="main" name="main" src="/<?= $menu[0]['path'] ?>"></iframe>
-<!--<iframe class="main" src="/company/edit"></iframe>-->
+<iframe class="main" name="main" src="/<?= $firstMenu ?>"></iframe>
+<!--<iframe class="main" src="/menu/add"></iframe>-->

@@ -24,4 +24,6 @@ interface Company
     public function getById(int $id): array;
 
     public function totalPage(): array;
+
+    public function update(array $data): array;
 }

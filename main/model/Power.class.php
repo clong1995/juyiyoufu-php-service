@@ -37,7 +37,7 @@ interface Power
      * 获取所有权限
      * @return array
      */
-    public function getAll(): array;
+    //public function getAll(): array;
 
     /**
      * 根据id获取权限

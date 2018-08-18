@@ -32,22 +32,22 @@ class UploadImpl implements Upload
 
         //检查目录是否存在
         if (!is_dir(DIR . 'file/'))
-            return ['state' => 'fail', 'data' => ['info' => '服务器不存在需要的目录']];
+            return ['state' => false, 'data' => ['info' => '服务器不存在需要的目录']];
 
         //判断是图片
         $imgType = ['gif', 'jpeg', 'jpg', 'pjpeg', 'x-png', 'png'];
         $ext = explode('/', $files["type"])[1];
         if (!in_array($ext, $imgType))
-            return ['state' => 'fail', 'data' => ['info' => '文件非通用图片类型或者不是图片']];
+            return ['state' => false, 'data' => ['info' => '文件非通用图片类型或者不是图片']];
 
         //判断图片大小
         if ($files["size"] > $size * 1024)
-            return ['state' => 'fail', 'data' => ['info' => '图片超大']];
+            return ['state' => false, 'data' => ['info' => '图片超大']];
 
         //过滤扩展名
         if (count($allowed)) {
             if (!in_array($ext, $allowed))
-                return ['state' => 'fail', 'data' => ['info' => '文件类型不允许']];
+                return ['state' => false, 'data' => ['info' => '文件类型不允许']];
         }
 
         //摘要文件
@@ -60,13 +60,13 @@ class UploadImpl implements Upload
         $count = $file->count(['id' => $md5]);
 
         if ($count)
-            return ['state' => 'success', 'data' => ['id' => $md5, 'info' => '文件已存在服务器中']];
+            return ['state' => true, 'data' => ['id' => $md5, 'info' => '文件已存在服务器中']];
 
         //保存文件
         $res = move_uploaded_file($files["tmp_name"], DIR . "file/" . $md5);
 
         if (!$res)
-            return ['state' => 'fail', 'data' => ['info' => '文件转存失败']];
+            return ['state' => false, 'data' => ['info' => '文件转存失败']];
 
         //数据库记录
         try{
@@ -79,10 +79,10 @@ class UploadImpl implements Upload
                 ]
             ]);
         }catch (Exception $e){
-            return ['state' => 'fail', 'data' => ['info' => '文件保存数据库失败']];
+            return ['state' => false, 'data' => ['info' => '文件保存数据库失败']];
         }
 
-        return ['state' => 'success', 'data' => ['id' => $md5]];
+        return ['state' => true, 'data' => ['id' => $md5]];
     }
 
     public function file($files, $path, $size = 1024, $allowed)

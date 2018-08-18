@@ -20,6 +20,7 @@ use \PDOException;
 abstract class AbstractMysql
 {
     public $pdo = null;
+
     public function __construct($connInfo)
     {
         try {
@@ -28,8 +29,8 @@ abstract class AbstractMysql
                 $connInfo['username'],
                 $connInfo['passwd']
             );
-            $this->pdo->setAttribute( PDO::ATTR_PERSISTENT, true );
-            $this->pdo->setAttribute( PDO::ATTR_EMULATE_PREPARES, false );
+            $this->pdo->setAttribute(PDO::ATTR_PERSISTENT, true);
+            $this->pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
         } catch (PDOException $e) {
             die("数据库连接失败" . $e->getMessage());
@@ -38,7 +39,7 @@ abstract class AbstractMysql
 
     /**
      * @param callable $fn
-     * @throws Exception
+     * @return bool
      */
     public function transaction(callable $fn)
     {
@@ -46,10 +47,12 @@ abstract class AbstractMysql
         try {
             $fn($this->pdo);
             //提交事物
-            $this->pdo->commit();
+            return $this->pdo->commit();
         } catch (Exception $e) {
             $this->pdo->rollBack();
-            throw new Exception($e->getMessage());
+            //抛出错误写日志
+            //throw new Exception.txt($e->getMessage());
+            return false;
         }
     }
 }

@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace main\model\impl;
 
+use EasyPhp\util\Util;
 use main\db\conn\Mysql;
 use main\model\Power;
 use main\db\impl;
@@ -19,7 +20,7 @@ class PowerImpl implements Power
 {
     //数据库句柄
     private $mysql = null;
-    private $pageSize = 10;
+    private $pageSize = 21;
 
     public function __construct()
     {
@@ -52,10 +53,10 @@ class PowerImpl implements Power
             });
         } catch (Exception $e) {
             //TODO 写日志
-            return ['state' => 'fail', 'data' => '增加权限失败!'];
+            return ['state' => false, 'data' => '增加权限失败!'];
         }
 
-        return ['state' => 'success', 'data' => '添加成功'];
+        return ['state' => true, 'data' => '添加成功'];
     }
 
     /**
@@ -84,17 +85,17 @@ class PowerImpl implements Power
                 ]);
             });
         } catch (Exception $e) {
-            return ['state' => 'fail', 'data' => '修改失败'];
+            return ['state' => false, 'data' => '修改失败'];
         }
 
-        return ['state' => 'success', 'data' => '修改成功'];
+        return ['state' => true, 'data' => '修改成功'];
     }
 
 
     public function delById(int $id): array
     {
         $handle = $this->mysql->pdo;
-        $returnData = ['state' => 'success', 'data' => '删除成功'];
+        $returnData = ['state' => true, 'data' => '删除成功'];
         $privilege = new impl\PrivilegeImpl($handle);
 
         //TODO 查询这个人是否真的有这个权限
@@ -103,7 +104,7 @@ class PowerImpl implements Power
         try {
             $privilege->delete([['privilege_id' => $id]]);
         } catch (Exception $e) {
-            $returnData = ['state' => 'fail', 'data' => '权限删除失败'];
+            $returnData = ['state' => false, 'data' => '权限删除失败'];
         }
         return $returnData;
     }
@@ -112,17 +113,17 @@ class PowerImpl implements Power
      * 获取所有权限
      * @return array
      */
-    public function getAll(): array
+    /*public function getAll(): array
     {
         $handle = $this->mysql->pdo;
         $privilege = new impl\PrivilegeImpl($handle);
         try {
             $res = $privilege->getAll();
         } catch (Exception $e) {
-            return ['state' => 'fail', 'data' => '获取权限列表失败'];
+            return ['state' => false, 'data' => '获取权限列表失败'];
         }
-        return ['state' => 'success', 'data' => $res];
-    }
+        return ['state' => true, 'data' => $res];
+    }*/
 
 
     /**
@@ -135,11 +136,12 @@ class PowerImpl implements Power
         $handle = $this->mysql->pdo;
         $privilege = new impl\PrivilegeImpl($handle);
         try {
-            $res = $privilege->getById($id);
-        } catch (Exception $e) {
-            return ['state' => 'fail', 'data' => '获取权限失败'];
+            $res = $privilege->select(['path', 'name', 'info', 'privilege_type'], ['privilege_id' => $id]);
+        } catch (Exception $exception) {
+            //TODO 写日志
+            return ['state' => false, 'data' => '获取权限失败'];
         }
-        return ['state' => 'success', 'data' => $res[0]];
+        return ['state' => true, 'data' => $res[0]];
     }
 
     /**
@@ -149,19 +151,20 @@ class PowerImpl implements Power
     public function getAllType(): array
     {
         $handle = $this->mysql->pdo;
-        $privilegeType = new impl\PrivilegeTypeImpl($handle);
+        $type = new impl\TypeImpl($handle);
         try {
-            $res = $privilegeType->select(['privilege_type_id', 'name']);
-        } catch (Exception $e) {
-            return ['state' => 'fail', 'data' => '获取权类型限列表失败'];
+            $res = $type->select(['type_id', 'name'], ['category' => 'domain']);
+        } catch (Exception $exception) {
+            //TODO 写日志
+            $code = $exception->getCode() . time() . Util::random();
+            return ['state' => false, 'data' => '获取权类型限列表失败', 'exception' => $code];
         }
 
-        return ['state' => 'success', 'data' => $res];
+        return ['state' => true, 'data' => $res];
     }
 
     /**
      * 获取总页数
-     * @param int $pageSize
      * @return array
      */
     public function totalPage(): array
@@ -171,15 +174,14 @@ class PowerImpl implements Power
         try {
             $res = ceil($privilege->count() / $this->pageSize);
         } catch (Exception $e) {
-            return ['state' => 'fail', 'data' => '获取总页数失败'];
+            return ['state' => false, 'data' => '获取总页数失败'];
         }
-        return ['state' => 'success', 'data' => $res];
+        return ['state' => true, 'data' => $res];
     }
 
     /**
      * 用于分页
      * @param int $page
-     * @param int $size
      * @return array
      */
     public function getPage(int $page): array
@@ -189,9 +191,11 @@ class PowerImpl implements Power
         $start = ($page - 1) * $this->pageSize;
         try {
             $res = $privilege->getLimit($start, $this->pageSize);
-        } catch (Exception $e) {
-            return ['state' => 'fail', 'data' => '获取权限列表失败'];
+        } catch (Exception $exception) {
+            //TODO 写日志
+            $code = $exception->getCode() . time() . Util::random();
+            return ['state' => false, 'data' => '获取权限列表失败', 'exception' => $code];
         }
-        return ['state' => 'success', 'data' => $res];
+        return ['state' => true, 'data' => $res];
     }
 }

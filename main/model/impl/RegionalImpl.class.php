@@ -32,9 +32,9 @@ class RegionalImpl implements Regional
         try {
             $res = $province->select(['provinceid', 'province']);
         } catch (Exception $e) {
-            return ['state' => 'fail', 'data' => '获取省份失败！'];
+            return ['state' => false, 'data' => '获取省份失败！'];
         }
-        return ['state' => 'success', 'data' => $res];
+        return ['state' => true, 'data' => $res];
     }
 
     public function city(int $id): array
@@ -44,9 +44,9 @@ class RegionalImpl implements Regional
         try {
             $res = $city->select(['cityid', 'city'], ['provinceid' => $id]);
         } catch (Exception $e) {
-            return ['state' => 'fail', 'data' => '获取市区失败！'];
+            return ['state' => false, 'data' => '获取市区失败！'];
         }
-        return ['state' => 'success', 'data' => $res];
+        return ['state' => true, 'data' => $res];
     }
 
     public function area(int $id): array
@@ -56,9 +56,9 @@ class RegionalImpl implements Regional
         try {
             $res = $area->select(['areaid', 'area'], ['cityid' => $id]);
         } catch (Exception $e) {
-            return ['state' => 'fail', 'data' => '获取区县失败！'];
+            return ['state' => false, 'data' => '获取区县失败！'];
         }
-        return ['state' => 'success', 'data' => $res];
+        return ['state' => true, 'data' => $res];
     }
 
 }

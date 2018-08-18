@@ -76,24 +76,24 @@ class CompanyImpl implements Company
                             'name' => $data['name'],
                             'company_id' => (int)$companyRes['id'],
                             'role_id' => 2,
-                            'index_menu_group_id' => 2
+                            'menu_group_id' => 2
                         ]]);
                     });
                 } catch (Exception $e) {
                     //TODO 日志
-                    return ['state' => 'fail', 'data' => '添加失败'];
+                    return ['state' => false, 'data' => '添加失败'];
                 };
 
             } else {
                 //员工已存在
-                return ['state' => 'fail', 'data' => '员工添已存在'];
+                return ['state' => false, 'data' => '员工添已存在'];
             }
         } else {
             //公司已存在
-            return ['state' => 'fail', 'data' => '公司已存在'];
+            return ['state' => false, 'data' => '公司已存在'];
         }
 
-        return ['state' => 'success', 'data' => '添加成功'];
+        return ['state' => true, 'data' => '添加成功'];
     }
 
     /**
@@ -145,16 +145,16 @@ class CompanyImpl implements Company
                             ['id' => $data['id']]
                         ]);
                     } else {
-                        return ['state' => 'fail', 'data' => '负责人电话已存在!'];
+                        return ['state' => false, 'data' => '负责人电话已存在!'];
                     }
                 } else {
-                    return ['state' => 'fail', 'data' => '公司已存在!'];
+                    return ['state' => false, 'data' => '公司已存在!'];
                 }
             });
         } catch (Exception $e) {
-            return ['state' => 'fail', 'data' => '修改失败!'];
+            return ['state' => false, 'data' => '修改失败!'];
         }
-        return ['state' => 'success', 'data' => '修改成功!'];
+        return ['state' => true, 'data' => '修改成功!'];
     }
 
     /**
@@ -180,9 +180,9 @@ class CompanyImpl implements Company
         try {
             $company->delete([['id' => $id]]);
         } catch (Exception $e) {
-            return ['state' => 'fail', 'data' => '删除失败'];
+            return ['state' => false, 'data' => '删除失败'];
         }
-        return ['state' => 'success', 'data' => '删除成功'];
+        return ['state' => true, 'data' => '删除成功'];
     }
 
     /**
@@ -196,10 +196,10 @@ class CompanyImpl implements Company
         try {
             $res = $company->getById($id);
         } catch (Exception $e) {
-            return ['state' => 'fail', 'data' => '获取公司失败'];
+            return ['state' => false, 'data' => '获取公司失败'];
         }
 
-        return ['state' => 'success', 'data' => $res];
+        return ['state' => true, 'data' => $res];
     }
 
     /**
@@ -215,10 +215,10 @@ class CompanyImpl implements Company
         try {
             $res = $company->getLimit($start, $this->pageSize);
         } catch (Exception $e) {
-            return ['state' => 'fail', 'data' => '获取公司失败'];
+            return ['state' => false, 'data' => '获取公司失败'];
         }
 
-        return ['state' => 'success', 'data' => $res];
+        return ['state' => true, 'data' => $res];
     }
 
     /**
@@ -232,9 +232,9 @@ class CompanyImpl implements Company
         try {
             $res = ceil($company->count() / $this->pageSize);
         } catch (Exception $e) {
-            return ['state' => 'fail', 'data' => '获取总页数失败'];
+            return ['state' => false, 'data' => '获取总页数失败'];
         }
-        return ['state' => 'success', 'data' => $res];
+        return ['state' => true, 'data' => $res];
     }
 
 }

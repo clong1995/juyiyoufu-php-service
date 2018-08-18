@@ -26,6 +26,6 @@ switch (ORDER) {
     case 'pc'://pc登录
         $login = new impl\LoginImpl();
         $res = $login->pc(PARAM['phone'], PARAM['password']);
-        Util::response($res['state'], $res['data']);
+        Util::response($res);
         break;
 }

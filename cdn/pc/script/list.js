@@ -9,7 +9,7 @@ ejs.ready(() => {
     ejs.on('.add', nav, 'click', t => ejs.link('/' + domain + '/add'));
 
     //编辑
-    ejs.on('.edit', main, 'click', t => ejs.link('/' + domain + '/edit?id=' + ejs.attr(t.parentNode.parentNode, 'data-id')));
+    ejs.on('.edit', main, 'click', t => ejs.link('/' + domain + '/edit/' + ejs.attr(t.parentNode.parentNode, 'data-id')));
 
     //删除
     ejs.on('.delete', main, 'click', t => {
@@ -52,7 +52,7 @@ function page(callback) {
                     page: ejs.html(t)
                 },
                 success: res => {
-                    if (res.state === 'success') {
+                    if (res.state) {
                         //添加新的
                         let newPage = '';
                         res.data.forEach(v => newPage += '<div class="item">' + callback(v) + '</div>');
@@ -63,7 +63,7 @@ function page(callback) {
                         ejs.addClass(t, 'active');
                     } else {
                         //TODO 错误提示
-                        alert();
+                        ejs.log(res, 'error');
                     }
                 }
             });

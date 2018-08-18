@@ -98,6 +98,9 @@ body {
     height: 30px;
     color: #666;
 }
+.main select{
+    color: #666;
+}
 
 .main input[type='text']:focus,
 .main input[type='date']:focus,

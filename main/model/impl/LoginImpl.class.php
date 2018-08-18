@@ -36,21 +36,21 @@ class LoginImpl implements Login
     public function pc(string $phone, string $password): array
     {
         if (strlen($phone) > 11 || strlen($phone) < 1) {
-            return ['state' => 'fail', 'data' => '手机号不合法！'];
+            return ['state' => false, 'data' => '手机号不合法！'];
         }
         if (strlen($password) > 32 || strlen($password) < 1) {
-            return ['state' => 'fail', 'data' => '密码不合法！'];
+            return ['state' => false, 'data' => '密码不合法！'];
         }
 
-        $employee = new impl\EmployeeImpl($this->handle);
+        $user = new impl\UserImpl($this->handle);
 
         try {
-            $res = $employee->select(['id', 'password'], ['phone' => $phone]);
-        } catch (Exception $e) {
+            $res = $user->select(['user_id', 'password'], ['phone' => $phone]);
+        } catch (Exception $exception) {
             //TODO 记录日志
-            return ['state' => 'fail', 'data' => '登录失败！'];
+            $code = $exception->getCode() . time() . Util::random();
+            return ['state' => false, 'data' => '登录失败！','exception' => $code];
         }
-
 
 
         if (count($res) === 1) {
@@ -59,29 +59,43 @@ class LoginImpl implements Login
             $str = strtoupper(md5($data['password'] . Util::getSession('salt')));
 
             if (!strcmp($str, $password)) {
-                $employeeId = (int)$data['id'];
+                $userId = (int)$data['user_id'];
                 //注册权限
-                $Privilege = new impl\PrivilegeImpl($this->handle);
+                $privilege = new impl\PrivilegeImpl($this->handle);
                 try {
-                    $res = $Privilege->getAllByEmployeeId($employeeId);
-                } catch (Exception $e) {
-                    return ['state' => 'fail', 'data' => '权限注册错误！'];
+                    $privilegeData = $privilege->getAllByUserId($userId,2);
+                } catch (Exception $exception) {
+                    //TODO 写日志
+                    $code = $exception->getCode() . time() . Util::random();
+                    return ['state' => false, 'data' => '权限注册失败！','exception' => $code];
                 }
+
+                //当前用户的菜单
+                $menu = new impl\MenuImpl($this->handle);
+                try {
+                    $menuData = $menu->getAllByUserId($userId,2);
+                } catch (Exception $exception) {
+                    //TODO 写日志
+                    $code = $exception->getCode() . time() . Util::random();
+                    return ['state' => false, 'data' => '菜单注册错误！', 'exception' => $code];
+                }
+
                 //只提取path部分作为权限
-                foreach ($res as &$value)
+                foreach ($privilegeData as &$value)
                     $value = $value['path'];
 
                 //注册id
-                Util::setSession('user_id', $employeeId);
-                Util::setSession('privilege', $res);
+                Util::setSession('user_id', $userId);
+                Util::setSession('privilege', $privilegeData);
+                Util::setSession('menu', $menuData);
                 //清除salt
                 Util::delSession('salt');
-                return ['state' => 'success', 'data' => '登录成功！'];
+                return ['state' => true, 'data' => '登录成功！'];
             } else {
-                return ['state' => 'fail', 'data' => '密码错误！'];
+                return ['state' => false, 'data' => '密码错误！'];
             }
         } else {
-            return ['state' => 'fail', 'data' => '用户不存在！'];
+            return ['state' => false, 'data' => '用户不存在！'];
         }
     }
 }

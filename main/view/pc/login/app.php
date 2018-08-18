@@ -15,7 +15,7 @@ if (!Util::hasSession('salt'))
     </span>-->
 </div>
 <div id="login" class="login">
-    <input class="salt" type="hidden" value="<?= Util::getSession('salt', $salt) ?>"/>
+    <input class="salt" type="hidden" value="<?= Util::getSession('salt') ?>"/>
     <div class="icon">
         <i class="iconfont">&#xe639;</i>
     </div>

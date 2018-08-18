@@ -8,7 +8,7 @@
 
 namespace main\db;
 
-interface Employee  extends Base
+interface User  extends Base
 {
     public function has(int $id, string $license): array;
 }

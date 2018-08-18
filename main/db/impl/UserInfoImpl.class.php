@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace main\db\impl;
 
-use main\db\EmployeeInfo;
+use main\db\UserInfo;
 
-class EmployeeInfoImpl extends AbstractMysqlBase implements EmployeeInfo
+class UserInfoImpl extends AbstractMysqlBase implements UserInfo
 {
 }

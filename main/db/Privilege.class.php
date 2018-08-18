@@ -12,11 +12,11 @@ namespace main\db;
 
 interface Privilege extends Base
 {
-    public function getAllByEmployeeId(int $employeeId): array;
+    public function getAllByUserId(int $userId,int $type): array;
 
-    public function getAll(): array;
+    //public function getAll(): array;
 
-    public function getById(int $id): array;
+    //public function getById(int $id): array;
 
     public function getLimit(int $start, int $size): array;
 }

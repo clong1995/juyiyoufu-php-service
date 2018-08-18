@@ -8,10 +8,10 @@
 
 namespace main\db\impl;
 
-use main\db\Employee;
+use main\db\User;
 
 
-class EmployeeImpl extends AbstractMysqlBase implements Employee
+class UserImpl extends AbstractMysqlBase implements User
 {
     public function has(int $id, string $phone): array
     {

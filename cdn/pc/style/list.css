@@ -63,8 +63,8 @@ body {
 }
 
 .main > .item {
-    width: 335px;
-    height: 175px;
+    min-width: 100px;
+    min-height: 100px;
     float: left;
     margin: 18px 10px 0 10px;
     font-size: 14px;
@@ -73,25 +73,27 @@ body {
 }
 
 .main > .item > .inner {
-    width: inherit;
+    width: 100%;
     box-sizing: border-box;
-    height: inherit;
-    padding: 12px;
+    height: 100%;
+    padding: 12px 12px 27px 12px;
     background: #fff;
     border-radius: 4px;
     border-bottom: 1px solid #ccc;
+    overflow: hidden;
+    position: relative;
 }
 
 .main > .item:hover > .inner {
     box-shadow: 10px 10px 5px #999;
     top: -5px;
     left: -5px;
-    position: absolute;
 }
 
 .main > .item > .inner > .row {
     float: left;
     height: 28px;
+    width: 100%;
     line-height: 27px;
 }
 

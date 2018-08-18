@@ -40,7 +40,7 @@ ejs.on('.login-btn', login, 'click', t => {
             password: ejs.md5(ejs.md5(password.value) + '' + salt.value)
         },
         success: res => {
-            if (res.state === 'success') {
+            if (res.state) {
                 //登录成功
                 send('login/main');
             } else {

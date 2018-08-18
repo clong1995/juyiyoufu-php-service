@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace main\db;
 
-interface IndexMenu extends Base
+interface UserInfo extends Base
 {
-    public function getAllByEmployeeId(int $employeeId);
+
 }

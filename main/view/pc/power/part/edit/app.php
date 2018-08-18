@@ -7,8 +7,9 @@ $power = new impl\PowerImpl();
 //权限类型
 $res = $power->getAllType();
 $type = $res['data'];
+
 //根据id查询权限
-$res = $power->getById((int)PARAM['id']);
+$res = $power->getById((int)PARAM[0]);
 $onePower = $res['data'];
 ?>
 <div class="nav" id="nav">
@@ -31,7 +32,7 @@ $onePower = $res['data'];
                         <option value=""></option>
                         <?php
                         foreach ($type as $value) {
-                            if ($value['privilege_type_id'] == $onePower['type']) {
+                            if ($value['type_id'] == $onePower['privilege_type']) {
                                 $selected = 'selected = "selected"';
                             } else {
                                 $selected = '';

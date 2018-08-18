@@ -15,23 +15,23 @@ switch (ORDER) {
     case 'add'://添加
         $power = new impl\PowerImpl();
         $res = $power->add(PARAM);
-        Util::response($res['state'], $res['data']);
+        Util::response($res);
         break;
 
     case 'update'://更新
         $power = new impl\PowerImpl();
         $res = $power->update(PARAM);
-        Util::response($res['state'], $res['data']);
+        Util::response($res);
         break;
 
     case 'delete'://删除
         $power = new impl\PowerImpl();
         $res = $power->delById((int)PARAM['id']);
-        Util::response($res['state'], $res['data']);
+        Util::response($res);
         break;
     case 'getPage':
         $power = new impl\PowerImpl();
         $res = $power->getPage((int)PARAM['page']);
-        Util::response($res['state'], $res['data']);
+        Util::response($res);
         break;
 }

@@ -16,47 +16,49 @@ use \Exception;
 class Mysql
 {
     private $pdo = null;
+
     public function __construct(PDO $pdo)
     {
         $this->pdo = $pdo;
     }
 
     /**
-     * 查询
-     * @param $sql
+     * @param string $sql
      * @param array $param
-     * @return array|bool
+     * @return array
+     * @throws Exception
      */
-    public function query(string $sql, array $param = []) : array
+    public function query(string $sql, array $param = []): array
     {
-        $data = [];
         $pdostatement = $this->pdo->prepare($sql);
+        if (!$pdostatement)
+            throw new Exception('SQL:\n'.$sql,91);
         $res = $pdostatement->execute($param);
-        if ($res) {
-            $data = $pdostatement->fetchAll(PDO::FETCH_ASSOC);
-        }else{
-            new Exception('SQL:'.$sql.'\nPARAMS:'.json_encode($param));
-        }
+        if (!$res)
+            throw new Exception('SQL AND PARAMS:\n' . $sql . '\n' . json_encode($param),92);
+        $data = $pdostatement->fetchAll(PDO::FETCH_ASSOC);
         return $data;
     }
 
     /**
-     * 更新
-     * @param $sql
+     * @param string $sql
      * @param array $param
      * @return array
+     * @throws Exception
      */
-    public function update(string $sql, array $param = []) : array
+    public function update(string $sql, array $param = []): array
     {
         $pdostatement = $this->pdo->prepare($sql);
+        if (!$pdostatement)
+            throw new Exception('SQL:\n'.$sql,91);
         $res = true;
         $data = [];
 
         //批处理
-        foreach ($param as $key=>$value) {
+        foreach ($param as $key => $value) {
             $res = $pdostatement->execute($value);
             if (!$res) {
-                new Exception('AT:'.$key.'\nSQL:'.$sql.'\nPARAMS:'.json_encode($value));
+                throw new Exception('AT:' . $key . '\nSQL:' . $sql . '\nPARAMS:' . json_encode($value));
                 break;
             }
         }
@@ -76,23 +78,24 @@ class Mysql
 
     /**
      * 检查模式，返回key
-     * @param $param
-     * @return mixed
+     * @param array $param
+     * @return array
+     * @throws Exception
      */
-    public function key(array $param) : array
+    public function key(array $param): array
     {
         if (is_array(reset($param))) {
             $keys = array_keys($param[0]);
             //检查模式是否一致
-            foreach ($param as $key=>$value) {
+            foreach ($param as $key => $value) {
                 if (array_keys($value) !== $keys) {
-                    new Exception('nAT:'.$key.'\nKEY:'.json_encode($value));
+                    throw new Exception('nAT:' . $key . '\nKEY:' . json_encode($value),93);
                     break;
                 }
             }
         } else {
             $keys = array_keys($param);
-            if($keys[0] === 0){//索引数组
+            if ($keys[0] === 0) {//索引数组
                 $keys = $param;
             }
         }
