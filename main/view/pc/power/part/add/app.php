@@ -24,7 +24,7 @@ $type = $res['data'];
                     <?php
                     foreach ($type as $value){
                         ?>
-                        <option value="<?=$value['privilege_type_id']?>"><?=$value['name']?></option>
+                        <option value="<?=$value['type_id']?>"><?=$value['name']?></option>
                     <?php
                     }
                     ?>

@@ -28,7 +28,9 @@ function save(verify, fn) {
             action: '/api/' + domain + '/add',
             verify: verify
         }, res => {
-            if (res.state !== 'success') {
+            if (res.state) {
+                ejs.link('/' + domain + '/list');
+            } else {
                 if (typeof res.data === 'string') {
                     //TODO 错误提示
                     alert(res.data);
@@ -47,8 +49,6 @@ function save(verify, fn) {
                 ejs.addClass(info, 'info');
                 ejs.html(info, res.data.msg);
                 ejs.append(error, info);
-            } else {
-                ejs.link('/' + domain + '/list');
             }
         });
     });

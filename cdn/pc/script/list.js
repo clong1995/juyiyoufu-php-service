@@ -20,7 +20,7 @@ ejs.ready(() => {
                 id: ejs.attr(item, 'data-id')
             },
             success: data => {
-                if (data.state === 'success')
+                if (data.state)
                     ejs.remove(item);
                 else {
                     //TODO 错误提示

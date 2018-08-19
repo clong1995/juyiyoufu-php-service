@@ -20,7 +20,7 @@ class PowerImpl implements Power
 {
     //数据库句柄
     private $mysql = null;
-    private $pageSize = 21;
+    private $pageSize = 20;
 
     public function __construct()
     {
@@ -35,25 +35,21 @@ class PowerImpl implements Power
     public function add(array $data): array
     {
         //TODO 过滤数据
-
+        $handle = $this->mysql->pdo;
+        $privilege = new impl\PrivilegeImpl($handle);
         try {
-            //开启事物
-            $this->mysql->transaction(function ($pdo) use ($data) {
-                //T1:增加权限
-                $privilege = new impl\PrivilegeImpl($pdo);
-                $res = $privilege->insert([
-                    ['path' => $data['path']]
-                ]);
-
-                //T2:增加权限信息
-                $privilegeInfo = new impl\PrivilegeInfoImpl($pdo);
-                $privilegeInfo->insert([
-                    ['privilege_id' => $res['id'], 'name' => $data['name'], 'info' => $data['info'], 'privilege_type_id' => $data['type']]
-                ]);
-            });
-        } catch (Exception $e) {
+            $privilege->insert([
+                [
+                    'name' => $data['name'],
+                    'path' => $data['path'],
+                    'info' => $data['info'],
+                    'privilege_type' => (int)$data['type']
+                ]
+            ]);
+        } catch (Exception $exception) {
             //TODO 写日志
-            return ['state' => false, 'data' => '增加权限失败!'];
+            $code = $exception->getCode() . time() . Util::random();
+            return ['state' => false, 'data' => '增加权限失败!', 'exception' => $code];
         }
 
         return ['state' => true, 'data' => '添加成功'];
@@ -65,27 +61,21 @@ class PowerImpl implements Power
      */
     public function update(array $data): array
     {
+        $handle = $this->mysql->pdo;
+        $privilege = new impl\PrivilegeImpl($handle);
         try {
-            //开启事物
-            $this->mysql->transaction(function ($handle) use ($data) {
-                //T1:修改权限
-                $privilege = new impl\PrivilegeImpl($handle);
-                $privilege->update([
-                    ['path' => $data['path']]
-                ], [
-                    ['privilege_id' => $data['id']]
-                ]);
-
-                //T2:修改权限信息
-                $privilegeInfo = new impl\PrivilegeInfoImpl($handle);
-                $privilegeInfo->update([
-                    ['name' => $data['name'], 'info' => $data['info'], 'privilege_type_id' => $data['type']]
-                ], [
-                    ['privilege_id' => $data['id']]
-                ]);
-            });
-        } catch (Exception $e) {
-            return ['state' => false, 'data' => '修改失败'];
+            $privilege->update([[
+                'path' => $data['path'],
+                'name' => $data['name'],
+                'info' => $data['info'],
+                'privilege_type' => $data['type']
+            ]], [[
+                'privilege_id' => $data['id']
+            ]]);
+        } catch (Exception $exception) {
+            //TODO 写日志
+            $code = $exception->getCode() . time() . Util::random();
+            return ['state' => false, 'data' => '修改失败', 'exception' => $code];
         }
 
         return ['state' => true, 'data' => '修改成功'];
@@ -98,7 +88,7 @@ class PowerImpl implements Power
         $returnData = ['state' => true, 'data' => '删除成功'];
         $privilege = new impl\PrivilegeImpl($handle);
 
-        //TODO 查询这个人是否真的有这个权限
+        //TODO 防拿别人的id删除
 
         //执行删除
         try {

@@ -11,7 +11,7 @@ $data = $res['data'];
 <div class="nav" id="nav">
     <span class="title"><i class="iconfont">&#xe60c;</i>权限列表</span>
     <button class="add"><i class="iconfont">&#xe68e;</i>增加权限</button>
-    <button class="reload" onclick="location.reload()"><i class="iconfont">&#xe60d;</i>刷新</button>
+<!--    <button class="reload" onclick="location.reload()"><i class="iconfont">&#xe60d;</i>刷新</button>-->
 </div>
 <div class="main" id="main">
     <?php

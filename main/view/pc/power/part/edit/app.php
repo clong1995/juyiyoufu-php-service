@@ -19,7 +19,7 @@ $onePower = $res['data'];
 </div>
 <div id="main" class="main">
     <form class="form">
-        <input type="hidden" name="id" value="<?= $onePower['id'] ?>"/>
+        <input type="hidden" name="id" value="<?= (int)PARAM[0] ?>"/>
         <table>
             <tr>
                 <td class="title">名称</td>
@@ -38,7 +38,7 @@ $onePower = $res['data'];
                                 $selected = '';
                             }
                             ?>
-                            <option value="<?= $value['privilege_type_id'] ?>" <?= $selected ?>><?= $value['name'] ?></option>
+                            <option value="<?= $value['type_id'] ?>" <?= $selected ?> ><?= $value['name'] ?></option>
                             <?php
                         }
                         ?>
