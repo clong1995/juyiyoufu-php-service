@@ -1,0 +1,7 @@
+.box {
+    color: red;
+}
+
+.box > .foo {
+    background: #0f99ff;
+}

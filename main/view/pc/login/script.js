@@ -10,8 +10,7 @@ let msg = ejs.query('.msg', login);
 //点击登录
 ejs.on('.login-btn', login, 'click', t => {
     let phone = ejs.query('.phone', login),
-        password = ejs.query('.password', login),
-        salt = ejs.query('.salt', login);
+        password = ejs.query('.password', login);
 
     //校验字段
     if (!phone.value) {
@@ -37,7 +36,7 @@ ejs.on('.login-btn', login, 'click', t => {
         method: 'POST',
         data: {
             phone: phone.value,
-            password: ejs.md5(ejs.md5(password.value) + '' + salt.value)
+            password: ejs.md5(ejs.md5(password.value) + '' + DATA.salt)
         },
         success: res => {
             if (res.state) {

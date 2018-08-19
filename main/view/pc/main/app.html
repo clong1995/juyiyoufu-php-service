@@ -1,32 +1,9 @@
-<?php
-declare(strict_types=1);
-
-use \EasyPhp\util\Util;
-
-$menu = Util::getSession('menu');
-$firstMenu = null;
-
-?>
 <div class="left" id="left">
     <!--logo-->
     <div class="logo">
         <img src="">
     </div>
-    <div class="list">
-        <?php
-        foreach ($menu as $value) {
-            if ($value['type'] == 1) {
-                if (!$firstMenu) $firstMenu = $value['path'];
-                ?>
-                <a class="item" href="/<?= $value['path'] ?>" target="main">
-                    <i class="iconfont"><?= $value['icon'] ?></i>
-                    <?= $value['name'] ?>
-                </a>
-                <?php
-            }
-        }
-        ?>
-    </div>
+    <div class="list"></div>
 </div>
 <div class="nav" id="nav">
     <!-- 搜索 -->
@@ -59,5 +36,6 @@ $firstMenu = null;
         </div>
     </div>
 </div>
-<iframe class="main" name="main" src="/<?= $firstMenu ?>"></iframe>
-<!--<iframe class="main" src="/menu/add"></iframe>-->
+<!--<iframe class="main" name="main" src="/--><? //= $firstMenu ?><!--"></iframe>-->
+<!--<iframe class="main" src="https://www.baidu.com"></iframe>-->
+<div class="main" id="main"></div>

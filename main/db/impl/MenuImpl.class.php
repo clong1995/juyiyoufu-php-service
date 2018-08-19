@@ -27,7 +27,7 @@ class MenuImpl extends AbstractMysqlBase implements Menu
                 SELECT
                     menu_id AS id,
                     menu.name AS name,
-                    in_order,
+                    in_order AS orderr,
                     icon,
                     path,
                     type_id as type,

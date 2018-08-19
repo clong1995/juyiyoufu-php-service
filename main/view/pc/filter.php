@@ -16,4 +16,3 @@ if ($head['Host'] !== 'pc.nurse.juyiyoufu.com')
 //客户端限制
 if (strpos($head['User-Agent'], 'Electron') === false)
     Util::notFound('Illegal client!');
-
